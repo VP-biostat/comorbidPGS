@@ -1,17 +1,20 @@
 Package: comorbidPRS
-Title: A package for analysing Polygenic Scores (PRS) to investigate shared 
-    predisposition between different Phenotypes
+Title: Assessing the shared predisposition between Phenotypes using Polygenic Scores (PRS)
 Version: 0.0.0.9000
 Authors@R: 
     person("Vincent", "Pascat", , "vincent.pascat@univ-lille.fr", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Using Polygenic Scores (PRS) from a population, this package 
-    allows to do fast analysis on different Phenotypes, export interesting
+           comment = c(ORCID = "0000-0002-6227-8812"))
+Description: Using Polygenic Scores (PRS), this package allows to 
+    investigate shared predisposition between different Conditions, 
+    and do fast analysis on different Phenotypes, export interesting
     views of the PRS distribution using ggplot2 graphs. 
+Depends: R (>= 3.5.0)
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.2
 Imports: 
-    data.table,
-    stats
+    ggplot2,
+    stats,
+    utils
+LazyData: true

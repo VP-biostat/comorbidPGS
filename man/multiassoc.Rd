@@ -2,34 +2,27 @@
 % Please edit documentation in R/multiassoc.R
 \name{multiassoc}
 \alias{multiassoc}
-\title{take a distribution of PRS and multiple Phenotypes, the name of the analysis and eventual confounders
-return a data frame showing the regression of the unique PRS on the list of Phenotypes}
+\title{Multiple PRS Associations from a Data Frame}
 \usage{
-multiassoc(
-  df = NA,
-  prs_col = "SCORESUM",
-  phenotype_col = "Phenotype",
-  scale = TRUE,
-  covar_col = NA
-)
+multiassoc(df = NULL, assoc_table = NULL, scale = TRUE, covar_col = NA)
 }
 \arguments{
 \item{df}{a dataframe with individuals on each row, at least one column PRS
 (continuous variable) and one with phenotype (continuous or categorical)}
 
-\item{prs_col}{a character specifying the PRS column name}
-
-\item{phenotype_col}{a character specifying the Phenotype column name}
+\item{assoc_table}{a dataframe or matrix specifying the associations to
+make from df. Each row should have the format 'PRS', 'Phenotype'}
 
 \item{scale}{a boolean specifying if scaling of PRS should be done before testing}
 
 \item{covar_col}{a character vector specifying the covariate column names (facultative)}
 }
 \value{
-return a data frame showing the regression of the PRS on the Phenotypes
-with 'PRS','Phenotype','N_cases','N_controls','N','OR','SE','lower_CI','upper_CI','P_value'
+return a data frame showing the association of the PRS(s) on the Phenotype(s)
+with 'PRS','Phenotype','Covar','N_cases','N_controls','N','OR','SE','lower_CI','upper_CI','P_value'
 }
 \description{
-take a distribution of PRS and multiple Phenotypes, the name of the analysis and eventual confounders
-return a data frame showing the regression of the unique PRS on the list of Phenotypes
+\code{multiassoc()} take a data frame with distribution(s) of PRS and Phenotype(s),
+and a table of associations to make from this data frame
+return a data frame showing the association results
 }
