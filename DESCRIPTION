@@ -9,7 +9,7 @@ Description: Using Polygenic Scores (PRS), this package allows to
     and do fast analysis on different Phenotypes, export interesting
     views of the PRS distribution using ggplot2 graphs. 
 Depends: R (>= 3.5.0)
-License: GPL-3
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.2
@@ -18,3 +18,6 @@ Imports:
     stats,
     utils
 LazyData: true
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

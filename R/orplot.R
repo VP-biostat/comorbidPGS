@@ -41,7 +41,7 @@ orplot <- function(score_table = NULL, axis = "vertical", filename = NA, pval = 
     warning("Axis parameter is not 'horizontal' or 'vertical', changing it to
             the value by default")
     axis <- 'vertical'
-  } else if (!typeof(pval) %in% c("numeric","integer","double","logical")) {
+  } else if (!class(pval) %in% c("numeric","integer","double","logical")) {
     stop("pval parameter should be either a logical or a numeric")
   }
 

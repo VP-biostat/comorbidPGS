@@ -25,19 +25,45 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
     stop("Please provide a data frame (that includes PRS values with at least
          columns PRS and Phenotype)")
   } else if (ncol(df)<2) {
-    stop("Please provide a data frame (that includes at least 2 columns PRS
-         and Phenotype)")
+    stop("Please provide a data frame for df that includes at least 2 columns PRS
+         and Phenotype")
+  } else if (!is.logical(scale)) {
+    stop("Please provide a logical for scale (TRUE by default)")
   }
 
 
   ## Checking what is in the data frame df
   #if no SCORESUM column found, assume 2nd column is PRS
-  if (!prs_col %in% names(df)) {
+  if (is.null(prs_col)) {
+    warning("Missing prs_col, using by default the second column of df")
+    prs_col <- names(df)[2]
+  } else if (is.na(prs_col)) {
+    warning("Missing prs_col, using by default the second column of df")
+    prs_col <- names(df)[2]
+  } else if (!prs_col %in% names(df)) {
+    warning("Wrong prs_col, using by default the second column of df")
     prs_col <- names(df)[2]
   }
   #if no Phenotype column found, assume 3rd column is PRS
-  if (!phenotype_col %in% names(df)) {
+  if (is.null(phenotype_col)) {
+    warning("Missing phenotype_col, using by default the third column of df")
     phenotype_col <- names(df)[3]
+  } else if (is.na(phenotype_col)) {
+    warning("Missing phenotype_col, using by default the third column of df")
+    phenotype_col <- names(df)[3]
+  } else if (!phenotype_col %in% names(df)) {
+    warning("Wrong phenotype_col, using by default the third column of df")
+    phenotype_col <- names(df)[3]
+  }
+  #if no Covariate column found, assume covar_col is NA
+  if (is.null(covar_col[1]) | is.na(covar_col[1])) {
+    covar_col <- NA
+  } else {
+    for (covar in covar_col) {
+      if (!covar %in% names(df)) {
+        stop(paste("Wrong covar_col provided,", covar,"does not exist"))
+      }
+    }
   }
   #communicate the columns selected
   cat("\n  PRS: ",prs_col)
@@ -79,7 +105,8 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   if (phenotype_type == "Cases/Controls") {
     regress <- glm(regress_formula, family="binomial"(link="logit"), data=df)
   } else if (phenotype_type == "Categorical") {
-    regress <- glm(regress_formula, data=df)
+    cat("\n   Phenotype is categorical, ‘cases’ are interpreted as the factor not having the first level")
+    regress <- glm(regress_formula, family="binomial"(link="logit"), data=df)
   } else if (phenotype_type == "Continuous") {
     regress <- lm(regress_formula, data=df)
   }

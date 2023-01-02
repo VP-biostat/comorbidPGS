@@ -15,6 +15,16 @@
 #'
 #' @return return a data frame showing the association of the PRS(s) on the Phenotype(s)
 #' with 'PRS','Phenotype','Covar','N_cases','N_controls','N','OR','SE','lower_CI','upper_CI','P_value'
+#'
+#' @examples
+#' assoc_table <- expand.grid(c("PRS_1","PRS_2"),
+#'                            c("Phenotype_1","Phenotype_2",
+#'                            "Phenotype_3","Phenotype_4"))
+#' names(assoc_table) <- c("PRS","Phenotype")
+#' results <- multiassoc(df = comorbidExample, assoc_table = assoc_table, covar = c("Age",
+#' "Sex","Covariate"))
+#' print(results)
+#'
 #' @importFrom stats na.omit
 #' @export
 multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE, covar_col = NA) {

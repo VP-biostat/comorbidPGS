@@ -12,13 +12,14 @@ phenotype_type <- function(df = NULL, phenotype_col = "Phenotype") {
     stop("Phenotype column have less than 2 values")
   }
   phenotype_type <- "Continuous"
-  if (typeof(df[,phenotype_col]) == "logical") {
+  if (class(df[,phenotype_col]) == "logical") {
     phenotype_type <- "Cases/Controls"
-  } else if (typeof(df[,phenotype_col]) == "character") {
+  } else if (class(df[,phenotype_col]) %in% c("character","factor")) {
     if (length(unique(df[,phenotype_col])) == 2) {
       phenotype_type <- "Cases/Controls"
     } else if  (length(unique(df[,phenotype_col])) > 2) {
       phenotype_type <- "Categorical"
+      df[,phenotype_col] <- as.factor(df[,phenotype_col])
     }
   } else if (1 %in% unique(df[,phenotype_col]) & 0 %in% unique(df[,phenotype_col])) {
     phenotype_type <- "Cases/Controls"
