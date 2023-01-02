@@ -1,2 +1,7 @@
 ^comorbidPRS\.Rproj$
 ^\.Rproj\.user$
+^\.git$
+^\.github$
+^\.gitignore$
+^README\.md\.bak$
+^LICENSE\.md$
