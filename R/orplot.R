@@ -56,7 +56,7 @@ orplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
       geom_point(position = position_dodge(0.7), cex = 2) +
       geom_errorbar(lwd = 1.25, width = 0.3, position = position_dodge(0.7)) +
       geom_hline(yintercept = 1, linetype = "dashed", colour = "grey") +
-      geom_text(aes(label = ifelse(P_value <= pval, formatC(P_value, format = "e", digits = 1), ""), group = PRS),
+      geom_text(aes(label = ifelse(((P_value <= pval)&(pval != F)), formatC(P_value, format = "e", digits = 1), ""), group = PRS),
                 hjust=-0.1, vjust=-1, colour = 'black', size = 3, position = position_dodge(width = 0.7)) +
       labs(color = "PRS", y = "Odds Ratio", x = "Phenotype") +
       theme_minimal()+
@@ -70,7 +70,7 @@ orplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
       geom_point(position = position_dodge(0.7), cex = 2) +
       geom_errorbar(lwd = 1.25, width = 0.3, position = position_dodge(0.7)) +
       geom_vline(xintercept = 1, linetype = "dashed", colour = "grey") +
-      geom_text(aes(label = ifelse(P_value <= pval, formatC(P_value, format = "e", digits = 1), ""), group = PRS),
+      geom_text(aes(label = ifelse(((P_value <= pval)&(pval != F)), formatC(P_value, format = "e", digits = 1), ""), group = PRS),
                 hjust=-0.1, vjust=-1, colour = 'black', size = 3, position = position_dodge2(width = 1)) +
       labs(color = "PRS", y = "Odds Ratio", x = "Phenotype") +
       theme_minimal()+
