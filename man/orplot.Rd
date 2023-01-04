@@ -18,9 +18,6 @@ if pval is FALSE, P-value does not appear on the plot
 if pval is TRUE, P-value always appears next to the signal
 if pval is a number, P-value will appear if the P-value is inferior to
 this given number.}
-
-\item{filename}{a facultative character, specifying the path and file name
-where to store the plot}
 }
 \value{
 return a figure of results in the format ggplot2 object

@@ -72,7 +72,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   if (phenotype_type == "Cases/Controls") {
     regress <- glm(regress_formula, family="binomial"(link="logit"), data=df)
   } else if (phenotype_type == "Categorical") {
-    cat("\n   Phenotype is categorical, ‘cases’ are interpreted as the factor not having the first level")
+    cat("\n   Phenotype is categorical, 'cases' are interpreted as the factor not having the first level")
     regress <- glm(regress_formula, family="binomial"(link="logit"), data=df)
   } else if (phenotype_type == "Continuous") {
     regress <- lm(regress_formula, data=df)

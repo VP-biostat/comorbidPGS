@@ -30,7 +30,6 @@ return a data frame showing the association results
 assoc_table <- expand.grid(c("PRS_1","PRS_2"),
                            c("Phenotype_1","Phenotype_2",
                            "Phenotype_3","Phenotype_4"))
-names(assoc_table) <- c("PRS","Phenotype")
 results <- multiassoc(df = comorbidExample, assoc_table = assoc_table, covar = c("Age",
 "Sex","Covariate"))
 print(results)

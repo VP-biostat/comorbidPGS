@@ -9,8 +9,6 @@
 #' PRS	Phenotype  OR	lower_CI	upper_CI	P_value
 #' @param axis a character ('horizontal' or 'vertical') specifying the rotation
 #' of the plot, 'vertical' by default
-#' @param filename a facultative character, specifying the path and file name
-#' where to store the plot
 #' @param pval a  parameter specifying information on how to display P-value
 #' if pval is FALSE, P-value does not appear on the plot
 #' if pval is TRUE, P-value always appears next to the signal
