@@ -24,7 +24,7 @@ You can type this code in your R command shell to see a demo:
 library(comorbidPRS)
 
 #use the demo dataset
-dataset <- data(comorbidExample)
+dataset <- data("comorbidExample")
 
 #do an association of one PRS with one Phenotype
 result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
