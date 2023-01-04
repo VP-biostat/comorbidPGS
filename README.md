@@ -12,7 +12,7 @@ R version 3.5 or higher
 ## Installation
 Direct download is available on [github](https://github.com/VP-biostat/comorbidPRS).
 If you want to install comorbidPRS, put the code below directly in your R command shell
-```bash
+```r
 install.package("devtools") #if it is not done already
 library(devtools)
 install_github("VP-biostat/comorbidPRS")
@@ -20,7 +20,7 @@ install_github("VP-biostat/comorbidPRS")
 
 ## How to use it?
 You can type this code in your R command shell to see a demo: 
-```bash
+```r
 library(comorbidPRS)
 
 #use the demo dataset
