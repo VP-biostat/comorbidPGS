@@ -55,7 +55,7 @@ test_that('Wrong pval', {
 })
 
 for (ax in c('horizontal','vertical')) {
-  for (pvalue in c(0.05,0)) {
+  for (pvalue in c(0.05,0.5,T,F)) {
 
     test_that(paste("Test with axis =",ax,"; pval =",pvalue), {
       expect_s3_class(
