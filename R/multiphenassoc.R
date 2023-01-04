@@ -45,6 +45,7 @@ multiphenassoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phe
 
     cat("\n")
     setTxtProgressBar(progress,i)
+    cat("\n")
   }
 
   #returning the result

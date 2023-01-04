@@ -90,7 +90,6 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   }
   sample_size <- nrow(df)
   cat("\n  Sample Size: ", sample_size)
-  cat(coef(summary(regress)))
   beta <- coef(summary(regress))[2,1]
   se <- coef(summary(regress))[2,2]
   p_val <- coef(summary(regress))[2,4]

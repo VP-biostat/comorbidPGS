@@ -64,6 +64,7 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE, covar_col = 
 
     cat("\n")
     setTxtProgressBar(progress,i)
+    cat("\n")
   }
 
   #returning the result
