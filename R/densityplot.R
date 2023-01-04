@@ -15,25 +15,17 @@
 #' the Threshold to consider individuals as Cases/Constrols as following:
 #' Phenotype > Threshold = Case
 #' Phenotype < Threshold = Control
-#' @param filename a facultative character, specifying the path and file name
-#' where to store the plot
 #'
 #' @return return a figure of results in the format ggplot2 object
 #' @importFrom stats na.omit
 #' @import ggplot2
 #' @export
 densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
-                      "Phenotype", scale = T, threshold = NA, filename = NA) {
+                      "Phenotype", scale = T, threshold = NA) {
   ## Checking inputs
-  if (is.null(df)) {
-    stop("Please provide a data frame (that includes PRS values with at least
-         columns PRS and Phenotype)")
-  } else if (ncol(df)<2) {
-    stop("Please provide a data frame (that includes at least 2 columns PRS
-         and Phenotype)")
-  } else if (length(unique(df[,phenotype_col])) < 2) {
-    stop("Phenotype column have less than 2 values")
-  }
+  col_names <- df_checker(df, prs_col, phenotype_col, scale)
+  prs_col <- col_names$prs_col
+  phenotype_col <- col_names$phenotype_col
 
   ## Taking only subset of df
   df <- df[,c(prs_col,phenotype_col)]
@@ -54,8 +46,9 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
             axis.text.x.bottom = element_text(size = 11, angle = 60),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
-  } else if (!is.na(threshold) & typeof(threshold) %in% c("integer","numeric","double")) {
-    p <- ggplot(df, aes(PRS, fill = as.logical.factor(Phenotype > threshold))) + #TO BE COMPLETED
+  } else if (!is.na(threshold) & class(threshold) %in% c("integer","numeric","double")) {
+    df$Categorical_Pheno <- df$Phenotype > threshold
+    p <- ggplot(df, aes(PRS, fill = as.factor(Categorical_Pheno))) +
       geom_density(alpha = 0.4) +
       theme_minimal()+
       labs(x = prs_col, y = "Density", fill = phenotype_col) +
@@ -64,9 +57,8 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
   } else {
-    if (!typeof(threshold) %in% c("integer","numeric","double") & !is.na(threshold)) {
-      warning("threshold is not a number, ignoring the parameter")
-    }
+    warning("Phenotype is continuous and 'threshold' is not a number, ignoring the parameter")
+
     p <- ggplot(df, aes(PRS)) +
       geom_density(alpha = 0.4) +
       theme_minimal()+
@@ -75,10 +67,6 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
             axis.text.x.bottom = element_text(size = 11, angle = 60),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
-  }
-
-  if (!is.na(filename)) {
-    ggsave(p, file = filename)
   }
 
   return(p)

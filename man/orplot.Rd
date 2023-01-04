@@ -4,7 +4,7 @@
 \alias{orplot}
 \title{Odds Ratio plot from Multiple PRS Associations}
 \usage{
-orplot(score_table = NULL, axis = "vertical", filename = NA, pval = 0.05)
+orplot(score_table = NULL, axis = "vertical", pval = 0.05)
 }
 \arguments{
 \item{score_table}{a dataframe with association results with at least
@@ -13,14 +13,14 @@ PRS    Phenotype  OR    lower_CI    upper_CI    P_value}
 \item{axis}{a character ('horizontal' or 'vertical') specifying the rotation
 of the plot, 'vertical' by default}
 
-\item{filename}{a facultative character, specifying the path and file name
-where to store the plot}
-
 \item{pval}{a  parameter specifying information on how to display P-value
 if pval is FALSE, P-value does not appear on the plot
 if pval is TRUE, P-value always appears next to the signal
 if pval is a number, P-value will appear if the P-value is inferior to
 this given number.}
+
+\item{filename}{a facultative character, specifying the path and file name
+where to store the plot}
 }
 \value{
 return a figure of results in the format ggplot2 object

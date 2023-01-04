@@ -13,8 +13,8 @@ assoc(
 )
 }
 \arguments{
-\item{df}{a dataframe with individuals on each row, at least one column PRS
-(continuous variable) and one with phenotype (continuous or categorical)}
+\item{df}{a dataframe with individuals on each row, at least one ID column,
+one column PRS (continuous variable) and one with phenotype (continuous or discrete)}
 
 \item{prs_col}{a character specifying the PRS column name}
 

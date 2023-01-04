@@ -7,11 +7,11 @@
 multiassoc(df = NULL, assoc_table = NULL, scale = TRUE, covar_col = NA)
 }
 \arguments{
-\item{df}{a dataframe with individuals on each row, at least one column PRS
-(continuous variable) and one with phenotype (continuous or categorical)}
+\item{df}{a dataframe with individuals on each row, at least one ID column,
+one column PRS (continuous variable) and one with phenotype (continuous or discrete)}
 
 \item{assoc_table}{a dataframe or matrix specifying the associations to
-make from df. Each row should have the format 'PRS', 'Phenotype'}
+make from df representing PRS and Phenotype (in this order)}
 
 \item{scale}{a boolean specifying if scaling of PRS should be done before testing}
 

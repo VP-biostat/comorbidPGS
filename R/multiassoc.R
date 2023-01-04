@@ -6,10 +6,10 @@
 #' and a table of associations to make from this data frame
 #' return a data frame showing the association results
 #'
-#' @param df a dataframe with individuals on each row, at least one column PRS
-#'(continuous variable) and one with phenotype (continuous or categorical)
+#' @param df a dataframe with individuals on each row, at least one ID column,
+#' one column PRS (continuous variable) and one with phenotype (continuous or discrete)
 #' @param assoc_table a dataframe or matrix specifying the associations to
-#' make from df. Each row should have the format 'PRS', 'Phenotype'
+#' make from df representing PRS and Phenotype (in this order)
 #' @param scale a boolean specifying if scaling of PRS should be done before testing
 #' @param covar_col a character vector specifying the covariate column names (facultative)
 #'
@@ -28,23 +28,17 @@
 #' @importFrom stats na.omit
 #' @export
 multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE, covar_col = NA) {
-  ## Checking inputs
-  #checking inputs
-  if (is.null(df)) {
-    stop("Please provide a data frame (that includes PRS values with at least
-         columns individual_id, PRS, Phenotype)")
-  } else if (ncol(df)<3) {
-    stop("Please provide a data frame (that includes at least 3 columns such
-         as individual_id, PRS, Phenotype)")
-  } else if(is.null(assoc_table)) {
+  ## Checking inputs (done in assoc that calls df_checker)
+  if (is.null(assoc_table)) {
     stop("Please provide a data frame or a matrix for assoc_table parameter")
+  } else if (!(class(assoc_table)[1] %in% c("data.frame", "matrix", "array"))) {
+    stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
   } else if (ncol(assoc_table) != 2) {
-    stop("Please provide for assoc_table a data frame or a matrix with 2
-           columns representing PRS and Phenotype (in this order)")
+    stop("Please provide for assoc_table a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
   } else {
     n_assoc <- nrow(assoc_table)
-    if (n_assoc == 1) {
-      warning("Only one association given, preferably use assoc() function")
+    if (n_assoc <= 1) {
+      warning("No multiple associations given, preferably use assoc() function")
     }
   }
   cat("\n\n------\nMultiple associations (",n_assoc,") testing:")

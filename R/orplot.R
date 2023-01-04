@@ -20,29 +20,36 @@
 #' @return return a figure of results in the format ggplot2 object
 #' @import ggplot2
 #' @export
-orplot <- function(score_table = NULL, axis = "vertical", filename = NA, pval = 0.05) {
+orplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
   ## Checking inputs
   if (is.null(score_table)) {
-    stop("Please provide a data frame (that includes PRS values with at least
-         PRS	Phenotype  OR	lower_CI	upper_CI	P_value)")
+    stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype'  'OR'	'lower_CI'	'upper_CI'	'P_value')")
+  } else if (!class(score_table)[1] %in% c("data.frame")) {
+    stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype'  'OR'	'lower_CI'	'upper_CI'	'P_value')")
   } else if (!"PRS" %in% names(score_table)) {
-    stop("Please provide a column 'PRS' in the data frame of results")
+    stop("Please provide a column named 'PRS' in the data frame of results")
   } else if (!"Phenotype" %in% names(score_table)) {
-    stop("Please provide a column 'Phenotype' in the data frame of results")
+    stop("Please provide a column named 'Phenotype' in the data frame of results")
   } else if (!"OR" %in% names(score_table)) {
-    stop("Please provide a column 'OR' in the data frame of results")
+    stop("Please provide a column named 'OR' in the data frame of results")
   } else if (!"lower_CI" %in% names(score_table)) {
-    stop("Please provide a column 'lower_CI' in the data frame of results")
+    stop("Please provide a column named 'lower_CI' in the data frame of results")
   } else if (!"upper_CI" %in% names(score_table)) {
-    stop("Please provide a column 'upper_CI' in the data frame of results")
+    stop("Please provide a column named 'upper_CI' in the data frame of results")
   } else if (!"P_value" %in% names(score_table)) {
-    stop("Please provide a column 'P_value' in the data frame of results")
-  } else if (!axis %in% c('horizontal','vertical')) {
-    warning("Axis parameter is not 'horizontal' or 'vertical', changing it to
+    stop("Please provide a column named 'P_value' in the data frame of results")
+  } else if (is.null(axis)) {
+    warning("'axis' parameter is not 'horizontal' or 'vertical', changing it to
             the value by default")
     axis <- 'vertical'
-  } else if (!class(pval) %in% c("numeric","integer","double","logical")) {
-    stop("pval parameter should be either a logical or a numeric")
+  } else if (!axis %in% c('horizontal','vertical')) {
+    warning("'axis' parameter is not 'horizontal' or 'vertical', changing it to
+            the value by default")
+    axis <- 'vertical'
+  } else if (is.null(pval)) {
+    stop("Missing 'pval' parameter")
+  } else if (!class(pval)[1] %in% c("numeric","integer","double","logical")) {
+    stop("'pval' parameter should be either a logical or a numeric")
   }
 
   ## Making plot
@@ -74,10 +81,6 @@ orplot <- function(score_table = NULL, axis = "vertical", filename = NA, pval = 
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11),
             legend.position = ifelse((length(unique(score_table$PRS)) == 1), "none", "bottom"))
-  }
-
-  if (!is.na(filename)) {
-    ggsave(p, file = filename)
   }
 
   return(p)

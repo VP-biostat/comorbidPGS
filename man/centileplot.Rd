@@ -10,8 +10,7 @@ centileplot(
   phenotype_col = "Phenotype",
   scale = T,
   decile = F,
-  continuous_metric = NA,
-  filename = NA
+  continuous_metric = NA
 )
 }
 \arguments{
@@ -27,10 +26,7 @@ centileplot(
 \item{decile}{a boolean specifying if centiles or deciles should be used}
 
 \item{continuous_metric}{a facultative character specifying what metric to
-use for continuous Phenotype, only two options: "median" or "mean"}
-
-\item{filename}{a facultative character, specifying the path and file name
-where to store the plot}
+use for continuous Phenotype, only three options: NA, "median" or "mean"}
 }
 \value{
 return a figure of results in the format ggplot2 object

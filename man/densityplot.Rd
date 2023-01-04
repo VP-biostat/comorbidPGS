@@ -9,8 +9,7 @@ densityplot(
   prs_col = "SCORESUM",
   phenotype_col = "Phenotype",
   scale = T,
-  threshold = NA,
-  filename = NA
+  threshold = NA
 )
 }
 \arguments{
@@ -27,9 +26,6 @@ densityplot(
 the Threshold to consider individuals as Cases/Constrols as following:
 Phenotype > Threshold = Case
 Phenotype < Threshold = Control}
-
-\item{filename}{a facultative character, specifying the path and file name
-where to store the plot}
 }
 \value{
 return a figure of results in the format ggplot2 object

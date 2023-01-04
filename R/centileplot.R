@@ -13,29 +13,21 @@
 #' @param scale a boolean specifying if scaling of PRS should be done before plotting
 #' @param decile a boolean specifying if centiles or deciles should be used
 #' @param continuous_metric a facultative character specifying what metric to
-#' use for continuous Phenotype, only two options: "median" or "mean"
-#' @param filename a facultative character, specifying the path and file name
-#' where to store the plot
+#' use for continuous Phenotype, only three options: NA, "median" or "mean"
 #'
 #' @return return a figure of results in the format ggplot2 object
 #' @importFrom stats na.omit
 #' @import ggplot2
 #' @export
-centileplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
-                             "Phenotype", scale = T, decile = F, continuous_metric = NA,
-                           filename = NA) {
+centileplot <- function(df = NULL, prs_col = "SCORESUM",
+                        phenotype_col = "Phenotype",
+                        scale = T, decile = F, continuous_metric = NA) {
   ## Checking inputs
-  if (is.null(df)) {
-    stop("Please provide a data frame (that includes PRS values with at least
-         columns PRS and Phenotype)")
-  } else if (ncol(df)<2) {
-    stop("Please provide a data frame (that includes at least 2 columns PRS
-         and Phenotype)")
-  } else if (length(unique(df[,phenotype_col])) < 2) {
-    stop("Phenotype column have less than 2 values")
-  } else if (!continuous_metric %in% c(NA, "median", "mean")) {
-    stop("continuous_metric parameter only accepts tree values: NA, 'median'
-    or 'mean'")
+  col_names <- df_checker(df, prs_col, phenotype_col, scale)
+  prs_col <- col_names$prs_col
+  phenotype_col <- col_names$phenotype_col
+  if (!continuous_metric %in% c(NA, "median", "mean")) {
+    stop("'continuous_metric' parameter only accepts three values: NA, 'median' or 'mean'")
   }
 
   ## Taking only subset of df
@@ -46,8 +38,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
     df[,"PRS"] <- scale(df[,"PRS"]) #scaling if scale = T
   }
   if (nrow(df) < 10000) {
-    warning("The dataset has less than 10,000 individuals, centiles plot might not look good!
-    Use the argument decile = T to adapt to small datasets")
+    warning("The dataset has less than 10,000 individuals, centiles plot may not look good! Use the argument decile = T to adapt to small datasets")
   }
 
   ## Making centiles plot based on the category of Phenotype
@@ -65,8 +56,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
   preval <- data.frame(matrix(nrow = 0, ncol = 4))
 
   if (phenotype_type == "Categorical") {
-    stop("Cannot use a categorical phenotype for centiles plot. Please use
-         a Cases/Controls or Continuous Phenotype")
+    stop("Cannot use Categorical Phenotype for centiles plot. Please use Cases/Controls or Continuous Phenotype")
   } else if (phenotype_type == "Cases/Controls") {
 
     names(preval) <- c("centile","prevalence","n_cases","n")
@@ -97,8 +87,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
   } else if (phenotype_type == "Continuous") {
 
     if (is.na(continuous_metric)) {
-      warning("The Phenotype selected is continuous, using mean value group by centiles by default")
-      continuous_metric <- "mean"
+      continuous_metric <- 'mean'
     }
 
     names(preval) <- c("centile","median","mean","n")
@@ -128,10 +117,6 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
             axis.text.y.left = element_text(size = 11))
 
 
-  }
-
-  if (!is.na(filename)) {
-    ggsave(p, file = filename)
   }
 
   return(p)

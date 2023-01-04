@@ -5,8 +5,8 @@
 #' `multiphenassoc()` take a distribution of PRS and multiple Phenotypes and eventual confounders
 #' return a data frame showing the association results
 #'
-#' @param df a dataframe with individuals on each row, at least one column PRS
-#'(continuous variable) and one with phenotype (continuous or categorical)
+#' @param df a dataframe with individuals on each row, at least one ID column,
+#' one column PRS (continuous variable) and one with phenotype (continuous or discrete)
 #' @param prs_col a character specifying the PRS column name
 #' @param phenotype_col a character vector specifying the Phenotype column names
 #' @param scale a boolean specifying if scaling of PRS should be done before testing
@@ -21,15 +21,9 @@ multiphenassoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phe
   ## Checking inputs
   n_pheno <- length(phenotype_col)
   cat("\n\n------\nMultiple  phenotypes associations (",n_pheno,") testing:")
-  #checking inputs
-  if (is.null(df)) {
-    stop("Please provide a data frame (that includes PRS values with at least
-         columns individual_id, PRS, Phenotype)")
-  } else if (ncol(df)<3) {
-    stop("Please provide a data frame (that includes at least 3 columns such
-         as individual_id, PRS, Phenotype)")
-  } else if (n_pheno == 1) {
-    warning("Only one Phenotype given, preferably use assoc() function")
+  #checking inputs (done in assoc that calls df_checker)
+  if (n_pheno <= 1) {
+    warning("No multiple Phenotypes given, preferably use assoc() function")
   }
 
   ##Creating progress bar

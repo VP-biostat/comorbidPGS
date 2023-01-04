@@ -12,7 +12,7 @@
 #'   \item{Phenotype_2}{A cases/controls Phenotype associated to PRS_1}
 #'   \item{Phenotype_3}{A cases/controls Phenotype associated to PRS_2}
 #'   \item{Phenotype_4}{A categorical Phenotype associated to PRS_2}
-#'   \item{Sex, Age, Covariate}{Tree potential Covariates}
+#'   \item{Sex, Age, Covariate}{Three potential Covariates}
 #'   ...
 #' }
 #' @source <https://github.com/VP-biostat/comorbidPRS>

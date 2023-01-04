@@ -5,8 +5,8 @@
 #' `assoc()` take a distribution of PRS, a Phenotype and eventual Confounders
 #' return a data frame showing the association of PRS on the Phenotype
 #'
-#' @param df a dataframe with individuals on each row, at least one column PRS
-#' (continuous variable) and one with phenotype (continuous or categorical)
+#' @param df a dataframe with individuals on each row, at least one ID column,
+#' one column PRS (continuous variable) and one with phenotype (continuous or discrete)
 #' @param prs_col a character specifying the PRS column name
 #' @param phenotype_col a character specifying the Phenotype column name
 #' @param scale a boolean specifying if scaling of PRS should be done before testing
@@ -19,52 +19,16 @@
 #' @export
 assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
                   scale = TRUE, covar_col = NA) {
-  cat("\n\n---\nAssociation testing:")
   ## Checking inputs
-  if (is.null(df)) {
-    stop("Please provide a data frame (that includes PRS values with at least
-         columns PRS and Phenotype)")
-  } else if (ncol(df)<2) {
-    stop("Please provide a data frame for df that includes at least 2 columns PRS
-         and Phenotype")
-  } else if (!is.logical(scale)) {
+  col_names <- df_checker(df, prs_col, phenotype_col, scale, covar_col)
+  prs_col <- col_names$prs_col
+  phenotype_col <- col_names$phenotype_col
+  if (!is.logical(scale)) {
     stop("Please provide a logical for scale (TRUE by default)")
   }
 
+  cat("\n\n---\nAssociation testing:")
 
-  ## Checking what is in the data frame df
-  #if no SCORESUM column found, assume 2nd column is PRS
-  if (is.null(prs_col)) {
-    warning("Missing prs_col, using by default the second column of df")
-    prs_col <- names(df)[2]
-  } else if (is.na(prs_col)) {
-    warning("Missing prs_col, using by default the second column of df")
-    prs_col <- names(df)[2]
-  } else if (!prs_col %in% names(df)) {
-    warning("Wrong prs_col, using by default the second column of df")
-    prs_col <- names(df)[2]
-  }
-  #if no Phenotype column found, assume 3rd column is PRS
-  if (is.null(phenotype_col)) {
-    warning("Missing phenotype_col, using by default the third column of df")
-    phenotype_col <- names(df)[3]
-  } else if (is.na(phenotype_col)) {
-    warning("Missing phenotype_col, using by default the third column of df")
-    phenotype_col <- names(df)[3]
-  } else if (!phenotype_col %in% names(df)) {
-    warning("Wrong phenotype_col, using by default the third column of df")
-    phenotype_col <- names(df)[3]
-  }
-  #if no Covariate column found, assume covar_col is NA
-  if (is.null(covar_col[1]) | is.na(covar_col[1])) {
-    covar_col <- NA
-  } else {
-    for (covar in covar_col) {
-      if (!covar %in% names(df)) {
-        stop(paste("Wrong covar_col provided,", covar,"does not exist"))
-      }
-    }
-  }
   #communicate the columns selected
   cat("\n  PRS: ",prs_col)
   cat("\n  Phenotype: ",phenotype_col)
@@ -80,6 +44,9 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   df <- na.omit(df) #excluding rows with NAs
   if (scale) {
     df[,prs_col] <- scale(df[,prs_col]) #scaling if scale = T
+  }
+  if (nrow(df)<2) {
+    stop("After NA removal, not enough samples/individuals to test")
   }
 
 
@@ -132,7 +99,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   lower_ci <- ci[2,1]
   upper_ci <- ci[2,2]
   cat("\n   OR ( 95% CI ): ",or," (",lower_ci,"-",upper_ci,")")
-  cat("\n   P-value: ",p_val)
+  cat("\n   P-value: ",p_val,"\n")
 
   #creating the score_table
   score_table <- data.frame("PRS" = prs_col, "Phenotype" = phenotype_col,
