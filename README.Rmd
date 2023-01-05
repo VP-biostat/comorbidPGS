@@ -1,0 +1,86 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# comorbidPRS
+
+<!-- badges: start -->
+[![GitHub tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPRS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPRS)
+<!-- badges: end -->
+
+comorbidPRS is a tool for analysing an already computed PRS distribution to investigate shared aetiology in multiple conditions.
+
+comorbidPRS is under GPL-3 license, and is freely available for download. 
+
+## Prerequisite
+stats 
+utils
+ggplot2 
+R version 3.5 or higher 
+
+## Installation
+
+You can install the development version of comorbidPRS from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("VP-biostat/comorbidPRS")
+```
+
+## Example
+
+This is a basic example which shows you how to do basic association with the example dataset:
+
+```{r example, echo = FALSE}
+library(comorbidPRS)
+
+#use the demo dataset
+dataset <- comorbidExample
+
+#do an association of one PRS with one Phenotype
+result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
+print(result_1)
+```
+```{r example multiple assoc, echo = FALSE}
+#do multiple associations
+assoc <- expand.grid(c("PRS_1", "PRS_2"), c("Phenotype_1", "Phenotype_2", "Phenotype_3", "Phenotype_4"))
+result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("Age", "Sex", "Covariate"))
+print(result_2)
+```
+
+Examples of plot: 
+
+```{r decileplot, echo = FALSE}
+decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
+```
+
+```{r densityplot, echo = FALSE}
+comorbidPRS::densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
+```
+
+```{r centileplot, echo = FALSE}
+comorbidPRS::centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
+```
+
+```{r orplot, echo = FALSE}
+#show multiple associations in a plot
+comorbidPRS::orplot(score_table = result_2)
+```
+
+## Citation 
+If you use comorbidPRS in any published work, please cite the following manuscript:
+
+```{r citation, echo=FALSE, results = 'asis'}
+print(citation('comorbidPRS'), 'html')
+```
