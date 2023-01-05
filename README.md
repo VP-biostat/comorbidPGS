@@ -42,181 +42,36 @@ dataset <- comorbidExample
 
 #do an association of one PRS with one Phenotype
 result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
-#> 
-#> 
-#> ---
-#> Association testing:
-#>   PRS:  PRS_1
-#>   Phenotype:  Phenotype_1
-#>   Covariate:  NA
-#>   Phenotype type:  Continuous
-#>     Phenotype_1 ~ PRS_1
-#>   Sample Size:  50000
-#>    OR ( 95% CI ):  1.197197  ( 1.186749 - 1.207738 )
-#>    P-value:  0
 ```
 
 ``` r
-print(result_1)
-#>     PRS   Phenotype Covar N_cases N_controls     N       OR          SE
-#> 1 PRS_1 Phenotype_1    NA      NA         NA 50000 1.197197 0.004472266
-#>   lower_CI upper_CI P_value
-#> 1 1.186749 1.207738       0
+knitr::kable(result_1)
 ```
+
+| PRS   | Phenotype   | Covar | N_cases | N_controls |     N |       OR |        SE | lower_CI | upper_CI | P_value |
+|:------|:------------|:------|:--------|:-----------|------:|---------:|----------:|---------:|---------:|--------:|
+| PRS_1 | Phenotype_1 | NA    | NA      | NA         | 50000 | 1.197197 | 0.0044723 | 1.186749 | 1.207737 |       0 |
 
 ``` r
 #do multiple associations
 assoc <- expand.grid(c("PRS_1", "PRS_2"), c("Phenotype_1", "Phenotype_2", "Phenotype_3", "Phenotype_4"))
 result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("Age", "Sex", "Covariate"))
-#> 
-#> 
-#> ------
-#> Multiple associations ( 8 ) testing:
-#>   |                                                                              |                                                                      |   0%
-#> 
-#> ---
-#> Association testing:
-#>   PRS:  PRS_1
-#>   Phenotype:  Phenotype_1
-#>   Covariate:  Age Sex Covariate
-#>   Phenotype type:  Continuous
-#>     Phenotype_1 ~ PRS_1 + Age + Sex + Covariate
-#>   Sample Size:  50000
-#>    OR ( 95% CI ):  1.197185  ( 1.186736 - 1.207726 )
-#>    P-value:  0 
-#> 
-#>   |                                                                              |=========                                                             |  12%
-#> 
-#> 
-#> ---
-#> Association testing:
-#>   PRS:  PRS_2
-#>   Phenotype:  Phenotype_1
-#>   Covariate:  Age Sex Covariate
-#>   Phenotype type:  Continuous
-#>     Phenotype_1 ~ PRS_2 + Age + Sex + Covariate
-#>   Sample Size:  50000
-#>    OR ( 95% CI ):  0.9988762  ( 0.9900188 - 1.007813 )
-#>    P-value:  0.8045741 
-#> 
-#>   |                                                                              |==================                                                    |  25%
-#> 
-#> 
-#> ---
-#> Association testing:
-#>   PRS:  PRS_1
-#>   Phenotype:  Phenotype_2
-#>   Covariate:  Age Sex Covariate
-#>   Phenotype type:  Cases/Controls
-#>     Phenotype_2 ~ PRS_1 + Age + Sex + Covariate
-#>   Cases:  24589
-#>   Controls:  25411
-#>   Sample Size:  50000
-#>    OR ( 95% CI ):  1.69677  ( 1.664486 - 1.729818 )
-#>    P-value:  0 
-#> 
-#>   |                                                                              |==========================                                            |  38%
-#> 
-#> 
-#> ---
-#> Association testing:
-#>   PRS:  PRS_2
-#>   Phenotype:  Phenotype_2
-#>   Covariate:  Age Sex Covariate
-#>   Phenotype type:  Cases/Controls
-#>     Phenotype_2 ~ PRS_2 + Age + Sex + Covariate
-#>   Cases:  24589
-#>   Controls:  25411
-#>   Sample Size:  50000
-#>    OR ( 95% CI ):  0.9972665  ( 0.9799316 - 1.014908 )
-#>    P-value:  0.7596387 
-#> 
-#>   |                                                                              |===================================                                   |  50%
-#> 
-#> 
-#> ---
-#> Association testing:
-#>   PRS:  PRS_1
-#>   Phenotype:  Phenotype_3
-#>   Covariate:  Age Sex Covariate
-#>   Phenotype type:  Cases/Controls
-#>     Phenotype_3 ~ PRS_1 + Age + Sex + Covariate
-#>   Cases:  25213
-#>   Controls:  24787
-#>   Sample Size:  50000
-#>    OR ( 95% CI ):  1.008607  ( 0.991078 - 1.026447 )
-#>    P-value:  0.33803 
-#> 
-#>   |                                                                              |============================================                          |  62%
-#> 
-#> 
-#> ---
-#> Association testing:
-#>   PRS:  PRS_2
-#>   Phenotype:  Phenotype_3
-#>   Covariate:  Age Sex Covariate
-#>   Phenotype type:  Cases/Controls
-#>     Phenotype_3 ~ PRS_2 + Age + Sex + Covariate
-#>   Cases:  25213
-#>   Controls:  24787
-#>   Sample Size:  50000
-#>    OR ( 95% CI ):  1.694778  ( 1.662545 - 1.727772 )
-#>    P-value:  0 
-#> 
-#>   |                                                                              |====================================================                  |  75%
-#> 
-#> 
-#> ---
-#> Association testing:
-#>   PRS:  PRS_1
-#>   Phenotype:  Phenotype_4
-#>   Covariate:  Age Sex Covariate
-#>   Phenotype type:  Categorical
-#>     Phenotype_4 ~ PRS_1 + Age + Sex + Covariate
-#>    Phenotype is categorical, 'cases' are interpreted as the factor not having the first level
-#>   Sample Size:  50000
-#>    OR ( 95% CI ):  1.001931  ( 0.9772745 - 1.02721 )
-#>    P-value:  0.8793929 
-#> 
-#>   |                                                                              |=============================================================         |  88%
-#> 
-#> 
-#> ---
-#> Association testing:
-#>   PRS:  PRS_2
-#>   Phenotype:  Phenotype_4
-#>   Covariate:  Age Sex Covariate
-#>   Phenotype type:  Categorical
-#>     Phenotype_4 ~ PRS_2 + Age + Sex + Covariate
-#>    Phenotype is categorical, 'cases' are interpreted as the factor not having the first level
-#>   Sample Size:  50000
-#>    OR ( 95% CI ):  2.365826  ( 2.299163 - 2.434845 )
-#>    P-value:  0 
-#> 
-#>   |                                                                              |======================================================================| 100%
 ```
 
 ``` r
-print(result_2)
-#>     PRS   Phenotype             Covar N_cases N_controls     N        OR
-#> 1 PRS_1 Phenotype_1 Age+Sex+Covariate      NA         NA 50000 1.1971851
-#> 2 PRS_2 Phenotype_1 Age+Sex+Covariate      NA         NA 50000 0.9988762
-#> 3 PRS_1 Phenotype_2 Age+Sex+Covariate   24589      25411 50000 1.6967704
-#> 4 PRS_2 Phenotype_2 Age+Sex+Covariate   24589      25411 50000 0.9972665
-#> 5 PRS_1 Phenotype_3 Age+Sex+Covariate   25213      24787 50000 1.0086071
-#> 6 PRS_2 Phenotype_3 Age+Sex+Covariate   25213      24787 50000 1.6947776
-#> 7 PRS_1 Phenotype_4 Age+Sex+Covariate      NA         NA 50000 1.0019309
-#> 8 PRS_2 Phenotype_4 Age+Sex+Covariate      NA         NA 50000 2.3658259
-#>            SE  lower_CI upper_CI   P_value
-#> 1 0.004472399 1.1867365 1.207726 0.0000000
-#> 2 0.004544322 0.9900188 1.007813 0.8045741
-#> 3 0.009821416 1.6644859 1.729818 0.0000000
-#> 4 0.008946462 0.9799316 1.014908 0.7596387
-#> 5 0.008945349 0.9910780 1.026447 0.3380300
-#> 6 0.009817085 1.6625449 1.727772 0.0000000
-#> 7 0.012712643 0.9772745 1.027210 0.8793929
-#> 8 0.014626835 2.2991633 2.434845 0.0000000
+knitr::kable(result_2)
 ```
+
+| PRS   | Phenotype   | Covar             | N_cases | N_controls |     N |        OR |        SE |  lower_CI | upper_CI |   P_value |
+|:------|:------------|:------------------|--------:|-----------:|------:|----------:|----------:|----------:|---------:|----------:|
+| PRS_1 | Phenotype_1 | Age+Sex+Covariate |      NA |         NA | 50000 | 1.1971851 | 0.0044724 | 1.1867365 | 1.207726 | 0.0000000 |
+| PRS_2 | Phenotype_1 | Age+Sex+Covariate |      NA |         NA | 50000 | 0.9988762 | 0.0045443 | 0.9900188 | 1.007813 | 0.8045741 |
+| PRS_1 | Phenotype_2 | Age+Sex+Covariate |   24589 |      25411 | 50000 | 1.6967704 | 0.0098214 | 1.6644859 | 1.729818 | 0.0000000 |
+| PRS_2 | Phenotype_2 | Age+Sex+Covariate |   24589 |      25411 | 50000 | 0.9972665 | 0.0089465 | 0.9799316 | 1.014908 | 0.7596387 |
+| PRS_1 | Phenotype_3 | Age+Sex+Covariate |   25213 |      24787 | 50000 | 1.0086071 | 0.0089453 | 0.9910780 | 1.026447 | 0.3380300 |
+| PRS_2 | Phenotype_3 | Age+Sex+Covariate |   25213 |      24787 | 50000 | 1.6947776 | 0.0098171 | 1.6625449 | 1.727772 | 0.0000000 |
+| PRS_1 | Phenotype_4 | Age+Sex+Covariate |      NA |         NA | 50000 | 1.0019309 | 0.0127126 | 0.9772745 | 1.027210 | 0.8793929 |
+| PRS_2 | Phenotype_4 | Age+Sex+Covariate |      NA |         NA | 50000 | 2.3658259 | 0.0146268 | 2.2991633 | 2.434845 | 0.0000000 |
 
 Examples of plot:
 
@@ -227,20 +82,20 @@ decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 <img src="man/figures/README-decileplot-1.png" width="100%" />
 
 ``` r
-comorbidPRS::densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
+densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
 ```
 
 <img src="man/figures/README-densityplot-1.png" width="100%" />
 
 ``` r
-comorbidPRS::centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
+centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
 ```
 
 <img src="man/figures/README-centileplot-1.png" width="100%" />
 
 ``` r
 #show multiple associations in a plot
-comorbidPRS::orplot(score_table = result_2)
+orplot(score_table = result_2)
 ```
 
 <img src="man/figures/README-orplot-1.png" width="100%" />
