@@ -42,7 +42,7 @@ devtools::install_github("VP-biostat/comorbidPRS")
 
 This is a basic example which shows you how to do basic association with the example dataset:
 
-```{r example, echo = FALSE}
+```{r example, message = FALSE}
 library(comorbidPRS)
 
 #use the demo dataset
@@ -50,30 +50,34 @@ dataset <- comorbidExample
 
 #do an association of one PRS with one Phenotype
 result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
+```
+```{r result_1}
 print(result_1)
 ```
-```{r example multiple assoc, echo = FALSE}
+```{r example multiple assoc, message = FALSE}
 #do multiple associations
 assoc <- expand.grid(c("PRS_1", "PRS_2"), c("Phenotype_1", "Phenotype_2", "Phenotype_3", "Phenotype_4"))
 result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("Age", "Sex", "Covariate"))
+```
+```{r result_2}
 print(result_2)
 ```
 
 Examples of plot: 
 
-```{r decileplot, echo = FALSE}
+```{r decileplot}
 decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 ```
 
-```{r densityplot, echo = FALSE}
+```{r densityplot}
 comorbidPRS::densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
 ```
 
-```{r centileplot, echo = FALSE}
+```{r centileplot}
 comorbidPRS::centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
 ```
 
-```{r orplot, echo = FALSE}
+```{r orplot}
 #show multiple associations in a plot
 comorbidPRS::orplot(score_table = result_2)
 ```
