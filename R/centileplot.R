@@ -10,7 +10,6 @@
 #' (continuous variable) and one with phenotype (continuous or categorical)
 #' @param prs_col a character specifying the PRS column name
 #' @param phenotype_col a character specifying the Phenotype column name
-#' @param scale a boolean specifying if scaling of PRS should be done before plotting
 #' @param decile a boolean specifying if centiles or deciles should be used
 #' @param continuous_metric a facultative character specifying what metric to
 #' use for continuous Phenotype, only three options: NA, "median" or "mean"
@@ -21,9 +20,9 @@
 #' @export
 centileplot <- function(df = NULL, prs_col = "SCORESUM",
                         phenotype_col = "Phenotype",
-                        scale = T, decile = F, continuous_metric = NA) {
+                        decile = F, continuous_metric = NA) {
   ## Checking inputs
-  col_names <- df_checker(df, prs_col, phenotype_col, scale)
+  col_names <- df_checker(df, prs_col, phenotype_col, scale = F)
   prs_col <- col_names$prs_col
   phenotype_col <- col_names$phenotype_col
   if (!continuous_metric %in% c(NA, "median", "mean")) {
@@ -34,9 +33,6 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
   df <- df[,c(prs_col,phenotype_col)]
   names(df) <- c("PRS","Phenotype")
   df <- na.omit(df)
-  if (scale) {
-    df[,"PRS"] <- scale(df[,"PRS"]) #scaling if scale = T
-  }
   if (nrow(df) < 10000) {
     warning("The dataset has less than 10,000 individuals, centiles plot may not look good! Use the argument decile = T to adapt to small datasets")
   }

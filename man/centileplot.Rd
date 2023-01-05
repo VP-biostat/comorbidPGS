@@ -8,7 +8,6 @@ centileplot(
   df = NULL,
   prs_col = "SCORESUM",
   phenotype_col = "Phenotype",
-  scale = T,
   decile = F,
   continuous_metric = NA
 )
@@ -20,8 +19,6 @@ centileplot(
 \item{prs_col}{a character specifying the PRS column name}
 
 \item{phenotype_col}{a character specifying the Phenotype column name}
-
-\item{scale}{a boolean specifying if scaling of PRS should be done before plotting}
 
 \item{decile}{a boolean specifying if centiles or deciles should be used}
 

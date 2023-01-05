@@ -15,20 +15,18 @@ test_that('Categorical Phenotype', {
                              phenotype_col = "Phenotype_4"))
 })
 
-for (scaling in c(T, F)) {
-  for (deciling in c(T, F)) {
-    for (cont_met in c(NA, 'mean', 'median')) {
+for (deciling in c(T, F)) {
+  for (cont_met in c(NA, 'mean', 'median')) {
 
-      test_that(paste("Test with scaling =",scaling,"; centile =",deciling,"; continuous_metric =",cont_met), {
-        expect_s3_class(
-          object = centileplot(df = comorbidExample, prs_col = "PRS_1",
-                         phenotype_col = ifelse(!is.na(cont_met), "Phenotype_1", "Phenotype_2"),
-                         scale = scaling, decile = deciling, continuous_metric = cont_met
-          ),
-          class = "ggplot"
-        )
-      })
+    test_that(paste("Test with centile =",deciling,"; continuous_metric =",cont_met), {
+      expect_s3_class(
+        object = centileplot(df = comorbidExample, prs_col = "PRS_1",
+                       phenotype_col = ifelse(!is.na(cont_met), "Phenotype_1", "Phenotype_2"),
+                       decile = deciling, continuous_metric = cont_met
+        ),
+        class = "ggplot"
+      )
+    })
 
-    }
   }
 }
