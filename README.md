@@ -31,6 +31,8 @@ devtools::install_github("VP-biostat/comorbidPRS")
 
 ## Example
 
+### Building an Association Table
+
 This is a basic example which shows you how to do basic association with
 the example dataset:
 
@@ -44,10 +46,6 @@ dataset <- comorbidExample
 result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 ```
 
-``` r
-knitr::kable(result_1)
-```
-
 | PRS   | Phenotype   | Covar | N_cases | N_controls |     N |       OR |        SE | lower_CI | upper_CI | P_value |
 |:------|:------------|:------|:--------|:-----------|------:|---------:|----------:|---------:|---------:|--------:|
 | PRS_1 | Phenotype_1 | NA    | NA      | NA         | 50000 | 1.197197 | 0.0044723 | 1.186749 | 1.207737 |       0 |
@@ -56,10 +54,6 @@ knitr::kable(result_1)
 #do multiple associations
 assoc <- expand.grid(c("PRS_1", "PRS_2"), c("Phenotype_1", "Phenotype_2", "Phenotype_3", "Phenotype_4"))
 result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("Age", "Sex", "Covariate"))
-```
-
-``` r
-knitr::kable(result_2)
 ```
 
 | PRS   | Phenotype   | Covar             | N_cases | N_controls |     N |        OR |        SE |  lower_CI | upper_CI |   P_value |
@@ -73,13 +67,7 @@ knitr::kable(result_2)
 | PRS_1 | Phenotype_4 | Age+Sex+Covariate |      NA |         NA | 50000 | 1.0019309 | 0.0127126 | 0.9772745 | 1.027210 | 0.8793929 |
 | PRS_2 | Phenotype_4 | Age+Sex+Covariate |      NA |         NA | 50000 | 2.3658259 | 0.0146268 | 2.2991633 | 2.434845 | 0.0000000 |
 
-Examples of plot:
-
-``` r
-decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
-```
-
-<img src="man/figures/README-decileplot-1.png" width="100%" />
+### Examples of plot
 
 ``` r
 densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
@@ -88,27 +76,28 @@ densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
 <img src="man/figures/README-densityplot-1.png" width="100%" />
 
 ``` r
-centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
-```
-
-<img src="man/figures/README-centileplot-1.png" width="100%" />
-
-``` r
 #show multiple associations in a plot
 orplot(score_table = result_2)
 ```
 
 <img src="man/figures/README-orplot-1.png" width="100%" />
 
+``` r
+centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
+```
+
+<img src="man/figures/README-centileplot-1.png" width="100%" />
+
+``` r
+decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
+```
+
+<img src="man/figures/README-decileplot-1.png" width="100%" />
+
 ## Citation
 
 If you use comorbidPRS in any published work, please cite the following
 manuscript:
-
-    #> Warning in citation("comorbidPRS"): no date field in DESCRIPTION file of package
-    #> 'comorbidPRS'
-    #> Warning in citation("comorbidPRS"): could not determine year for 'comorbidPRS'
-    #> from package DESCRIPTION file
 
 <p>
 Pascat V (????). <em>comorbidPRS: Assessing the shared predisposition

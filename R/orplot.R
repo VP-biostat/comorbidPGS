@@ -53,25 +53,25 @@ orplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
   ## Making plot
   if (axis == 'horizontal') {
     p <- ggplot(score_table, aes(x = Phenotype, y = OR, ymin = lower_CI, ymax = upper_CI, color = PRS)) +
-      geom_point(position = position_dodge(0.7), cex = 2) +
-      geom_errorbar(lwd = 1.25, width = 0.3, position = position_dodge(0.7)) +
+      geom_point(position = position_dodge(0.5), cex = 2) +
+      geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
       geom_hline(yintercept = 1, linetype = "dashed", colour = "grey") +
       geom_text(aes(label = ifelse(((P_value <= pval)&(pval != F)), formatC(P_value, format = "e", digits = 1), ""), group = PRS),
-                hjust=-0.1, vjust=-1, colour = 'black', size = 3, position = position_dodge(width = 0.7)) +
+                hjust=0, vjust=1, angle = 90, colour = 'black', size = 3, position = position_dodge(1)) +
       labs(color = "PRS", y = "Odds Ratio", x = "Phenotype") +
       theme_minimal()+
       theme(axis.title.x = element_text(vjust=-0.5, size = 11),
-            axis.text.x.bottom = element_text(size = 11, angle = 60),
+            axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11),
             legend.position = ifelse((length(unique(score_table$PRS)) == 1), "none", "right"))
   } else if (axis == 'vertical') {
     p <- ggplot(score_table, aes(y = Phenotype, x = OR, xmin = lower_CI, xmax = upper_CI, color = PRS)) +
-      geom_point(position = position_dodge(0.7), cex = 2) +
-      geom_errorbar(lwd = 1.25, width = 0.3, position = position_dodge(0.7)) +
+      geom_point(position = position_dodge(0.5), cex = 2) +
+      geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
       geom_vline(xintercept = 1, linetype = "dashed", colour = "grey") +
       geom_text(aes(label = ifelse(((P_value <= pval)&(pval != F)), formatC(P_value, format = "e", digits = 1), ""), group = PRS),
-                hjust=-0.1, vjust=-1, colour = 'black', size = 3, position = position_dodge2(width = 1)) +
+                hjust=0, vjust=0, angle = 0, colour = 'black', size = 3, position = position_dodge(1)) +
       labs(color = "PRS", y = "Odds Ratio", x = "Phenotype") +
       theme_minimal()+
       theme(axis.title.x = element_text(vjust=-0.5, size = 11),

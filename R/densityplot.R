@@ -43,7 +43,7 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
       labs(x = prs_col, y = "Density", fill = phenotype_col) +
       theme_minimal()+
       theme(axis.title.x = element_text(vjust=-0.5, size = 11),
-            axis.text.x.bottom = element_text(size = 11, angle = 60),
+            axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
   } else if (!is.na(threshold) & class(threshold) %in% c("integer","numeric","double")) {
@@ -53,7 +53,7 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
       theme_minimal()+
       labs(x = prs_col, y = "Density", fill = phenotype_col) +
       theme(axis.title.x = element_text(vjust=-0.5, size = 11),
-            axis.text.x.bottom = element_text(size = 11, angle = 60),
+            axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
   } else {
@@ -64,7 +64,7 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
       theme_minimal()+
       labs(x = prs_col, y = "Density") +
       theme(axis.title.x = element_text(vjust=-0.5, size = 11),
-            axis.text.x.bottom = element_text(size = 11, angle = 60),
+            axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
   }

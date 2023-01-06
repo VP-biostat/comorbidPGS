@@ -40,6 +40,8 @@ devtools::install_github("VP-biostat/comorbidPRS")
 
 ## Example
 
+### Building an Association Table
+
 This is a basic example which shows you how to do basic association with the example dataset:
 
 ```{r example, results = 'hide'}
@@ -51,7 +53,7 @@ dataset <- comorbidExample
 #do an association of one PRS with one Phenotype
 result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 ```
-```{r result_1}
+```{r result_1, echo = FALSE}
 knitr::kable(result_1)
 ```
 ```{r example multiple assoc, results = 'hide'}
@@ -59,22 +61,15 @@ knitr::kable(result_1)
 assoc <- expand.grid(c("PRS_1", "PRS_2"), c("Phenotype_1", "Phenotype_2", "Phenotype_3", "Phenotype_4"))
 result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("Age", "Sex", "Covariate"))
 ```
-```{r result_2}
+```{r result_2, echo = FALSE}
 knitr::kable(result_2)
 ```
 
-Examples of plot: 
 
-```{r decileplot}
-decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
-```
+### Examples of plot
 
 ```{r densityplot}
 densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
-```
-
-```{r centileplot}
-centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
 ```
 
 ```{r orplot}
@@ -82,9 +77,17 @@ centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
 orplot(score_table = result_2)
 ```
 
+```{r centileplot}
+centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
+```
+
+```{r decileplot}
+decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
+```
+
 ## Citation 
 If you use comorbidPRS in any published work, please cite the following manuscript:
 
-```{r citation, echo=FALSE, results = 'asis'}
+```{r citation, echo = FALSE, results = 'asis', warning = FALSE}
 print(citation('comorbidPRS'), 'html')
 ```
