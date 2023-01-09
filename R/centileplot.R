@@ -30,8 +30,8 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
   }
 
   ## Taking only subset of df
-  df <- df[,c(prs_col,phenotype_col)]
-  names(df) <- c("PRS","Phenotype")
+  df <- df[, c(prs_col, phenotype_col)]
+  names(df) <- c("PRS", "Phenotype")
   df <- na.omit(df)
   if (nrow(df) < 10000) {
     warning("The dataset has less than 10,000 individuals, centiles plot may not look good! Use the argument decile = T to adapt to small datasets")
@@ -40,13 +40,13 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
   ## Making centiles plot based on the category of Phenotype
   phenotype_type <- phenotype_type(df = df, phenotype_col = "Phenotype")
 
-  df$centile <- with(df, cut(PRS, breaks=quantile(PRS, probs=seq(0,1, by=0.01), na.rm=TRUE), include.lowest=TRUE, dig.lab = 10))
+  df$centile <- with(df, cut(PRS, breaks = quantile(PRS, probs = seq(0, 1, by = 0.01), na.rm = TRUE), include.lowest = TRUE, dig.lab = 10))
   df$centile <- as.factor(df$centile)
-  levels(df$centile) <- seq(1,100, by=1)
+  levels(df$centile) <- seq(1, 100, by = 1)
   if (decile) {
-    df$centile <- cut(as.numeric(df$centile), breaks = seq(0,100, by = 10))
+    df$centile <- cut(as.numeric(df$centile), breaks = seq(0, 100, by = 10))
     df$centile <- as.factor(df$centile)
-    levels(df$centile) <- seq(1,10, by=1)
+    levels(df$centile) <- seq(1, 10, by = 1)
   }
 
   preval <- data.frame(matrix(nrow = 0, ncol = 4))
@@ -54,67 +54,78 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
   if (phenotype_type == "Categorical") {
     stop("Cannot use Categorical Phenotype for centiles plot. Please use Cases/Controls or Continuous Phenotype")
   } else if (phenotype_type == "Cases/Controls") {
+    names(preval) <- c("centile", "prevalence", "n_cases", "n")
 
-    names(preval) <- c("centile","prevalence","n_cases","n")
-
-    #create prevalence of cases group by centiles
+    # create prevalence of cases group by centiles
     for (val in levels(df$centile)) {
       n_cases <- sum(df$centile == val & as.logical(df$Phenotype) == T, na.rm = T)
       n_controls <- sum(df$centile == val & as.logical(df$Phenotype) == F, na.rm = T)
-      n <- n_cases+n_controls
-      preval <- rbind(preval, data.frame("centile" = val,
-                                         "n_cases" = n_cases,
-                                         "prevalence" = n_cases/n,
-                                         "n" = n))
+      n <- n_cases + n_controls
+      preval <- rbind(preval, data.frame(
+        "centile" = val,
+        "n_cases" = n_cases,
+        "prevalence" = n_cases / n,
+        "n" = n
+      ))
     }
 
-    p <- ggplot(preval, aes(x = as.numeric(centile),
-                            y = as.numeric(prevalence)*100,
-                            color = as.numeric(prevalence))) +
+    p <- ggplot(preval, aes(
+      x = as.numeric(centile),
+      y = as.numeric(prevalence) * 100,
+      color = as.numeric(prevalence)
+    )) +
       geom_point(show.legend = F) +
-      xlim(1,ifelse(decile, 10,100)) +
-      labs(x = paste(ifelse(decile, "Deciles of","Centiles of"),prs_col),
-           y = paste("Prevalence of",phenotype_col)) +
-      theme_minimal()+
-      theme(axis.title.x = element_text(size = 11),
-            axis.text.x.bottom = element_text(size = 11),
-            axis.title.y = element_text(size = 11),
-            axis.text.y.left = element_text(size = 11))
+      xlim(1, ifelse(decile, 10, 100)) +
+      labs(
+        x = paste(ifelse(decile, "Deciles of", "Centiles of"), prs_col),
+        y = paste("Prevalence of", phenotype_col)
+      ) +
+      theme_minimal() +
+      theme(
+        axis.title.x = element_text(size = 11),
+        axis.text.x.bottom = element_text(size = 11),
+        axis.title.y = element_text(size = 11),
+        axis.text.y.left = element_text(size = 11)
+      )
   } else if (phenotype_type == "Continuous") {
-
     if (is.na(continuous_metric)) {
-      continuous_metric <- 'mean'
+      continuous_metric <- "mean"
     }
 
-    names(preval) <- c("centile","median","mean","n")
+    names(preval) <- c("centile", "median", "mean", "n")
 
-    #create median of continuous phenotype group by centiles
+    # create median of continuous phenotype group by centiles
     for (val in levels(df$centile)) {
       med <- median(df[which(df$centile == val), "Phenotype"], na.rm = T)
       mean <- mean(df[which(df$centile == val), "Phenotype"], na.rm = T)
-      n <- nrow(df[which(df$centile == val),])
-      preval <- rbind(preval, data.frame("centile" = val,
-                                         "median" = med,
-                                         "mean" = mean,
-                                         "n" = n))
+      n <- nrow(df[which(df$centile == val), ])
+      preval <- rbind(preval, data.frame(
+        "centile" = val,
+        "median" = med,
+        "mean" = mean,
+        "n" = n
+      ))
     }
 
-    p <- ggplot(preval, aes(x = as.numeric(centile),
-                            y = as.numeric(get(continuous_metric)),
-                            color = as.numeric(get(continuous_metric)))) +
+    p <- ggplot(preval, aes(
+      x = as.numeric(centile),
+      y = as.numeric(get(continuous_metric)),
+      color = as.numeric(get(continuous_metric))
+    )) +
       geom_point(show.legend = F) +
-      xlim(1,ifelse(decile, 10,100)) +
-      labs(x = paste(ifelse(decile, "Deciles of","Centiles of"),prs_col),
-           y = paste(continuous_metric,phenotype_col)) +
-      theme_minimal()+
-      theme(axis.title.x = element_text(size = 11),
-            axis.text.x.bottom = element_text(size = 11),
-            axis.title.y = element_text(size = 11),
-            axis.text.y.left = element_text(size = 11))
-
-
+      xlim(1, ifelse(decile, 10, 100)) +
+      labs(
+        x = paste(ifelse(decile, "Deciles of", "Centiles of"), prs_col),
+        y = paste(continuous_metric, phenotype_col)
+      ) +
+      theme_minimal() +
+      theme(
+        axis.title.x = element_text(size = 11),
+        axis.text.x.bottom = element_text(size = 11),
+        axis.title.y = element_text(size = 11),
+        axis.text.y.left = element_text(size = 11)
+      )
   }
 
   return(p)
 }
-

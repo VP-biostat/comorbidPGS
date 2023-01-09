@@ -21,52 +21,58 @@
 #' @import ggplot2
 #' @export
 densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
-                      "Phenotype", scale = T, threshold = NA) {
+                          "Phenotype", scale = T, threshold = NA) {
   ## Checking inputs
   col_names <- df_checker(df, prs_col, phenotype_col, scale)
   prs_col <- col_names$prs_col
   phenotype_col <- col_names$phenotype_col
 
   ## Taking only subset of df
-  df <- df[,c(prs_col,phenotype_col)]
-  names(df) <- c("PRS","Phenotype")
+  df <- df[, c(prs_col, phenotype_col)]
+  names(df) <- c("PRS", "Phenotype")
   df <- na.omit(df)
   if (scale) {
-    df[,"PRS"] <- scale(df[,"PRS"]) #scaling if scale = T
+    df[, "PRS"] <- scale(df[, "PRS"]) # scaling if scale = T
   }
 
   ## Making plot based on the category of Phenotype
   phenotype_type <- phenotype_type(df = df, phenotype_col = "Phenotype")
-  if (phenotype_type %in% c("Cases/Controls","Categorical")) {
+  if (phenotype_type %in% c("Cases/Controls", "Categorical")) {
     p <- ggplot(df, aes(PRS, fill = as.factor(Phenotype))) +
       geom_density(alpha = 0.4) +
       labs(x = prs_col, y = "Density", fill = phenotype_col) +
-      theme_minimal()+
-      theme(axis.title.x = element_text(size = 11),
-            axis.text.x.bottom = element_text(size = 11),
-            axis.title.y = element_text(size = 11),
-            axis.text.y.left = element_text(size = 11))
-  } else if (!is.na(threshold) & class(threshold) %in% c("integer","numeric","double")) {
+      theme_minimal() +
+      theme(
+        axis.title.x = element_text(size = 11),
+        axis.text.x.bottom = element_text(size = 11),
+        axis.title.y = element_text(size = 11),
+        axis.text.y.left = element_text(size = 11)
+      )
+  } else if (!is.na(threshold) & class(threshold) %in% c("integer", "numeric", "double")) {
     df$Categorical_Pheno <- df$Phenotype > threshold
     p <- ggplot(df, aes(PRS, fill = as.factor(Categorical_Pheno))) +
       geom_density(alpha = 0.4) +
-      theme_minimal()+
+      theme_minimal() +
       labs(x = prs_col, y = "Density", fill = phenotype_col) +
-      theme(axis.title.x = element_text(size = 11),
-            axis.text.x.bottom = element_text(size = 11),
-            axis.title.y = element_text(size = 11),
-            axis.text.y.left = element_text(size = 11))
+      theme(
+        axis.title.x = element_text(size = 11),
+        axis.text.x.bottom = element_text(size = 11),
+        axis.title.y = element_text(size = 11),
+        axis.text.y.left = element_text(size = 11)
+      )
   } else {
     warning("Phenotype is continuous and 'threshold' is not a number, ignoring the parameter")
 
     p <- ggplot(df, aes(PRS)) +
       geom_density(alpha = 0.4) +
-      theme_minimal()+
+      theme_minimal() +
       labs(x = prs_col, y = "Density") +
-      theme(axis.title.x = element_text(size = 11),
-            axis.text.x.bottom = element_text(size = 11),
-            axis.title.y = element_text(size = 11),
-            axis.text.y.left = element_text(size = 11))
+      theme(
+        axis.title.x = element_text(size = 11),
+        axis.text.x.bottom = element_text(size = 11),
+        axis.title.y = element_text(size = 11),
+        axis.text.y.left = element_text(size = 11)
+      )
   }
 
   return(p)

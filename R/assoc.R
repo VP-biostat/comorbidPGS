@@ -29,53 +29,53 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
 
   cat("\n\n---\nAssociation testing:")
 
-  #communicate the columns selected
-  cat("\n  PRS: ",prs_col)
-  cat("\n  Phenotype: ",phenotype_col)
-  cat("\n  Covariate: ",covar_col)
+  # communicate the columns selected
+  cat("\n  PRS: ", prs_col)
+  cat("\n  Phenotype: ", phenotype_col)
+  cat("\n  Covariate: ", covar_col)
 
 
   ## QCing df
   if (is.na(covar_col[1])) {
-    df <- df[,c(prs_col,phenotype_col)] #cropping the dataset to only 2 columns
+    df <- df[, c(prs_col, phenotype_col)] # cropping the dataset to only 2 columns
   } else {
-    df <- df[,c(prs_col,phenotype_col,covar_col)] #cropping the dataset to 2+(covar length) columns
+    df <- df[, c(prs_col, phenotype_col, covar_col)] # cropping the dataset to 2+(covar length) columns
   }
-  df <- na.omit(df) #excluding rows with NAs
+  df <- na.omit(df) # excluding rows with NAs
   if (scale) {
-    df[,prs_col] <- scale(df[,prs_col]) #scaling if scale = T
+    df[, prs_col] <- scale(df[, prs_col]) # scaling if scale = T
   }
-  if (nrow(df)<2) {
+  if (nrow(df) < 2) {
     stop("After NA removal, not enough samples/individuals to test")
   }
 
 
   ## Doing regression
-  #check Phenotype continuous or discrete aspect
+  # check Phenotype continuous or discrete aspect
   phenotype_type <- phenotype_type(df = df, phenotype_col = phenotype_col)
-  cat("\n  Phenotype type: ",phenotype_type)
+  cat("\n  Phenotype type: ", phenotype_type)
 
-  #create the regression formula based on phenotype, prs and covariate(s)
+  # create the regression formula based on phenotype, prs and covariate(s)
   if (length(covar_col) > 1 & !is.na(covar_col[1])) {
-    #create the regression formula
-    regress_formula <- paste(phenotype_col,"~",prs_col)
+    # create the regression formula
+    regress_formula <- paste(phenotype_col, "~", prs_col)
     for (covar in covar_col) {
-      regress_formula <- paste(regress_formula,"+",covar)
+      regress_formula <- paste(regress_formula, "+", covar)
     }
   } else {
-    #create the regression formula
-    regress_formula <- paste(phenotype_col,"~",prs_col)
+    # create the regression formula
+    regress_formula <- paste(phenotype_col, "~", prs_col)
   }
-  cat("\n   ",regress_formula)
+  cat("\n   ", regress_formula)
 
-  #doing regression according to phenotype type
+  # doing regression according to phenotype type
   if (phenotype_type == "Cases/Controls") {
-    regress <- glm(regress_formula, family="binomial"(link="logit"), data=df)
+    regress <- glm(regress_formula, family = "binomial"(link = "logit"), data = df)
   } else if (phenotype_type == "Categorical") {
     cat("\n   Phenotype is categorical, 'cases' are interpreted as the factor not having the first level")
-    regress <- glm(regress_formula, family="binomial"(link="logit"), data=df)
+    regress <- glm(regress_formula, family = "binomial"(link = "logit"), data = df)
   } else if (phenotype_type == "Continuous") {
-    regress <- lm(regress_formula, data=df)
+    regress <- lm(regress_formula, data = df)
   }
 
 
@@ -83,32 +83,33 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   cases <- NA
   controls <- NA
   if (phenotype_type == "Cases/Controls") {
-    cases <- sum(as.logical(df[,phenotype_col]) == T)
-    controls <- sum(as.logical(df[,phenotype_col]) == F)
-    cat("\n  Cases: ",cases)
-    cat("\n  Controls: ",controls)
+    cases <- sum(as.logical(df[, phenotype_col]) == T)
+    controls <- sum(as.logical(df[, phenotype_col]) == F)
+    cat("\n  Cases: ", cases)
+    cat("\n  Controls: ", controls)
   }
   sample_size <- nrow(df)
   cat("\n  Sample Size: ", sample_size)
-  beta <- coef(summary(regress))[2,1]
-  se <- coef(summary(regress))[2,2]
-  p_val <- coef(summary(regress))[2,4]
+  beta <- coef(summary(regress))[2, 1]
+  se <- coef(summary(regress))[2, 2]
+  p_val <- coef(summary(regress))[2, 4]
   or <- exp(beta)
   ci <- suppressMessages(exp(confint(regress)))
-  lower_ci <- ci[2,1]
-  upper_ci <- ci[2,2]
-  cat("\n   OR ( 95% CI ): ",or," (",lower_ci,"-",upper_ci,")")
-  cat("\n   P-value: ",p_val,"\n")
+  lower_ci <- ci[2, 1]
+  upper_ci <- ci[2, 2]
+  cat("\n   OR ( 95% CI ): ", or, " (", lower_ci, "-", upper_ci, ")")
+  cat("\n   P-value: ", p_val, "\n")
 
-  #creating the score_table
-  score_table <- data.frame("PRS" = prs_col, "Phenotype" = phenotype_col,
-                            "Covar" = paste(covar_col, collapse = "+"),
-                            "N_cases" = cases, "N_controls" = controls,
-                            "N" = sample_size, "OR" = or, "SE" = se,
-                            "lower_CI" = lower_ci, "upper_CI" = upper_ci,
-                            "P_value" = p_val)
+  # creating the score_table
+  score_table <- data.frame(
+    "PRS" = prs_col, "Phenotype" = phenotype_col,
+    "Covar" = paste(covar_col, collapse = "+"),
+    "N_cases" = cases, "N_controls" = controls,
+    "N" = sample_size, "OR" = or, "SE" = se,
+    "lower_CI" = lower_ci, "upper_CI" = upper_ci,
+    "P_value" = p_val
+  )
 
-  #returning the result
+  # returning the result
   return(score_table)
-
 }

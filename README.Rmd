@@ -47,21 +47,21 @@ This is a basic example which shows you how to do basic association with the exa
 ```{r example, results = 'hide'}
 library(comorbidPRS)
 
-#use the demo dataset
+# use the demo dataset
 dataset <- comorbidExample
-#NOTE: The dataset must have at least 3 different columns: 
+# NOTE: The dataset must have at least 3 different columns:
 # - an ID column (the first one)
 # - a PRS column (must be numeric, by default it is the column named "SCORESUM" or the second column if "SCORESUM" is not present)
 # - a Phenotype column, can be factors, numbers or characters
 
-#do an association of one PRS with one Phenotype
+# do an association of one PRS with one Phenotype
 result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 ```
 ```{r result_1, echo = FALSE}
 knitr::kable(result_1)
 ```
 ```{r example multiple assoc, results = 'hide'}
-#do multiple associations
+# do multiple associations
 assoc <- expand.grid(c("PRS_1", "PRS_2"), c("Phenotype_1", "Phenotype_2", "Phenotype_3", "Phenotype_4"))
 result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("Age", "Sex", "Covariate"))
 ```
@@ -77,9 +77,9 @@ densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
 ```
 
 ```{r orplot}
-#show multiple associations in a plot
+# show multiple associations in a plot
 orplot(score_table = result_2)
-#NOTE: The score_table should have the assoc() output format
+# NOTE: The score_table should have the assoc() output format
 ```
 
 ```{r centileplot}
@@ -94,5 +94,5 @@ decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 If you use comorbidPRS in any published work, please cite the following manuscript:
 
 ```{r citation, echo = FALSE, results = 'asis', warning = FALSE}
-print(citation('comorbidPRS'), 'html')
+print(citation("comorbidPRS"), "html")
 ```

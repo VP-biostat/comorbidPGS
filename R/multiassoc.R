@@ -17,11 +17,17 @@
 #' with 'PRS','Phenotype','Covar','N_cases','N_controls','N','OR','SE','lower_CI','upper_CI','P_value'
 #'
 #' @examples
-#' assoc_table <- expand.grid(c("PRS_1", "PRS_2"),
-#'                            c("Phenotype_1", "Phenotype_2",
-#'                            "Phenotype_3", "Phenotype_4"))
-#' results <- multiassoc(df = comorbidExample, assoc_table = assoc_table,
-#'                       covar = c("Age", "Sex", "Covariate"))
+#' assoc_table <- expand.grid(
+#'   c("PRS_1", "PRS_2"),
+#'   c(
+#'     "Phenotype_1", "Phenotype_2",
+#'     "Phenotype_3", "Phenotype_4"
+#'   )
+#' )
+#' results <- multiassoc(
+#'   df = comorbidExample, assoc_table = assoc_table,
+#'   covar = c("Age", "Sex", "Covariate")
+#' )
 #' print(results)
 #'
 #' @importFrom stats na.omit
@@ -40,34 +46,37 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE, covar_col = 
       warning("No multiple associations given, preferably use assoc() function")
     }
   }
-  cat("\n\n------\nMultiple associations (",n_assoc,") testing:")
+  cat("\n\n------\nMultiple associations (", n_assoc, ") testing:")
 
-  ##Creating progress bar
+  ## Creating progress bar
   cat("\n")
-  progress = txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
+  progress <- txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
 
-  ##Creating the score table
+  ## Creating the score table
   scores_table <- data.frame(matrix(nrow = 0, ncol = 11))
-  names(scores_table) <- c('PRS','Phenotype','Covar','N_cases','N_controls',
-                           'N','OR','SE','lower_CI','upper_CI','P_value')
+  names(scores_table) <- c(
+    "PRS", "Phenotype", "Covar", "N_cases", "N_controls",
+    "N", "OR", "SE", "lower_CI", "upper_CI", "P_value"
+  )
 
   ## QC assoc table
-  names(assoc_table) <- c("PRS","Phenotype")
+  names(assoc_table) <- c("PRS", "Phenotype")
 
 
   ## For loop of assoc function
   for (i in 1:n_assoc) {
-    scores_table <- rbind(scores_table, assoc(df = df, prs_col = as.character(assoc_table[i,1]),
-                                              phenotype_col = as.character(assoc_table[i,2]),
-                                              scale = scale, covar_col =
-                                                covar_col))
+    scores_table <- rbind(scores_table, assoc(
+      df = df, prs_col = as.character(assoc_table[i, 1]),
+      phenotype_col = as.character(assoc_table[i, 2]),
+      scale = scale, covar_col =
+        covar_col
+    ))
 
     cat("\n")
-    setTxtProgressBar(progress,i)
+    setTxtProgressBar(progress, i)
     cat("\n")
   }
 
-  #returning the result
+  # returning the result
   return(scores_table)
-
 }

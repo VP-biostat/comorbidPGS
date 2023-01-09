@@ -17,12 +17,15 @@ download.
 
 ## Prerequisite
 
-stats utils ggplot2 R version 3.5 or higher
+-   R version 3.5 or higher with the following packages:
+    -   stats
+    -   utils
+    -   ggplot2
 
 ## Installation
 
 You can install the development version of comorbidPRS from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/VP-biostat/comorbidPRS) with:
 
 ``` r
 # install.packages("devtools")
@@ -39,10 +42,14 @@ the example dataset:
 ``` r
 library(comorbidPRS)
 
-#use the demo dataset
+# use the demo dataset
 dataset <- comorbidExample
+# NOTE: The dataset must have at least 3 different columns:
+# - an ID column (the first one)
+# - a PRS column (must be numeric, by default it is the column named "SCORESUM" or the second column if "SCORESUM" is not present)
+# - a Phenotype column, can be factors, numbers or characters
 
-#do an association of one PRS with one Phenotype
+# do an association of one PRS with one Phenotype
 result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 ```
 
@@ -51,7 +58,7 @@ result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 | PRS_1 | Phenotype_1 | NA    | NA      | NA         | 50000 | 1.197197 | 0.0044723 | 1.186749 | 1.207737 |       0 |
 
 ``` r
-#do multiple associations
+# do multiple associations
 assoc <- expand.grid(c("PRS_1", "PRS_2"), c("Phenotype_1", "Phenotype_2", "Phenotype_3", "Phenotype_4"))
 result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("Age", "Sex", "Covariate"))
 ```
@@ -76,11 +83,15 @@ densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
 <img src="man/figures/README-densityplot-1.png" width="100%" />
 
 ``` r
-#show multiple associations in a plot
+# show multiple associations in a plot
 orplot(score_table = result_2)
 ```
 
 <img src="man/figures/README-orplot-1.png" width="100%" />
+
+``` r
+# NOTE: The score_table should have the assoc() output format
+```
 
 ``` r
 centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
