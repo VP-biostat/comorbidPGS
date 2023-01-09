@@ -24,14 +24,14 @@ comorbidPRS is a tool for analysing an already computed PRS distribution to inve
 comorbidPRS is under GPL-3 license, and is freely available for download. 
 
 ## Prerequisite
-stats 
-utils
-ggplot2 
-R version 3.5 or higher 
+* R version 3.5 or higher with the following packages:
+    + stats 
+    + utils
+    + ggplot2 
 
 ## Installation
 
-You can install the development version of comorbidPRS from [GitHub](https://github.com/) with:
+You can install the development version of comorbidPRS from [GitHub](https://github.com/VP-biostat/comorbidPRS) with:
 
 ``` r
 # install.packages("devtools")
@@ -49,6 +49,10 @@ library(comorbidPRS)
 
 #use the demo dataset
 dataset <- comorbidExample
+#NOTE: The dataset must have at least 3 different columns: 
+# - an ID column (the first one)
+# - a PRS column (must be numeric, by default it is the column named "SCORESUM" or the second column if "SCORESUM" is not present)
+# - a Phenotype column, can be factors, numbers or characters
 
 #do an association of one PRS with one Phenotype
 result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
@@ -75,6 +79,7 @@ densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
 ```{r orplot}
 #show multiple associations in a plot
 orplot(score_table = result_2)
+#NOTE: The score_table should have the assoc() output format
 ```
 
 ```{r centileplot}

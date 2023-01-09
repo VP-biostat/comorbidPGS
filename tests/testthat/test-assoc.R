@@ -23,6 +23,11 @@ test_that('Wrong prs_col', {
   expect_warning(assoc(df = comorbidExample, prs_col = "WRONG_PRS", phenotype_col = "Phenotype_1"))
 })
 
+
+test_that('Not numeric prs_col', {
+  expect_error(assoc(df = comorbidExample, prs_col = "Phenotype_4", phenotype_col = "Phenotype_1"))
+})
+
 test_that('Null phenotype_col', {
   expect_warning(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = NULL))
 })

@@ -21,6 +21,9 @@ df_checker <- function(df = NULL, prs_col = NA, phenotype_col = NA, scale = NA,
     ID, PRS and a continuous or discrete Phenotype")
   } else if (!is.logical(scale)) {
     stop("Please provide a logical for 'scale' (TRUE by default)")
+  } else if (nrow(unique(df)) != nrow(df)) {
+    warning("Duplicate(s) found in df! Removing them")
+    df <- unique(df)
   }
 
 
@@ -36,6 +39,8 @@ df_checker <- function(df = NULL, prs_col = NA, phenotype_col = NA, scale = NA,
   } else if (!prs_col %in% names(df)) {
     warning("Wrong prs_col, using by default the second column of df")
     prs_col <- names(df)[2]
+  } else if (!class(df[,prs_col]) %in% c("numeric","integer","double")) {
+    stop("Please provide numeric values in the PRS column")
   }
   #if no Phenotype column found, assume 3rd column is PRS
   if (is.null(phenotype_col)) {

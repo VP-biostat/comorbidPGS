@@ -60,7 +60,7 @@ orplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
                 hjust=0, vjust=1, angle = 90, colour = 'black', size = 3, position = position_dodge(1)) +
       labs(color = "PRS", y = "Odds Ratio", x = "Phenotype") +
       theme_minimal()+
-      theme(axis.title.x = element_text(vjust=-0.5, size = 11),
+      theme(axis.title.x = element_text(size = 11),
             axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11),
@@ -74,7 +74,7 @@ orplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
                 hjust=0, vjust=0, angle = 0, colour = 'black', size = 3, position = position_dodge(1)) +
       labs(color = "PRS", y = "Odds Ratio", x = "Phenotype") +
       theme_minimal()+
-      theme(axis.title.x = element_text(vjust=-0.5, size = 11),
+      theme(axis.title.x = element_text(size = 11),
             axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11),

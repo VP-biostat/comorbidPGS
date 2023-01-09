@@ -76,7 +76,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
       labs(x = paste(ifelse(decile, "Deciles of","Centiles of"),prs_col),
            y = paste("Prevalence of",phenotype_col)) +
       theme_minimal()+
-      theme(axis.title.x = element_text(vjust=-0.5, size = 11),
+      theme(axis.title.x = element_text(size = 11),
             axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
@@ -107,7 +107,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
       labs(x = paste(ifelse(decile, "Deciles of","Centiles of"),prs_col),
            y = paste(continuous_metric,phenotype_col)) +
       theme_minimal()+
-      theme(axis.title.x = element_text(vjust=-0.5, size = 11),
+      theme(axis.title.x = element_text(size = 11),
             axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))

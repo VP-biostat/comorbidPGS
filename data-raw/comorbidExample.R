@@ -20,6 +20,7 @@ phenotype_1 <- (sample(c(0,2), 50000, replace = T)+prs_1/max(prs_1))
 phenotype_2 <- rbinom(50000, 1, (prs_1-min(prs_1))/(max(prs_1)-min(prs_1)))
 #build a cases/controls phenotype associated with prs_2 using binomial law
 phenotype_3 <- rbinom(50000, 1, (prs_2-min(prs_2))/(max(prs_2)-min(prs_2)))
+phenotype_3 <- as.logical(phenotype_3)
 #build a categorical phenotype associated with prs_2 using 3 summed binomial laws
 phenotype_4_int <- rbinom(50000, 1, (prs_2-min(prs_2))/(max(prs_2)-min(prs_2))) +
   rbinom(50000, 1, (prs_2-min(prs_2))/(max(prs_2)-min(prs_2))) +

@@ -45,11 +45,11 @@ decileboxplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
     p <- ggplot(df, aes(x = as.factor(decile),
                             y = as.numeric(Phenotype),
                             fill = mean(as.numeric(Phenotype), na.rm = T))) +
-      geom_boxplot(show.legend = F, alpha = 0.5) +
+      geom_boxplot(show.legend = F, alpha = 0.4) +
       labs(x = paste("Deciles of",prs_col),
            y = phenotype_col) +
       theme_minimal()+
-      theme(axis.title.x = element_text(vjust=-0.5, size = 11),
+      theme(axis.title.x = element_text(size = 11),
             axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))

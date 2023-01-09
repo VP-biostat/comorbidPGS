@@ -42,7 +42,7 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
       geom_density(alpha = 0.4) +
       labs(x = prs_col, y = "Density", fill = phenotype_col) +
       theme_minimal()+
-      theme(axis.title.x = element_text(vjust=-0.5, size = 11),
+      theme(axis.title.x = element_text(size = 11),
             axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
@@ -52,7 +52,7 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
       geom_density(alpha = 0.4) +
       theme_minimal()+
       labs(x = prs_col, y = "Density", fill = phenotype_col) +
-      theme(axis.title.x = element_text(vjust=-0.5, size = 11),
+      theme(axis.title.x = element_text(size = 11),
             axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
@@ -63,7 +63,7 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
       geom_density(alpha = 0.4) +
       theme_minimal()+
       labs(x = prs_col, y = "Density") +
-      theme(axis.title.x = element_text(vjust=-0.5, size = 11),
+      theme(axis.title.x = element_text(size = 11),
             axis.text.x.bottom = element_text(size = 11),
             axis.title.y = element_text(size = 11),
             axis.text.y.left = element_text(size = 11))
