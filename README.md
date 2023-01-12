@@ -87,11 +87,8 @@ densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
 orplot(score_table = result_2)
 ```
 
-<img src="man/figures/README-orplot-1.png" width="100%" />
-
-``` r
-# NOTE: The score_table should have the assoc() output format
-```
+<img src="man/figures/README-orplot-1.png" width="100%" /> NOTE: The
+score_table should have the assoc() output format
 
 ``` r
 centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
@@ -99,11 +96,19 @@ centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
 
 <img src="man/figures/README-centileplot-1.png" width="100%" />
 
+As those graphical functions use ggplot2, you can fully customised your
+plot:
+
 ``` r
-# as those graphical functions use ggplot2, you can fully customised your plot
 library(ggplot2)
-decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1") + 
-  scale_color_gradient(low = "white", high = "black")
+centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3") + 
+  scale_color_gradient(low = "green", high = "red")
+```
+
+<img src="man/figures/README-centileplot and ggplot-1.png" width="100%" />
+
+``` r
+decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 ```
 
 <img src="man/figures/README-decileplot-1.png" width="100%" />
