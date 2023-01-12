@@ -100,7 +100,10 @@ centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
 <img src="man/figures/README-centileplot-1.png" width="100%" />
 
 ``` r
-decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
+# as those graphical functions use ggplot2, you can fully customised your plot
+library(ggplot2)
+decileboxplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1") + 
+  scale_color_gradient(low = "white", high = "black")
 ```
 
 <img src="man/figures/README-decileplot-1.png" width="100%" />

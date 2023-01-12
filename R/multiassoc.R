@@ -12,6 +12,8 @@
 #' make from df representing PRS and Phenotype (in this order)
 #' @param scale a boolean specifying if scaling of PRS should be done before testing
 #' @param covar_col a character vector specifying the covariate column names (facultative)
+#' @param log 	a connection, or a character string naming the file to print to.
+#' If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
 #'
 #' @return return a data frame showing the association of the PRS(s) on the Phenotype(s)
 #' with 'PRS','Phenotype','Covar','N_cases','N_controls','N','OR','SE','lower_CI','upper_CI','P_value'
@@ -26,30 +28,33 @@
 #' )
 #' results <- multiassoc(
 #'   df = comorbidExample, assoc_table = assoc_table,
-#'   covar = c("Age", "Sex", "Covariate")
+#'   covar_col = c("Age", "Sex", "Covariate")
 #' )
 #' print(results)
 #'
 #' @importFrom stats na.omit
 #' @export
-multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE, covar_col = NA) {
+multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
+                       covar_col = NA, log = "") {
   ## Checking inputs (done in assoc that calls df_checker)
   if (is.null(assoc_table)) {
-    stop("Please provide a data frame or a matrix for assoc_table parameter")
+    stop("Please provide a data frame or a matrix for 'assoc_table' parameter")
   } else if (!(class(assoc_table)[1] %in% c("data.frame", "matrix", "array"))) {
     stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
   } else if (ncol(assoc_table) != 2) {
-    stop("Please provide for assoc_table a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
+    stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
+  } else if (!class(log)[1] %in% c("character","url","connection")) {
+    stop("Please provide a connection, or a character string naming the file to print to for 'log'")
   } else {
     n_assoc <- nrow(assoc_table)
     if (n_assoc <= 1) {
       warning("No multiple associations given, preferably use assoc() function")
     }
   }
-  cat("\n\n------\nMultiple associations (", n_assoc, ") testing:")
+  cat("\n\n------\nMultiple associations (", n_assoc, ") testing:", file = log, append = F)
 
   ## Creating progress bar
-  cat("\n")
+  cat("\n", file = log, append = T)
   progress <- txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
 
   ## Creating the score table
@@ -68,13 +73,13 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE, covar_col = 
     scores_table <- rbind(scores_table, assoc(
       df = df, prs_col = as.character(assoc_table[i, 1]),
       phenotype_col = as.character(assoc_table[i, 2]),
-      scale = scale, covar_col =
-        covar_col
+      scale = scale, covar_col = covar_col,
+      log = log
     ))
 
-    cat("\n")
+    cat("\n", file = log, append = T)
     setTxtProgressBar(progress, i)
-    cat("\n")
+    cat("\n", file = log, append = T)
   }
 
   # returning the result

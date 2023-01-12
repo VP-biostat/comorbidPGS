@@ -76,7 +76,7 @@ orplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
       geom_text(aes(label = ifelse(((P_value <= pval) & (pval != F)), formatC(P_value, format = "e", digits = 1), ""), group = PRS),
         hjust = 0, vjust = 0, angle = 0, colour = "black", size = 3, position = position_dodge(1)
       ) +
-      labs(color = "PRS", y = "Odds Ratio", x = "Phenotype") +
+      labs(color = "PRS", x = "Odds Ratio", y = "Phenotype") +
       theme_minimal() +
       theme(
         axis.title.x = element_text(size = 11),

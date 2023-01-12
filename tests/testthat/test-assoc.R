@@ -56,6 +56,14 @@ test_that("Not enough sample/individuals", {
   expect_error(assoc(df = cbind(comorbidExample, data.frame("WRONG_PHENO" = rep(NA, nrow(comorbidExample)))), prs_col = "PRS_1", phenotype_col = "WRONG_PHENO"))
 })
 
+test_that("Null log", {
+  expect_error(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = "Phenotype_1", log = NULL))
+})
+
+test_that("Wrong log", {
+  expect_error(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = "Phenotype_1", log = 1))
+})
+
 for (prs in grep("PRS", names(comorbidExample), value = T)) {
   for (phenotype in grep("Phenotype", names(comorbidExample), value = T)) {
     test_that(paste("Test of", prs, "on", phenotype), {

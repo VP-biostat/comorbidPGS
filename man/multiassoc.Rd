@@ -4,7 +4,13 @@
 \alias{multiassoc}
 \title{Multiple PRS Associations from a Data Frame}
 \usage{
-multiassoc(df = NULL, assoc_table = NULL, scale = TRUE, covar_col = NA)
+multiassoc(
+  df = NULL,
+  assoc_table = NULL,
+  scale = TRUE,
+  covar_col = NA,
+  log = ""
+)
 }
 \arguments{
 \item{df}{a dataframe with individuals on each row, at least one ID column,
@@ -16,6 +22,9 @@ make from df representing PRS and Phenotype (in this order)}
 \item{scale}{a boolean specifying if scaling of PRS should be done before testing}
 
 \item{covar_col}{a character vector specifying the covariate column names (facultative)}
+
+\item{log}{a connection, or a character string naming the file to print to.
+If "" (by default), it prints to the standard output connection, the console unless redirected by sink.}
 }
 \value{
 return a data frame showing the association of the PRS(s) on the Phenotype(s)
@@ -36,7 +45,7 @@ assoc_table <- expand.grid(
 )
 results <- multiassoc(
   df = comorbidExample, assoc_table = assoc_table,
-  covar = c("Age", "Sex", "Covariate")
+  covar_col = c("Age", "Sex", "Covariate")
 )
 print(results)
 

@@ -9,7 +9,8 @@ assoc(
   prs_col = "SCORESUM",
   phenotype_col = "Phenotype",
   scale = TRUE,
-  covar_col = NA
+  covar_col = NA,
+  log = ""
 )
 }
 \arguments{
@@ -23,6 +24,9 @@ one column PRS (continuous variable) and one with phenotype (continuous or discr
 \item{scale}{a boolean specifying if scaling of PRS should be done before testing}
 
 \item{covar_col}{a character vector specifying the covariate column names (facultative)}
+
+\item{log}{a connection, or a character string naming the file to print to.
+If "" (by default), it prints to the standard output connection, the console unless redirected by sink.}
 }
 \value{
 return a data frame showing the association of the PRS on the Phenotype

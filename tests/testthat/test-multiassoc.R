@@ -26,6 +26,14 @@ phenotype <- grep("Phenotype", names(comorbidExample), value = T)
 assoc <- cbind(prs, phenotype)
 assoc <- na.omit(assoc)
 
+test_that("Null log", {
+  expect_error(multiassoc(df = comorbidExample, assoc_table = assoc, log = NULL))
+})
+
+test_that("Wrong log", {
+  expect_error(multiassoc(df = comorbidExample, assoc_table = assoc, log = 1))
+})
+
 test_that("Test of several PRS and Phenotype using an assoc_table matrix and covariates", {
   expect_s3_class(
     object = multiassoc(df = comorbidExample, assoc_table = assoc, covar_col = c("Age", "Sex", "Covariate")),

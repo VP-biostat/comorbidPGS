@@ -2,6 +2,14 @@ test_that("Only one Phenotype", {
   expect_warning(multiphenassoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = "Phenotype_1"))
 })
 
+test_that("Null log", {
+  expect_error(multiphenassoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = c("Phenotype_1","Phenotype_2"), log = NULL))
+})
+
+test_that("Wrong log", {
+  expect_error(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = c("Phenotype_1","Phenotype_2"), log = 1))
+})
+
 prs <- grep("PRS", names(comorbidExample), value = T)[1]
 phenotype <- grep("Phenotype", names(comorbidExample), value = T)
 
