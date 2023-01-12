@@ -96,12 +96,12 @@ centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3")
 
 <img src="man/figures/README-centileplot-1.png" width="100%" />
 
-As those graphical functions use ggplot2, you can fully customised your
+As those graphical functions use ggplot2, you can fully customize your
 plot:
 
 ``` r
 library(ggplot2)
-centileplot(dataset, prs_col = "PRS_2", phenotype_col = "Phenotype_3") + 
+centileplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2") + 
   scale_color_gradient(low = "green", high = "red")
 ```
 
