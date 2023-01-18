@@ -1,3 +1,5 @@
+## code to prepare `comorbidExample` dataset goes here
+
 #' comorbidExample
 
 # number of samples
@@ -9,13 +11,13 @@ set.seed(7)
 id <- paste0("ind_", seq(1:n))
 
 # build a fake PRS with mean of 4, sd of 3
-prs_1 <- rnorm(50000, mean = 4, sd = 3)
+prs_1 <- rnorm(50000, mean = 0, sd = 2)
 # build a fake PRS with mean of 6, sd of 1
 prs_2 <- rnorm(50000, mean = 6, sd = 1)
 
 # build a continuous phenotype associated with prs_1
 # it is a bernoulli trial with an increase chance when having high PRS
-phenotype_1 <- (sample(c(0, 2), 50000, replace = T) + prs_1 / max(prs_1))
+phenotype_1 <- rnorm(50000, mean = 50, sd = 6)+prs_1
 # build a cases/controls phenotype associated with prs_1 using binomial law
 phenotype_2 <- rbinom(50000, 1, (prs_1 - min(prs_1)) / (max(prs_1) - min(prs_1)))
 # build a cases/controls phenotype associated with prs_2 using binomial law
