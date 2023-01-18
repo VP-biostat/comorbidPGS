@@ -48,6 +48,16 @@ test_that("Wrong Phenotype: only one value", {
   expect_error(assoc(df = cbind(comorbidExample, data.frame("WRONG_PHENO" = rep(0, nrow(comorbidExample)))), prs_col = "PRS_1", phenotype_col = "WRONG_PHENO"))
 })
 
+df <- comorbidExample
+df$test <- (sample(c(0, 2), 50000, replace = T) + df$PRS_1 / max(df$PRS_1))
+df$test2 <- c(df[1:4000, "test"], rep(NA, 50000-4000))
+test_that("Continuous Phenotype without normal distribution (N_pheno > 5000)", {
+  expect_warning(assoc(df = df, prs_col = "PRS_1", phenotype_col = "test"))
+})
+test_that("Continuous Phenotype without normal distribution (N_pheno < 5000)", {
+  expect_warning(assoc(df = df, prs_col = "PRS_1", phenotype_col = "test2"))
+})
+
 test_that("Wrong covar_col", {
   expect_error(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = "Phenotype_1", scale = "WRONG_COVARIATE"))
 })
