@@ -52,10 +52,18 @@ df <- comorbidExample
 df$test <- (sample(c(0, 2), 50000, replace = T) + df$PRS_1 / max(df$PRS_1))
 df$test2 <- c(df[1:4000, "test"], rep(NA, 50000-4000))
 test_that("Continuous Phenotype without normal distribution (N_pheno > 5000)", {
-  expect_warning(assoc(df = df, prs_col = "PRS_1", phenotype_col = "test"))
+  expect_error(assoc(df = df, prs_col = "PRS_1", phenotype_col = "test"))
 })
 test_that("Continuous Phenotype without normal distribution (N_pheno < 5000)", {
-  expect_warning(assoc(df = df, prs_col = "PRS_1", phenotype_col = "test2"))
+  expect_error(assoc(df = df, prs_col = "PRS_1", phenotype_col = "test2"))
+})
+
+
+test_that("Continuous PRS without normal distribution (N_prs > 5000)", {
+  expect_error(assoc(df = df, prs_col = "test", phenotype_col = "Phenotype_1"))
+})
+test_that("Continuous PRS without normal distribution (N_prs < 5000)", {
+  expect_error(assoc(df = df, prs_col = "test_2", phenotype_col = "Phenotype_1"))
 })
 
 test_that("Wrong covar_col", {

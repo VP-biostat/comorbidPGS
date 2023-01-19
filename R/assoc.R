@@ -48,6 +48,8 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
     stop("Please provide a logical for 'scale' (TRUE by default)")
   } else if (!class(log)[1] %in% c("character","url","connection")) {
     stop("Please provide a connection, or a character string naming the file to print to for 'log'")
+  } else if (!normal_distribution_checker(df[, prs_col])) {
+    warning(paste("PRS column", prs_col, "is not normal, please normalise prior to run association"))
   }
 
   cat("\n\n---\nAssociation testing:", file = log, append = T)
