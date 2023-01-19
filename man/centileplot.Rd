@@ -13,8 +13,13 @@ centileplot(
 )
 }
 \arguments{
-\item{df}{a dataframe with individuals on each row, at least one column PRS
-(continuous variable) and one with phenotype (continuous or categorical)}
+\item{df}{a dataframe with individuals on each row, and at least the following
+columns:
+\itemize{
+\item one ID column,
+\item one PRS column, with numerical continuous values following a normal distribution,
+\item one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
+}}
 
 \item{prs_col}{a character specifying the PRS column name}
 
@@ -23,7 +28,7 @@ centileplot(
 \item{decile}{a boolean specifying if centiles or deciles should be used}
 
 \item{continuous_metric}{a facultative character specifying what metric to
-use for continuous Phenotype, only three options: NA, "median" or "mean"}
+use for continuous Phenotype, only three options: \code{NA}, \code{"median"} or \code{"mean"}}
 }
 \value{
 return a figure of results in the format ggplot2 object

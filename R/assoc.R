@@ -5,18 +5,37 @@
 #' `assoc()` take a distribution of PRS, a Phenotype and eventual Confounders
 #' return a data frame showing the association of PRS on the Phenotype
 #'
-#' @param df a dataframe with individuals on each row, at least one ID column,
-#' one column PRS (continuous variable) and one with phenotype (continuous or discrete)
+#' @param df a dataframe with individuals on each row, and at least the following
+#' columns:
+#'
+#'  * one ID column,
+#'  * one PRS column, with numerical continuous values following a normal distribution,
+#'  * one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 #' @param prs_col a character specifying the PRS column name
 #' @param phenotype_col a character specifying the Phenotype column name
 #' @param scale a boolean specifying if scaling of PRS should be done before testing
 #' @param covar_col a character vector specifying the covariate column names (facultative)
-#' @param log 	a connection, or a character string naming the file to print to.
+#' @param log a connection, or a character string naming the file to print to.
 #' If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
 #'
 #' @return return a data frame showing the association of the PRS on the Phenotype
-#' with 'PRS','Phenotype','Covar','N_cases','N_controls','N','OR','SE','lower_CI','upper_CI','P_value'
+#' with the following columns:
+#'
+#' * PRS: the name of the PRS
+#' * Phenotype: the name of Phenotype
+#' * Phenotype_Type: either 'Continuous', 'Categorical' or 'Cases/Controls'
+#' * Covar: list all the covariates used for this association
+#' * N_cases: if Phenotype_Type is Cases/Controls, gives the number of cases
+#' * N_controls: if Phenotype_Type is Cases/Controls, gives the number of controls
+#' * N: the number of individuals/samples
+#' * Effect: if Phenotype_Type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+#' * SE: standard error of the related Effect (Beta or OR)
+#' * lower_CI: lower confidence interval of the related Effect (Beta or OR)
+#' * upper_CI: upper confidence interval of the related Effect (Beta or OR)
+#' * P_value: associated P-value
+#'
 #' @importFrom stats na.omit glm binomial lm coef confint median
+#' @importFrom MASS polr
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
@@ -74,11 +93,13 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
 
   # doing regression according to phenotype type
   if (phenotype_type == "Cases/Controls") {
+    cat("\n   Using a binary logistic regression", file = log, append = T)
     regress <- glm(regress_formula, family = "binomial"(link = "logit"), data = df)
   } else if (phenotype_type == "Categorical") {
-    cat("\n   Phenotype is categorical, 'cases' are interpreted as the factor not having the first level", file = log, append = T)
-    regress <- glm(regress_formula, family = "binomial"(link = "logit"), data = df)
+    cat("\n   Using an ordinal logistic regression", file = log, append = T)
+    regress <- polr(regress_formula, method = c("logistic"), data = df, Hess = T)
   } else if (phenotype_type == "Continuous") {
+    cat("\n   Using a linear regression", file = log, append = T)
     regress <- lm(regress_formula, data = df)
   }
 
@@ -94,22 +115,36 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   }
   sample_size <- nrow(df)
   cat("\n  Sample Size: ", sample_size, file = log, append = T)
-  beta <- coef(summary(regress))[2, 1]
-  se <- coef(summary(regress))[2, 2]
-  p_val <- coef(summary(regress))[2, 4]
-  or <- exp(beta)
-  ci <- suppressMessages(exp(confint(regress)))
+  ctable <- coef(summary(regress))
+  if (phenotype_type == "Categorical") {
+    # adding pval
+    ptemp <- pnorm(abs(ctable[, "t value"]), lower.tail = FALSE) * 2
+    ctable <- cbind(ctable, "p value" = ptemp)
+  }
+  beta_or <- ifelse((phenotype_type == "Continuous"), ctable[2, 1], exp(ctable[2, 1]))
+  se <- ctable[2, 2]
+  p_val <- ctable[2, 4]
+  if (phenotype_type == "Continuous") {
+    ci <- suppressMessages(confint(regress))
+  } else {
+    ci <- suppressMessages(exp(confint(regress)))
+  }
   lower_ci <- ci[2, 1]
   upper_ci <- ci[2, 2]
-  cat("\n   OR ( 95% CI ): ", or, " (", lower_ci, "-", upper_ci, ")", file = log, append = T)
+  if (phenotype_type == "Continuous") {
+    cat("\n   Beta ( 95% CI ): ", beta_or, " (", lower_ci, "-", upper_ci, ")", file = log, append = T)
+  } else {
+    cat("\n   OR ( 95% CI ): ", beta_or, " (", lower_ci, "-", upper_ci, ")", file = log, append = T)
+  }
   cat("\n   P-value: ", p_val, "\n", file = log, append = T)
 
   # creating the score_table
   score_table <- data.frame(
     "PRS" = prs_col, "Phenotype" = phenotype_col,
+    "Phenotype_Type" = phenotype_type,
     "Covar" = paste(covar_col, collapse = "+"),
     "N_cases" = cases, "N_controls" = controls,
-    "N" = sample_size, "OR" = or, "SE" = se,
+    "N" = sample_size, "Effect" = beta_or, "SE" = se,
     "lower_CI" = lower_ci, "upper_CI" = upper_ci,
     "P_value" = p_val
   )

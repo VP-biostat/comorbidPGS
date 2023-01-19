@@ -14,8 +14,13 @@ multiphenassoc(
 )
 }
 \arguments{
-\item{df}{a dataframe with individuals on each row, at least one ID column,
-one column PRS (continuous variable) and one with phenotype (continuous or discrete)}
+\item{df}{a dataframe with individuals on each row, and at least the following
+columns:
+\itemize{
+\item one ID column,
+\item one PRS column, with numerical continuous values following a normal distribution,
+\item one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
+}}
 
 \item{prs_col}{a character specifying the PRS column name}
 
@@ -30,7 +35,21 @@ If "" (by default), it prints to the standard output connection, the console unl
 }
 \value{
 return a data frame showing the association of the PRS on the Phenotypes
-with 'PRS','Phenotype','Covar','N_cases','N_controls','N','OR','SE','lower_CI','upper_CI','P_value'
+with the following columns:
+\itemize{
+\item PRS: the name of the PRS
+\item Phenotype: the name of Phenotype
+\item Phenotype_Type: either 'Continuous', 'Categorical' or 'Cases/Controls'
+\item Covar: list all the covariates used for this association
+\item N_cases: if Phenotype_Type is Cases/Controls, gives the number of cases
+\item N_controls: if Phenotype_Type is Cases/Controls, gives the number of controls
+\item N: the number of individuals/samples
+\item Effect: if Phenotype_Type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+\item SE: standard error of the related Effect (Beta or OR)
+\item lower_CI: lower confidence interval of the related Effect (Beta or OR)
+\item upper_CI: upper confidence interval of the related Effect (Beta or OR)
+\item P_value: associated P-value
+}
 }
 \description{
 \code{multiphenassoc()} take a distribution of PRS and multiple Phenotypes and eventual confounders

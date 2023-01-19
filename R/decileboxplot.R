@@ -3,15 +3,18 @@
 #'
 #' @description
 #' `decileboxplot()` take a distribution of PRS, a Continuous Phenotype
-#' return a plot (ggplot2 object) with deciles of PRS in x and Boxplot of
-#' the Phenotype in y
+#' return a plot with deciles of PRS in x and Boxplot of the Phenotype in y
 #'
-#' @param df a dataframe with individuals on each row, at least one column PRS
-#' (continuous variable) and one with phenotype (continuous or categorical)
+#' @param df a dataframe with individuals on each row, and at least the following
+#' columns:
+#'
+#'  * one ID column,
+#'  * one PRS column, with numerical continuous values following a normal distribution,
+#'  * one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 #' @param prs_col a character specifying the PRS column name
 #' @param phenotype_col a character specifying the Continuous Phenotype column name
 #'
-#' @return return a figure of results in the format ggplot2 object
+#' @return return a ggplot object (ggplot2)
 #' @importFrom stats na.omit
 #' @import ggplot2
 #' @export

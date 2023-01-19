@@ -13,8 +13,13 @@ densityplot(
 )
 }
 \arguments{
-\item{df}{a dataframe with individuals on each row, at least one column PRS
-(continuous variable) and one with phenotype (continuous or categorical)}
+\item{df}{a dataframe with individuals on each row, and at least the following
+columns:
+\itemize{
+\item one ID column,
+\item one PRS column, with numerical continuous values following a normal distribution,
+\item one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
+}}
 
 \item{prs_col}{a character specifying the PRS column name}
 
@@ -22,16 +27,17 @@ densityplot(
 
 \item{scale}{a boolean specifying if scaling of PRS should be done before plotting}
 
-\item{threshold}{a facultative numeric specifying for continuous Phenotype
-the Threshold to consider individuals as Cases/Constrols as following:
-Phenotype > Threshold = Case
-Phenotype < Threshold = Control}
+\item{threshold}{a facultative numeric specifying for Continuous Phenotype
+the Threshold to consider individuals as Cases/Controls as following:
+\itemize{
+\item Phenotype > Threshold = Case
+\item Phenotype < Threshold = Control
+}}
 }
 \value{
-return a figure of results in the format ggplot2 object
+return a ggplot object (ggplot2)
 }
 \description{
 \code{densityplot()} take a distribution of PRS, a Phenotype and eventual Confounders
-return a plot (ggplot2 object) with density of PRS in x by Categories of the
-Phenotype
+return a plot with density of PRS in x by Categories of the Phenotype
 }

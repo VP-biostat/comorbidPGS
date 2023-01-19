@@ -76,9 +76,11 @@ knitr::kable(result_2)
 densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
 ```
 
-```{r orplot}
+```{r assocplot}
 # show multiple associations in a plot
-orplot(score_table = result_2)
+assoplot <- assocplot(score_table = result_2)
+assoplot$continuous_phenotype
+assoplot$discrete_phenotype
 ```
 NOTE: The score_table should have the assoc() output format
 

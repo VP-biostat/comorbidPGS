@@ -17,10 +17,10 @@ download.
 
 ## Prerequisite
 
--   R version 3.5 or higher with the following packages:
-    -   stats
-    -   utils
-    -   ggplot2
+- R version 3.5 or higher with the following packages:
+  - stats
+  - utils
+  - ggplot2
 
 ## Installation
 
@@ -41,6 +41,11 @@ the example dataset:
 
 ``` r
 library(comorbidPRS)
+#> 
+#> Attachement du package : 'comorbidPRS'
+#> L'objet suivant est masqué depuis 'package:graphics':
+#> 
+#>     assocplot
 
 # use the demo dataset
 dataset <- comorbidExample
@@ -53,9 +58,9 @@ dataset <- comorbidExample
 result_1 <- assoc(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_1")
 ```
 
-| PRS   | Phenotype   | Covar | N_cases | N_controls |     N |       OR |        SE | lower_CI | upper_CI | P_value |
-|:------|:------------|:------|:--------|:-----------|------:|---------:|----------:|---------:|---------:|--------:|
-| PRS_1 | Phenotype_1 | NA    | NA      | NA         | 50000 | 1.197197 | 0.0044723 | 1.186749 | 1.207737 |       0 |
+| PRS   | Phenotype   | Phenotype_Type | Covar | N_cases | N_controls |     N |   Effect |        SE | lower_CI | upper_CI | P_value |
+|:------|:------------|:---------------|:------|:--------|:-----------|------:|---------:|----------:|---------:|---------:|--------:|
+| PRS_1 | Phenotype_1 | Continuous     | NA    | NA      | NA         | 50000 | 1.991441 | 0.0268217 |  1.93887 | 2.044012 |       0 |
 
 ``` r
 # do multiple associations
@@ -63,16 +68,16 @@ assoc <- expand.grid(c("PRS_1", "PRS_2"), c("Phenotype_1", "Phenotype_2", "Pheno
 result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("Age", "Sex", "Covariate"))
 ```
 
-| PRS   | Phenotype   | Covar             | N_cases | N_controls |     N |        OR |        SE |  lower_CI | upper_CI |   P_value |
-|:------|:------------|:------------------|--------:|-----------:|------:|----------:|----------:|----------:|---------:|----------:|
-| PRS_1 | Phenotype_1 | Age+Sex+Covariate |      NA |         NA | 50000 | 1.1971851 | 0.0044724 | 1.1867365 | 1.207726 | 0.0000000 |
-| PRS_2 | Phenotype_1 | Age+Sex+Covariate |      NA |         NA | 50000 | 0.9988762 | 0.0045443 | 0.9900188 | 1.007813 | 0.8045741 |
-| PRS_1 | Phenotype_2 | Age+Sex+Covariate |   24589 |      25411 | 50000 | 1.6967704 | 0.0098214 | 1.6644859 | 1.729818 | 0.0000000 |
-| PRS_2 | Phenotype_2 | Age+Sex+Covariate |   24589 |      25411 | 50000 | 0.9972665 | 0.0089465 | 0.9799316 | 1.014908 | 0.7596387 |
-| PRS_1 | Phenotype_3 | Age+Sex+Covariate |   25213 |      24787 | 50000 | 1.0086071 | 0.0089453 | 0.9910780 | 1.026447 | 0.3380300 |
-| PRS_2 | Phenotype_3 | Age+Sex+Covariate |   25213 |      24787 | 50000 | 1.6947776 | 0.0098171 | 1.6625449 | 1.727772 | 0.0000000 |
-| PRS_1 | Phenotype_4 | Age+Sex+Covariate |      NA |         NA | 50000 | 1.0019309 | 0.0127126 | 0.9772745 | 1.027210 | 0.8793929 |
-| PRS_2 | Phenotype_4 | Age+Sex+Covariate |      NA |         NA | 50000 | 2.3658259 | 0.0146268 | 2.2991633 | 2.434845 | 0.0000000 |
+| PRS   | Phenotype   | Phenotype_Type | Covar             | N_cases | N_controls |     N |     Effect |        SE |   lower_CI |  upper_CI |   P_value |
+|:------|:------------|:---------------|:------------------|--------:|-----------:|------:|-----------:|----------:|-----------:|----------:|----------:|
+| PRS_1 | Phenotype_1 | Continuous     | Age+Sex+Covariate |      NA |         NA | 50000 |  1.9914519 | 0.0268227 |  1.9388791 | 2.0440247 | 0.0000000 |
+| PRS_2 | Phenotype_1 | Continuous     | Age+Sex+Covariate |      NA |         NA | 50000 | -0.0436724 | 0.0282645 | -0.0990712 | 0.0117264 | 0.1223206 |
+| PRS_1 | Phenotype_2 | Cases/Controls | Age+Sex+Covariate |   24848 |      25152 | 50000 |  1.6649052 | 0.0097614 |  1.6334168 | 1.6971300 | 0.0000000 |
+| PRS_2 | Phenotype_2 | Cases/Controls | Age+Sex+Covariate |   24848 |      25152 | 50000 |  1.0047871 | 0.0089457 |  0.9873235 | 1.0225602 | 0.5934457 |
+| PRS_1 | Phenotype_3 | Cases/Controls | Age+Sex+Covariate |   25241 |      24759 | 50000 |  1.0212729 | 0.0089466 |  1.0035222 | 1.0393409 | 0.0186315 |
+| PRS_2 | Phenotype_3 | Cases/Controls | Age+Sex+Covariate |   25241 |      24759 | 50000 |  1.6819537 | 0.0097941 |  1.6500382 | 1.7146199 | 0.0000000 |
+| PRS_1 | Phenotype_4 | Categorical    | Age+Sex+Covariate |      NA |         NA | 50000 |  0.9998111 | 0.0003616 |  0.9991032 | 1.0005195 | 0.6014667 |
+| PRS_2 | Phenotype_4 | Categorical    | Age+Sex+Covariate |      NA |         NA | 50000 |  1.0002051 | 0.0003675 |  0.9994851 | 1.0009259 | 0.5768392 |
 
 ### Examples of plot
 
@@ -84,10 +89,17 @@ densityplot(dataset, prs_col = "PRS_1", phenotype_col = "Phenotype_2")
 
 ``` r
 # show multiple associations in a plot
-orplot(score_table = result_2)
+assoplot <- assocplot(score_table = result_2)
+assoplot$continuous_phenotype
 ```
 
-<img src="man/figures/README-orplot-1.png" width="100%" /> NOTE: The
+<img src="man/figures/README-assocplot-1.png" width="100%" />
+
+``` r
+assoplot$discrete_phenotype
+```
+
+<img src="man/figures/README-assocplot-2.png" width="100%" /> NOTE: The
 score_table should have the assoc() output format
 
 ``` r

@@ -4,19 +4,37 @@
 #' @description
 #' `multiassoc()` take a data frame with distribution(s) of PRS and Phenotype(s),
 #' and a table of associations to make from this data frame
+#'
 #' return a data frame showing the association results
 #'
-#' @param df a dataframe with individuals on each row, at least one ID column,
-#' one column PRS (continuous variable) and one with phenotype (continuous or discrete)
+#' @param df a dataframe with individuals on each row, and at least the following
+#' columns:
+#'
+#'  * one ID column,
+#'  * one PRS column, with numerical continuous values following a normal distribution,
+#'  * one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 #' @param assoc_table a dataframe or matrix specifying the associations to
-#' make from df representing PRS and Phenotype (in this order)
+#' make from df, with 2 columns: PRS and Phenotype (in this order)
 #' @param scale a boolean specifying if scaling of PRS should be done before testing
 #' @param covar_col a character vector specifying the covariate column names (facultative)
 #' @param log 	a connection, or a character string naming the file to print to.
 #' If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
 #'
 #' @return return a data frame showing the association of the PRS(s) on the Phenotype(s)
-#' with 'PRS','Phenotype','Covar','N_cases','N_controls','N','OR','SE','lower_CI','upper_CI','P_value'
+#' with the following columns:
+#'
+#' * PRS: the name of the PRS
+#' * Phenotype: the name of Phenotype
+#' * Phenotype_Type: either 'Continuous', 'Categorical' or 'Cases/Controls'
+#' * Covar: list all the covariates used for this association
+#' * N_cases: if Phenotype_Type is Cases/Controls, gives the number of cases
+#' * N_controls: if Phenotype_Type is Cases/Controls, gives the number of controls
+#' * N: the number of individuals/samples
+#' * Effect: if Phenotype_Type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+#' * SE: standard error of the related Effect (Beta or OR)
+#' * lower_CI: lower confidence interval of the related Effect (Beta or OR)
+#' * upper_CI: upper confidence interval of the related Effect (Beta or OR)
+#' * P_value: associated P-value
 #'
 #' @examples
 #' assoc_table <- expand.grid(

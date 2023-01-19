@@ -6,13 +6,17 @@
 #' return a plot (ggplot2 object) with centiles (or deciles if not enough individuals)
 #' of PRS in x and Prevalence/Median/Mean of the Phenotype in y
 #'
-#' @param df a dataframe with individuals on each row, at least one column PRS
-#' (continuous variable) and one with phenotype (continuous or categorical)
+#' @param df a dataframe with individuals on each row, and at least the following
+#' columns:
+#'
+#'  * one ID column,
+#'  * one PRS column, with numerical continuous values following a normal distribution,
+#'  * one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 #' @param prs_col a character specifying the PRS column name
 #' @param phenotype_col a character specifying the Phenotype column name
 #' @param decile a boolean specifying if centiles or deciles should be used
 #' @param continuous_metric a facultative character specifying what metric to
-#' use for continuous Phenotype, only three options: NA, "median" or "mean"
+#' use for continuous Phenotype, only three options: `NA`, `"median"` or `"mean"`
 #'
 #' @return return a figure of results in the format ggplot2 object
 #' @importFrom stats na.omit

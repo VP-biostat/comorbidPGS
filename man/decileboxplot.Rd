@@ -7,18 +7,22 @@
 decileboxplot(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype")
 }
 \arguments{
-\item{df}{a dataframe with individuals on each row, at least one column PRS
-(continuous variable) and one with phenotype (continuous or categorical)}
+\item{df}{a dataframe with individuals on each row, and at least the following
+columns:
+\itemize{
+\item one ID column,
+\item one PRS column, with numerical continuous values following a normal distribution,
+\item one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
+}}
 
 \item{prs_col}{a character specifying the PRS column name}
 
 \item{phenotype_col}{a character specifying the Continuous Phenotype column name}
 }
 \value{
-return a figure of results in the format ggplot2 object
+return a ggplot object (ggplot2)
 }
 \description{
 \code{decileboxplot()} take a distribution of PRS, a Continuous Phenotype
-return a plot (ggplot2 object) with deciles of PRS in x and Boxplot of
-the Phenotype in y
+return a plot with deciles of PRS in x and Boxplot of the Phenotype in y
 }
