@@ -60,7 +60,7 @@ test_that("Continuous Phenotype without normal distribution (N_pheno < 5000)", {
 
 
 test_that("Continuous PRS without normal distribution (N_prs > 5000)", {
-  expect_error(assoc(df = df, prs_col = "test", phenotype_col = "Phenotype_1"))
+  expect_warning(assoc(df = df, prs_col = "test", phenotype_col = "Phenotype_1"))
 })
 test_that("Continuous PRS without normal distribution (N_prs < 5000)", {
   expect_error(assoc(df = df, prs_col = "test_2", phenotype_col = "Phenotype_1"))

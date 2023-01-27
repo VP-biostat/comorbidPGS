@@ -37,7 +37,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
   ## Checking inputs
   if (is.null(score_table)) {
     stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype' 'Phenotype_Type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
-  } else if (!class(score_table)[1] %in% c("data.frame")) {
+  } else if (!Reduce(`|`, class(score_table) %in% c("data.frame"))) {
     stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype' 'Phenotype_Type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
   } else if (!"PRS" %in% names(score_table)) {
     stop("Please provide a column named 'PRS' in the data frame of results")
@@ -62,7 +62,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
     axis <- "vertical"
   } else if (is.null(pval)) {
     stop("Missing 'pval' parameter")
-  } else if (!class(pval)[1] %in% c("numeric", "integer", "double", "logical")) {
+  } else if (!Reduce(`|`, class(pval) %in% c("numeric", "integer", "double", "logical"))) {
     stop("'pval' parameter should be either a logical or a numeric")
   }
 

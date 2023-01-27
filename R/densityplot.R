@@ -52,7 +52,7 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
         axis.title.y = element_text(size = 11),
         axis.text.y.left = element_text(size = 11)
       )
-  } else if (!is.na(threshold) & class(threshold) %in% c("integer", "numeric", "double")) {
+  } else if (!is.na(threshold) & Reduce(`|`, class(threshold) %in% c("integer", "numeric", "double"))) {
     df$Categorical_Pheno <- df$Phenotype > threshold
     p <- ggplot(df, aes(PRS, fill = as.factor(Categorical_Pheno))) +
       geom_density(alpha = 0.4) +

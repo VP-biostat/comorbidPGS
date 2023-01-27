@@ -57,11 +57,11 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
   ## Checking inputs (done in assoc that calls df_checker)
   if (is.null(assoc_table)) {
     stop("Please provide a data frame or a matrix for 'assoc_table' parameter")
-  } else if (!(class(assoc_table)[1] %in% c("data.frame", "matrix", "array"))) {
+  } else if (!Reduce(`|`, class(assoc_table) %in% c("data.frame", "matrix", "array"))) {
     stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
   } else if (ncol(assoc_table) != 2) {
     stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
-  } else if (!class(log)[1] %in% c("character","url","connection")) {
+  } else if (!Reduce(`|`, class(log) %in% c("character","url","connection"))) {
     stop("Please provide a connection, or a character string naming the file to print to for 'log'")
   } else {
     n_assoc <- nrow(assoc_table)

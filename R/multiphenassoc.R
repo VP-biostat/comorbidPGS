@@ -44,7 +44,7 @@ multiphenassoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phe
   # checking inputs (done in assoc that calls df_checker)
   if (n_pheno <= 1) {
     warning("No multiple Phenotypes given, preferably use assoc() function")
-  } else if (!class(log)[1] %in% c("character","url","connection")) {
+  } else if (!Reduce(`|`, class(log) %in% c("character","url","connection"))) {
     stop("Please provide a connection, or a character string naming the file to print to for 'log'")
   }
 

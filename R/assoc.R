@@ -23,12 +23,13 @@
 #'
 #' * PRS: the name of the PRS
 #' * Phenotype: the name of Phenotype
-#' * Phenotype_Type: either 'Continuous', 'Categorical' or 'Cases/Controls'
+#' * Phenotype_type: either 'Continuous', 'Ordered Categorical', 'Categorical' or 'Cases/Controls'
+#' * Stat_method: either 'Linear regression', 'Binary logistic regression', 'Ordinal logistic regression' or 'Multinomial logistic regression'
 #' * Covar: list all the covariates used for this association
-#' * N_cases: if Phenotype_Type is Cases/Controls, gives the number of cases
-#' * N_controls: if Phenotype_Type is Cases/Controls, gives the number of controls
+#' * N_cases: if Phenotype_type is Cases/Controls, gives the number of cases
+#' * N_controls: if Phenotype_type is Cases/Controls, gives the number of controls
 #' * N: the number of individuals/samples
-#' * Effect: if Phenotype_Type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+#' * Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
 #' * SE: standard error of the related Effect (Beta or OR)
 #' * lower_CI: lower confidence interval of the related Effect (Beta or OR)
 #' * upper_CI: upper confidence interval of the related Effect (Beta or OR)
@@ -36,6 +37,7 @@
 #'
 #' @importFrom stats na.omit glm binomial lm coef confint median
 #' @importFrom MASS polr
+#' @importFrom nnet multinom
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
@@ -46,10 +48,8 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   phenotype_col <- col_names$phenotype_col
   if (!is.logical(scale)) {
     stop("Please provide a logical for 'scale' (TRUE by default)")
-  } else if (!class(log)[1] %in% c("character","url","connection")) {
+  } else if (!Reduce(`|`, class(log) %in% c("character","url","connection"))) {
     stop("Please provide a connection, or a character string naming the file to print to for 'log'")
-  } else if (!normal_distribution_checker(df[, prs_col])) {
-    warning(paste("PRS column", prs_col, "is not normal, please normalise prior to run association"))
   }
 
   cat("\n\n---\nAssociation testing:", file = log, append = T)
@@ -97,42 +97,76 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   if (phenotype_type == "Cases/Controls") {
     cat("\n   Using a binary logistic regression", file = log, append = T)
     regress <- glm(regress_formula, family = "binomial"(link = "logit"), data = df)
-  } else if (phenotype_type == "Categorical") {
+  } else if (phenotype_type == "Ordered Categorical") {
     cat("\n   Using an ordinal logistic regression", file = log, append = T)
     regress <- polr(regress_formula, method = c("logistic"), data = df, Hess = T)
+  } else if (phenotype_type == "Categorical") {
+    cat("\n   Using an multinomial logistic regression\n", file = log, append = T)
+    regress <- multinom(regress_formula, data = df, Hess = T)
   } else if (phenotype_type == "Continuous") {
     cat("\n   Using a linear regression", file = log, append = T)
     regress <- lm(regress_formula, data = df)
   }
 
 
-  ## Wrapping up the results
-  cases <- NA
-  controls <- NA
+  ## Wrapping up the results in a table
+  #collecting common sample size
   if (phenotype_type == "Cases/Controls") {
     cases <- sum(as.logical(df[, phenotype_col]) == T)
     controls <- sum(as.logical(df[, phenotype_col]) == F)
     cat("\n  Cases: ", cases, file = log, append = T)
     cat("\n  Controls: ", controls, file = log, append = T)
-  }
-  sample_size <- nrow(df)
-  cat("\n  Sample Size: ", sample_size, file = log, append = T)
-  ctable <- coef(summary(regress))
-  if (phenotype_type == "Categorical") {
-    # adding pval
-    ptemp <- pnorm(abs(ctable[, "t value"]), lower.tail = FALSE) * 2
-    ctable <- cbind(ctable, "p value" = ptemp)
-  }
-  beta_or <- ifelse((phenotype_type == "Continuous"), ctable[2, 1], exp(ctable[2, 1]))
-  se <- ctable[2, 2]
-  p_val <- ctable[2, 4]
-  if (phenotype_type == "Continuous") {
-    ci <- suppressMessages(confint(regress))
+  } else if (phenotype_type == "Categorical") {
+    phen_ref <- levels(df[, phenotype_col])[1]
+    cases <- c()
+    controls <- c()
+    phenotype_name <- c()
+    sample_size <- c()
+    for (value in levels(df[, phenotype_col])[-1]) {
+      tmp_cases <- sum(df[,phenotype_col] == value)
+      tmp_controls <- sum(df[,phenotype_col] == phen_ref)
+      cases <- c(cases, tmp_cases)
+      controls <- c(controls, tmp_controls)
+      phenotype_name <- c(phenotype_name, paste(phenotype_col, phen_ref, "~", value))
+      sample_size <- c(sample_size, tmp_cases+tmp_controls)
+    }
   } else {
-    ci <- suppressMessages(exp(confint(regress)))
+    cases <- NA
+    controls <- NA
   }
-  lower_ci <- ci[2, 1]
-  upper_ci <- ci[2, 2]
+  if (!exists("phenotype_name")) {
+    phenotype_name <- phenotype_col
+  }
+  if (!exists("sample_size")) {
+    sample_size <- nrow(df)
+  }
+  cat("\n  Sample Size: ", sample_size, file = log, append = T)
+
+  # linear regression or binary log regression or ordinal log regression
+  if (phenotype_type == "Categorical") {
+    beta <- coef(regress)[,2]
+    beta_se <- summary(regress)$standard.error[,2]
+    z <- beta_or/se
+    p_val <- (1-pnorm(abs(z), 0, 1))*2
+    beta_or <- exp(beta)
+    se <- beta_or*beta_se
+  } else {
+    ctable <- coef(summary(regress))
+
+    if (phenotype_type == "Ordered Categorical") {
+      # adding pval in case
+      ptemp <- (1-pnorm(abs(ctable[, "t value"]), 0, 1))*2
+      ctable <- cbind(ctable, "p value" = ptemp)
+    }
+
+    beta_or <- ifelse((phenotype_type == "Continuous"), ctable[2, 1], exp(ctable[2, 1]))
+    se <- ifelse((phenotype_type == "Continuous"), ctable[2, 2], beta_or*ctable[2, 2])
+    p_val <- ctable[2, 4]
+  }
+
+  lower_ci <- beta_or-1.96*se
+  upper_ci <- beta_or+1.96*se
+
   if (phenotype_type == "Continuous") {
     cat("\n   Beta ( 95% CI ): ", beta_or, " (", lower_ci, "-", upper_ci, ")", file = log, append = T)
   } else {
@@ -142,8 +176,8 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
 
   # creating the score_table
   score_table <- data.frame(
-    "PRS" = prs_col, "Phenotype" = phenotype_col,
-    "Phenotype_Type" = phenotype_type,
+    "PRS" = prs_col, "Phenotype" = phenotype_name,
+    "Phenotype_type" = phenotype_type,
     "Covar" = paste(covar_col, collapse = "+"),
     "N_cases" = cases, "N_controls" = controls,
     "N" = sample_size, "Effect" = beta_or, "SE" = se,

@@ -12,7 +12,7 @@ df_checker <- function(df = NULL, prs_col = NA, phenotype_col = NA, scale = NA,
   if (is.null(df)) {
     stop("Please provide for 'df' a data frame (with at least 3 columns:
     ID, PRS and a continuous or discrete Phenotype)")
-  } else if (!(class(df)[1] %in% c("data.frame"))) {
+  } else if (!Reduce(`|`, class(df) %in% c("data.frame"))) {
     stop("Please provide for 'df' a data frame (with at least 3 columns:
     ID, PRS and a continuous or discrete Phenotype)")
   } else if (ncol(df) < 3) {
@@ -38,7 +38,7 @@ df_checker <- function(df = NULL, prs_col = NA, phenotype_col = NA, scale = NA,
   } else if (!prs_col %in% names(df)) {
     warning("Wrong prs_col, using by default the second column of df")
     prs_col <- names(df)[2]
-  } else if (!class(df[, prs_col]) %in% c("numeric", "integer", "double")) {
+  } else if (!Reduce(`|`, class(df[, prs_col]) %in% c("numeric", "integer", "double"))) {
     stop("Please provide numeric values in the PRS column")
   }
   # if no Phenotype column found, assume 3rd column is PRS
@@ -75,14 +75,15 @@ normal_distribution_checker <- function(x) {
   if (n_pheno>5000) {
     st <- 0
     for (i in 1:10) {
-      t <- shapiro.test(df[sample(1:n_pheno, 5000, replace = T), phenotype_col])$p.value
+      t <- shapiro.test(x[sample(1:n_pheno, 5000, replace = T)])$p.value
       st <- st+(t>0.05)
     }
-    if (st < 3) {
+    if (st == 0) {
+      print(st)
       normal <- F
     }
   } else {
-    t <- shapiro.test(df[sample(1:n_pheno, n_pheno, replace = T), phenotype_col])$p.value
+    t <- shapiro.test(x[sample(1:n_pheno, 5000, replace = T)])$p.value
     if (t <= 0.05) {
       normal <- F
     }
@@ -97,16 +98,21 @@ phenotype_type <- function(df = NULL, phenotype_col = "Phenotype") {
   phenotype_type <- "unknown"
   if (length(values) < 2) {
     stop(paste("Phenotype column", phenotype_col, "have less than 2 valuess"))
-  } else if (class(df[, phenotype_col]) == "logical" | length(values) == 2) {
+  } else if (Reduce(`|`, class(df[, phenotype_col]) == "logical") | length(values) == 2) {
     phenotype_type <- "Cases/Controls"
-  } else if (class(df[, phenotype_col]) %in% c("character", "factor") & length(values) > 2) {
-    phenotype_type <- "Categorical"
+  } else if (Reduce(`|`, class(df[, phenotype_col]) %in% c("character", "factor")) & length(values) > 2) {
+    #it is a categorical phenotype, now checking if it is ordered
+    if (is.ordered(df[, phenotype_col])) {
+      phenotype_type <- "Ordered Categorical"
+    } else {
+      phenotype_type <- "Categorical"
+    }
     df[, phenotype_col] <- as.factor(df[, phenotype_col])
-  } else if (class(df[, phenotype_col]) %in% c("numeric", "integer", "double")) {
+  } else if (Reduce(`|`, class(df[, phenotype_col]) %in% c("numeric", "integer", "double"))) {
     #check first if the variable follow normal distribution
     #if we have n > 5000, we need to run shapiro multiple times
     if (!normal_distribution_checker(df[, phenotype_col])) {
-      stop(paste("Phenotype column", phenotype_col, "is continuous and not normal, please normalise prior to run association"))
+      warning(paste("Phenotype column", phenotype_col, "is continuous and not normal, please normalise prior association"))
     }
     phenotype_type <- "Continuous"
     df[, phenotype_col] <- as.numeric(df[, phenotype_col])
