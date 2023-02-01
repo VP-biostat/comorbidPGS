@@ -93,7 +93,7 @@ result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex"
 ### Examples of plot
 
 ``` r
-densityplot(dataset, prs_col = "t2d_PRS", phenotype_col = "sbp_cat")
+densityplot(dataset, prs_col = "ldl_PRS", phenotype_col = "sbp_cat")
 ```
 
 <img src="man/figures/README-densityplot-1.png" width="100%" />
@@ -133,9 +133,6 @@ centileplot(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d") +
 ``` r
 decileboxplot(dataset, prs_col = "ldl_PRS", phenotype_col = "ldl")
 #> [1] 0
-#> Warning in phenotype_type(df = df, phenotype_col = "Phenotype"): Phenotype
-#> column Phenotype is continuous and not normal, please normalise prior
-#> association
 ```
 
 <img src="man/figures/README-decileplot-1.png" width="100%" />
