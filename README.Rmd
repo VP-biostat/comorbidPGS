@@ -91,7 +91,7 @@ centileplot(dataset, prs_col = "brc_PRS", phenotype_col = "brc")
 As those graphical functions use ggplot2, you can fully customize your plot:
 ```{r centileplot and ggplot}
 library(ggplot2)
-centileplot(dataset, prs_col = "ldl_PRS", phenotype_col = "t2d") + 
+centileplot(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d") + 
   scale_color_gradient(low = "green", high = "red")
 ```
 

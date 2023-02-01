@@ -94,8 +94,6 @@ result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex"
 
 ``` r
 densityplot(dataset, prs_col = "t2d_PRS", phenotype_col = "sbp_cat")
-#> Warning in densityplot(dataset, prs_col = "t2d_PRS", phenotype_col = "sbp_cat"):
-#> Phenotype is continuous and 'threshold' is not a number, ignoring the parameter
 ```
 
 <img src="man/figures/README-densityplot-1.png" width="100%" />
@@ -126,7 +124,7 @@ plot:
 
 ``` r
 library(ggplot2)
-centileplot(dataset, prs_col = "ldl_PRS", phenotype_col = "t2d") + 
+centileplot(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d") + 
   scale_color_gradient(low = "green", high = "red")
 ```
 

@@ -41,7 +41,7 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
 
   ## Making plot based on the category of Phenotype
   phenotype_type <- phenotype_type(df = df, phenotype_col = "Phenotype")
-  if (phenotype_type %in% c("Cases/Controls", "Categorical")) {
+  if (phenotype_type %in% c("Cases/Controls", "Categorical", "Ordered Categorical")) {
     p <- ggplot(df, aes(PRS, fill = as.factor(Phenotype))) +
       geom_density(alpha = 0.4) +
       labs(x = prs_col, y = "Density", fill = phenotype_col) +
