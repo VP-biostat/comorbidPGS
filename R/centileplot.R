@@ -55,7 +55,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
 
   preval <- data.frame(matrix(nrow = 0, ncol = 4))
 
-  if (phenotype_type == "Categorical") {
+  if (phenotype_type %in% c("Ordered Categorical","Categorical")) {
     stop("Cannot use Categorical Phenotype for centiles plot. Please use Cases/Controls or Continuous Phenotype")
   } else if (phenotype_type == "Cases/Controls") {
     names(preval) <- c("centile", "prevalence", "n_cases", "n")

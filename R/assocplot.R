@@ -10,8 +10,8 @@
 #'
 #' * PRS: the name of the PRS
 #' * Phenotype: the name of Phenotype
-#' * Phenotype_Type: either 'Continuous', 'Categorical' or 'Cases/Controls'
-#' * Effect: if Phenotype_Type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+#' * Phenotype_type: either `'Continuous'`, `'Ordered Categorical'`, `'Categorical'` or `'Cases/Controls'`
+#' * Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
 #' * lower_CI: lower confidence interval of the related Effect (Beta or OR)
 #' * upper_CI: upper confidence interval of the related Effect (Beta or OR)
 #' * P_value: associated P-value
@@ -36,15 +36,15 @@
 assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
   ## Checking inputs
   if (is.null(score_table)) {
-    stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype' 'Phenotype_Type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
+    stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype' 'Phenotype_type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
   } else if (!Reduce(`|`, class(score_table) %in% c("data.frame"))) {
-    stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype' 'Phenotype_Type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
+    stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype' 'Phenotype_type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
   } else if (!"PRS" %in% names(score_table)) {
     stop("Please provide a column named 'PRS' in the data frame of results")
   } else if (!"Phenotype" %in% names(score_table)) {
     stop("Please provide a column named 'Phenotype' in the data frame of results")
-  } else if (!"Phenotype_Type" %in% names(score_table)) {
-    stop("Please provide a column named 'Phenotype_Type' in the data frame of results")
+  } else if (!"Phenotype_type" %in% names(score_table)) {
+    stop("Please provide a column named 'Phenotype_type' in the data frame of results")
   } else if (!"Effect" %in% names(score_table)) {
     stop("Please provide a column named 'Effect' in the data frame of results")
   } else if (!"lower_CI" %in% names(score_table)) {
@@ -72,9 +72,9 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
   p2_flag <- F
   if (axis == "horizontal") {
 
-    if ("Continuous" %in% score_table$Phenotype_Type) {
+    if ("Continuous" %in% score_table$Phenotype_type) {
 
-      temp_score <- score_table[which(score_table$Phenotype_Type == "Continuous"),]
+      temp_score <- score_table[which(score_table$Phenotype_type == "Continuous"),]
       p1_flag <- T
 
       p1 <- ggplot(temp_score, aes(x = Phenotype, y = Effect, ymin = lower_CI, ymax = upper_CI, color = PRS)) +
@@ -94,10 +94,9 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
 
     }
 
-    if ("Cases/Controls" %in% score_table$Phenotype_Type |
-        "Categorical" %in% score_table$Phenotype_Type) {
+    if (Reduce(`|`, (c("Cases/Controls","Categorical","Ordered Categorical") %in% score_table$Phenotype_type))) {
 
-      temp_score <- score_table[which(score_table$Phenotype_Type %in% c("Cases/Controls", "Categorical")),]
+      temp_score <- score_table[which(score_table$Phenotype_type %in% c("Cases/Controls", "Categorical")),]
       p2_flag <- T
 
       p2 <- ggplot(temp_score, aes(x = Phenotype, y = Effect, ymin = lower_CI, ymax = upper_CI, color = PRS)) +
@@ -119,10 +118,10 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
 
   } else if (axis == "vertical") {
 
-    if ("Continuous" %in% score_table$Phenotype_Type) {
+    if ("Continuous" %in% score_table$Phenotype_type) {
 
       p1_flag <- T
-      temp_score <- score_table[which(score_table$Phenotype_Type == "Continuous"),]
+      temp_score <- score_table[which(score_table$Phenotype_type == "Continuous"),]
 
       p1 <- ggplot(temp_score, aes(y = Phenotype, x = Effect, xmin = lower_CI, xmax = upper_CI, color = PRS)) +
         geom_point(position = position_dodge(0.5), cex = 2) +
@@ -141,11 +140,10 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
 
     }
 
-    if ("Cases/Controls" %in% score_table$Phenotype_Type |
-        "Categorical" %in% score_table$Phenotype_Type) {
+    if (Reduce(`|`, (c("Cases/Controls","Categorical","Ordered Categorical") %in% score_table$Phenotype_type))) {
 
       p2_flag <- T
-      temp_score <- score_table[which(score_table$Phenotype_Type %in% c("Cases/Controls", "Categorical")),]
+      temp_score <- score_table[which(score_table$Phenotype_type %in% c("Cases/Controls", "Categorical")),]
 
       p2 <- ggplot(temp_score, aes(y = Phenotype, x = Effect, xmin = lower_CI, xmax = upper_CI, color = PRS)) +
         geom_point(position = position_dodge(0.5), cex = 2) +

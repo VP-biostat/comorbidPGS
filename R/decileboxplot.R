@@ -41,7 +41,7 @@ decileboxplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
   levels(df$centile) <- seq(1, 100, by = 1)
   df$decile <- cut(as.numeric(df$centile), breaks = seq(0, 100, by = 10))
 
-  if (phenotype_type %in% c("Categorical", "Cases/Controls")) {
+  if (phenotype_type %in% c("Categorical", "Cases/Controls", "Ordered Categorical")) {
     stop("Cannot use a Categorical or a Cases/Controls phenotype for deciles boxplot. Please use Continuous Phenotype")
   } else if (phenotype_type == "Continuous") {
     p <- ggplot(df, aes(

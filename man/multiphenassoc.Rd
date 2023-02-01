@@ -39,12 +39,13 @@ with the following columns:
 \itemize{
 \item PRS: the name of the PRS
 \item Phenotype: the name of Phenotype
-\item Phenotype_Type: either 'Continuous', 'Categorical' or 'Cases/Controls'
+\item Phenotype_type: either \code{'Continuous'}, \code{'Ordered Categorical'}, \code{'Categorical'} or \code{'Cases/Controls'}
+\item Stat_method: association function detects what is the phenotype type and what is the best way to analyse it, either \code{'Linear regression'}, \code{'Binary logistic regression'}, \code{'Ordinal logistic regression'} or \code{'Multinomial logistic regression'}
 \item Covar: list all the covariates used for this association
-\item N_cases: if Phenotype_Type is Cases/Controls, gives the number of cases
-\item N_controls: if Phenotype_Type is Cases/Controls, gives the number of controls
+\item N_cases: if Phenotype_type is Cases/Controls, gives the number of cases
+\item N_controls: if Phenotype_type is Cases/Controls, gives the number of controls
 \item N: the number of individuals/samples
-\item Effect: if Phenotype_Type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+\item Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
 \item SE: standard error of the related Effect (Beta or OR)
 \item lower_CI: lower confidence interval of the related Effect (Beta or OR)
 \item upper_CI: upper confidence interval of the related Effect (Beta or OR)

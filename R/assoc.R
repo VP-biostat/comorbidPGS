@@ -23,8 +23,8 @@
 #'
 #' * PRS: the name of the PRS
 #' * Phenotype: the name of Phenotype
-#' * Phenotype_type: either 'Continuous', 'Ordered Categorical', 'Categorical' or 'Cases/Controls'
-#' * Stat_method: either 'Linear regression', 'Binary logistic regression', 'Ordinal logistic regression' or 'Multinomial logistic regression'
+#' * Phenotype_type: either `'Continuous'`, `'Ordered Categorical'`, `'Categorical'` or `'Cases/Controls'`
+#' * Stat_method: association function detects what is the phenotype type and what is the best way to analyse it, either `'Linear regression'`, `'Binary logistic regression'`, `'Ordinal logistic regression'` or `'Multinomial logistic regression'`
 #' * Covar: list all the covariates used for this association
 #' * N_cases: if Phenotype_type is Cases/Controls, gives the number of cases
 #' * N_controls: if Phenotype_type is Cases/Controls, gives the number of controls
@@ -95,18 +95,19 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
 
   # doing regression according to phenotype type
   if (phenotype_type == "Cases/Controls") {
-    cat("\n   Using a binary logistic regression", file = log, append = T)
+    stat_method <- 'Binary logistic regression'
     regress <- glm(regress_formula, family = "binomial"(link = "logit"), data = df)
   } else if (phenotype_type == "Ordered Categorical") {
-    cat("\n   Using an ordinal logistic regression", file = log, append = T)
+    stat_method <- 'Ordinal logistic regression'
     regress <- polr(regress_formula, method = c("logistic"), data = df, Hess = T)
   } else if (phenotype_type == "Categorical") {
-    cat("\n   Using an multinomial logistic regression\n", file = log, append = T)
+    stat_method <- 'Multinomial logistic regression'
     regress <- multinom(regress_formula, data = df, Hess = T)
   } else if (phenotype_type == "Continuous") {
-    cat("\n   Using a linear regression", file = log, append = T)
+    stat_method <- 'Linear regression'
     regress <- lm(regress_formula, data = df)
   }
+  cat("\n   Using a ",stat_method, file = log, append = T)
 
 
   ## Wrapping up the results in a table
@@ -146,7 +147,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   if (phenotype_type == "Categorical") {
     beta <- coef(regress)[,2]
     beta_se <- summary(regress)$standard.error[,2]
-    z <- beta_or/se
+    z <- beta/beta_se
     p_val <- (1-pnorm(abs(z), 0, 1))*2
     beta_or <- exp(beta)
     se <- beta_or*beta_se
@@ -178,6 +179,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   score_table <- data.frame(
     "PRS" = prs_col, "Phenotype" = phenotype_name,
     "Phenotype_type" = phenotype_type,
+    "Statistical_method" = stat_method,
     "Covar" = paste(covar_col, collapse = "+"),
     "N_cases" = cases, "N_controls" = controls,
     "N" = sample_size, "Effect" = beta_or, "SE" = se,

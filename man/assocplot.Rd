@@ -12,8 +12,8 @@ following columns:
 \itemize{
 \item PRS: the name of the PRS
 \item Phenotype: the name of Phenotype
-\item Phenotype_Type: either 'Continuous', 'Categorical' or 'Cases/Controls'
-\item Effect: if Phenotype_Type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+\item Phenotype_type: either \code{'Continuous'}, \code{'Ordered Categorical'}, \code{'Categorical'} or \code{'Cases/Controls'}
+\item Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
 \item lower_CI: lower confidence interval of the related Effect (Beta or OR)
 \item upper_CI: upper confidence interval of the related Effect (Beta or OR)
 \item P_value: associated P-value

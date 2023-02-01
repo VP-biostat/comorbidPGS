@@ -30,27 +30,21 @@ df_checker <- function(df = NULL, prs_col = NA, phenotype_col = NA, scale = NA,
   ## Checking what is in the data frame df
   # if no SCORESUM column found, assume 2nd column is PRS
   if (is.null(prs_col)) {
-    warning("Missing prs_col, using by default the second column of df")
-    prs_col <- names(df)[2]
+    stop("Missing prs_col")
   } else if (is.na(prs_col)) {
-    warning("Missing prs_col, using by default the second column of df")
-    prs_col <- names(df)[2]
+    stop("Missing prs_col")
   } else if (!prs_col %in% names(df)) {
-    warning("Wrong prs_col, using by default the second column of df")
-    prs_col <- names(df)[2]
+    stop("prs_col not found in df")
   } else if (!Reduce(`|`, class(df[, prs_col]) %in% c("numeric", "integer", "double"))) {
     stop("Please provide numeric values in the PRS column")
   }
   # if no Phenotype column found, assume 3rd column is PRS
   if (is.null(phenotype_col)) {
-    warning("Missing phenotype_col, using by default the third column of df")
-    phenotype_col <- names(df)[3]
+    stop("Missing phenotype_col")
   } else if (is.na(phenotype_col)) {
-    warning("Missing phenotype_col, using by default the third column of df")
-    phenotype_col <- names(df)[3]
+    stop("Missing phenotype_col")
   } else if (!phenotype_col %in% names(df)) {
-    warning("Wrong phenotype_col, using by default the third column of df")
-    phenotype_col <- names(df)[3]
+    stop("phenotype_col not found in df")
   }
   # if no Covariate column found, assume covar_col is NA
   if (is.null(covar_col[1]) | is.na(covar_col[1])) {
@@ -74,7 +68,7 @@ normal_distribution_checker <- function(x) {
   normal <- T
   if (n_pheno>5000) {
     st <- 0
-    for (i in 1:10) {
+    for (i in 1:50) {
       t <- shapiro.test(x[sample(1:n_pheno, 5000, replace = T)])$p.value
       st <- st+(t>0.05)
     }

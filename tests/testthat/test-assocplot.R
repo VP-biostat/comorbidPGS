@@ -6,18 +6,18 @@ test_that("Wrong class score_table", {
   expect_error(assocplot(score_table = "WRONG_DF"))
 })
 
-prs <- grep("PRS", names(comorbidExample), value = T)
-phenotype <- grep("Phenotype", names(comorbidExample), value = T)
+prs <- grep("PRS", names(comorbidData), value = T)
+phenotype <- c("ethnicity","t2d","log_ldl","sbp_cat")
 assoc <- cbind(prs, phenotype)
 assoc <- na.omit(assoc)
-score_table <- multiassoc(comorbidExample, assoc)
+score_table <- multiassoc(comorbidData, assoc)
 
 test_that("No column Phenotype in score_table", {
   expect_error(assocplot(score_table[, -"Phenotype"]))
 })
 
-test_that("No column Phenotype_Type in score_table", {
-  expect_error(assocplot(score_table[, -"Phenotype_Type"]))
+test_that("No column Phenotype_type in score_table", {
+  expect_error(assocplot(score_table[, -"Phenotype_type"]))
 })
 
 test_that("No column Effect in score_table", {
@@ -56,8 +56,8 @@ test_that("Wrong pval", {
   expect_error(assocplot(score_table, pval = "WRONG_PVAL"))
 })
 
-continuous_score_table <- score_table[which(score_table$Phenotype_Type == "Continuous"),]
-discrete_score_table <- score_table[which(score_table$Phenotype_Type != "Continuous"),]
+continuous_score_table <- score_table[which(score_table$Phenotype_type == "Continuous"),]
+discrete_score_table <- score_table[which(score_table$Phenotype_type != "Continuous"),]
 for (ax in c("horizontal", "vertical")) {
   for (pvalue in c(0.05, 0.5, T, F)) {
     test_that(paste("Test with only Continuous Phenotype ; axis =", ax, "; pval =", pvalue), {
@@ -75,9 +75,9 @@ for (ax in c("horizontal", "vertical")) {
     })
 
     test_that(paste("Test with axis =", ax, "; pval =", pvalue), {
-      expect_s3_class(
+      expect_type(
         object = assocplot(score_table, ax, pvalue),
-        class = "list"
+        type = "list"
       )
     })
   }

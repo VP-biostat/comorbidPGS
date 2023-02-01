@@ -23,12 +23,13 @@
 #'
 #' * PRS: the name of the PRS
 #' * Phenotype: the name of Phenotype
-#' * Phenotype_Type: either 'Continuous', 'Categorical' or 'Cases/Controls'
+#' * Phenotype_type: either `'Continuous'`, `'Ordered Categorical'`, `'Categorical'` or `'Cases/Controls'`
+#' * Stat_method: association function detects what is the phenotype type and what is the best way to analyse it, either `'Linear regression'`, `'Binary logistic regression'`, `'Ordinal logistic regression'` or `'Multinomial logistic regression'`
 #' * Covar: list all the covariates used for this association
-#' * N_cases: if Phenotype_Type is Cases/Controls, gives the number of cases
-#' * N_controls: if Phenotype_Type is Cases/Controls, gives the number of controls
+#' * N_cases: if Phenotype_type is Cases/Controls, gives the number of cases
+#' * N_controls: if Phenotype_type is Cases/Controls, gives the number of controls
 #' * N: the number of individuals/samples
-#' * Effect: if Phenotype_Type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+#' * Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
 #' * SE: standard error of the related Effect (Beta or OR)
 #' * lower_CI: lower confidence interval of the related Effect (Beta or OR)
 #' * upper_CI: upper confidence interval of the related Effect (Beta or OR)

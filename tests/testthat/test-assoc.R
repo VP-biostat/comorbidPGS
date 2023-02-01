@@ -11,82 +11,74 @@ test_that("Insufficient number of Column df", {
 })
 
 test_that("Null prs_col", {
-  expect_warning(assoc(df = comorbidExample, prs_col = NULL, phenotype_col = "Phenotype_1"))
+  expect_error(assoc(df = comorbidData, prs_col = NULL, phenotype_col = "log_ldl"))
 })
 
 test_that("NA prs_col", {
-  expect_warning(assoc(df = comorbidExample, prs_col = NA, phenotype_col = "Phenotype_1"))
+  expect_error(assoc(df = comorbidData, prs_col = NA, phenotype_col = "log_ldl"))
 })
 
 
 test_that("Wrong prs_col", {
-  expect_warning(assoc(df = comorbidExample, prs_col = "WRONG_PRS", phenotype_col = "Phenotype_1"))
+  expect_error(assoc(df = comorbidData, prs_col = "WRONG_PRS", phenotype_col = "log_ldl"))
 })
 
 
 test_that("Not numeric prs_col", {
-  expect_error(assoc(df = comorbidExample, prs_col = "Phenotype_4", phenotype_col = "Phenotype_1"))
+  expect_error(assoc(df = comorbidData, prs_col = "hypertension", phenotype_col = "log_ldl"))
 })
 
 test_that("Null phenotype_col", {
-  expect_warning(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = NULL))
+  expect_error(assoc(df = comorbidData, prs_col = "ldl_PRS", phenotype_col = NULL))
 })
 
 test_that("NA phenotype_col", {
-  expect_warning(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = NA))
+  expect_error(assoc(df = comorbidData, prs_col = "ldl_PRS", phenotype_col = NA))
 })
 
 test_that("Wrong phenotype_col", {
-  expect_warning(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = "WRONG_PHENOTYPE"))
+  expect_error(assoc(df = comorbidData, prs_col = "ldl_PRS", phenotype_col = "WRONG_PHENOTYPE"))
 })
 
 test_that("Wrong scale", {
-  expect_error(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = "Phenotype_1", scale = "WRONG_SCALE"))
+  expect_error(assoc(df = comorbidData, prs_col = "ldl_PRS", phenotype_col = "log_ldl", scale = "WRONG_SCALE"))
 })
 
 test_that("Wrong Phenotype: only one value", {
-  expect_error(assoc(df = cbind(comorbidExample, data.frame("WRONG_PHENO" = rep(0, nrow(comorbidExample)))), prs_col = "PRS_1", phenotype_col = "WRONG_PHENO"))
+  expect_error(assoc(df = cbind(comorbidData, data.frame("WRONG_PHENO" = rep(0, nrow(comorbidData)))), prs_col = "ldl_PRS", phenotype_col = "WRONG_PHENO"))
 })
 
-df <- comorbidExample
-df$test <- (sample(c(0, 2), 50000, replace = T) + df$PRS_1 / max(df$PRS_1))
-df$test2 <- c(df[1:4000, "test"], rep(NA, 50000-4000))
+df <- comorbidData
+df$test <- (sample(c(0, 2), nrow(df), replace = T) + df$ldl_PRS / max(df$ldl_PRS))
+df$test2 <- c(df[1:4000, "test"], rep(NA, nrow(df)-4000))
 test_that("Continuous Phenotype without normal distribution (N_pheno > 5000)", {
-  expect_error(assoc(df = df, prs_col = "PRS_1", phenotype_col = "test"))
+  expect_warning(assoc(df = df, prs_col = "ldl_PRS", phenotype_col = "test"))
 })
 test_that("Continuous Phenotype without normal distribution (N_pheno < 5000)", {
-  expect_error(assoc(df = df, prs_col = "PRS_1", phenotype_col = "test2"))
-})
-
-
-test_that("Continuous PRS without normal distribution (N_prs > 5000)", {
-  expect_warning(assoc(df = df, prs_col = "test", phenotype_col = "Phenotype_1"))
-})
-test_that("Continuous PRS without normal distribution (N_prs < 5000)", {
-  expect_error(assoc(df = df, prs_col = "test_2", phenotype_col = "Phenotype_1"))
+  expect_warning(assoc(df = df, prs_col = "ldl_PRS", phenotype_col = "test2"))
 })
 
 test_that("Wrong covar_col", {
-  expect_error(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = "Phenotype_1", scale = "WRONG_COVARIATE"))
+  expect_error(assoc(df = comorbidData, prs_col = "ldl_PRS", phenotype_col = "log_ldl", scale = "WRONG_COVARIATE"))
 })
 
 test_that("Not enough sample/individuals", {
-  expect_error(assoc(df = cbind(comorbidExample, data.frame("WRONG_PHENO" = rep(NA, nrow(comorbidExample)))), prs_col = "PRS_1", phenotype_col = "WRONG_PHENO"))
+  expect_error(assoc(df = cbind(comorbidData, data.frame("WRONG_PHENO" = rep(NA, nrow(comorbidData)))), prs_col = "ldl_PRS", phenotype_col = "WRONG_PHENO"))
 })
 
 test_that("Null log", {
-  expect_error(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = "Phenotype_1", log = NULL))
+  expect_error(assoc(df = comorbidData, prs_col = "ldl_PRS", phenotype_col = "log_ldl", log = NULL))
 })
 
 test_that("Wrong log", {
-  expect_error(assoc(df = comorbidExample, prs_col = "PRS_1", phenotype_col = "Phenotype_1", log = 1))
+  expect_error(assoc(df = comorbidData, prs_col = "ldl_PRS", phenotype_col = "log_ldl", log = 1))
 })
 
-for (prs in grep("PRS", names(comorbidExample), value = T)) {
-  for (phenotype in grep("Phenotype", names(comorbidExample), value = T)) {
+for (prs in grep("PRS", names(comorbidData), value = T)) {
+  for (phenotype in c("ethnicity","brc","t2d","log_ldl","sbp_cat")) {
     test_that(paste("Test of", prs, "on", phenotype), {
       expect_s3_class(
-        object = assoc(df = comorbidExample, prs_col = prs, phenotype_col = phenotype),
+        object = assoc(df = comorbidData, prs_col = prs, phenotype_col = phenotype),
         class = "data.frame"
       )
     })
