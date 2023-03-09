@@ -44,7 +44,7 @@ devtools::install_github("VP-biostat/comorbidPRS")
 
 This is a basic example which shows you how to do basic association with the example dataset:
 
-```{r example, results = 'hide'}
+```{r example, results = 'hide', warning = FALSE}
 library(comorbidPRS)
 
 # use the demo dataset

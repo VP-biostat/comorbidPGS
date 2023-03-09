@@ -33,7 +33,7 @@
 #'
 #' @import ggplot2
 #' @export
-assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
+assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
   ## Checking inputs
   if (is.null(score_table)) {
     stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype' 'Phenotype_type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
@@ -82,7 +82,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_hline(yintercept = 0, linetype = "dashed", colour = "grey") +
         geom_text(aes(label = ifelse(((P_value <= pval) & (pval != F)), formatC(P_value, format = "e", digits = 1), ""), group = PRS),
-                  hjust = 0, vjust = 1, angle = 90, colour = "black", size = 3, position = position_dodge(1)
+                  angle = 90, colour = "black", size = 3, position = position_dodge(0.5), vjust = 2
         ) +
         labs(color = "PRS", y = "Beta", x = "Phenotype") +
         theme_minimal() +
@@ -104,7 +104,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_hline(yintercept = 1, linetype = "dashed", colour = "grey") +
         geom_text(aes(label = ifelse(((P_value <= pval) & (pval != F)), formatC(P_value, format = "e", digits = 1), ""), group = PRS),
-                  hjust = 0, vjust = 1, angle = 90, colour = "black", size = 3, position = position_dodge(1)
+                  angle = 90, colour = "black", size = 3, position = position_dodge(0.5), vjust = 2
         ) +
         labs(color = "PRS", y = "Odds Ratio", x = "Phenotype") +
         theme_minimal() +
@@ -128,7 +128,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_vline(xintercept = 0, linetype = "dashed", colour = "grey") +
         geom_text(aes(label = ifelse(((P_value <= pval) & (pval != F)), formatC(P_value, format = "e", digits = 1), ""), group = PRS),
-                  hjust = 0, vjust = 0, angle = 0, colour = "black", size = 3, position = position_dodge(1)
+                  angle = 0, colour = "black", size = 3, position = position_dodge(0.5), vjust = 1
         ) +
         labs(color = "PRS", x = "Beta", y = "Phenotype") +
         theme_minimal() +
@@ -150,7 +150,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = 0.05) {
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_vline(xintercept = 1, linetype = "dashed", colour = "grey") +
         geom_text(aes(label = ifelse(((P_value <= pval) & (pval != F)), formatC(P_value, format = "e", digits = 1), ""), group = PRS),
-                  hjust = 0, vjust = 0, angle = 0, colour = "black", size = 3, position = position_dodge(1)
+                  angle = 0, colour = "black", size = 3, position = position_dodge(0.5), vjust = 1
         ) +
         labs(color = "PRS", x = "Odds Ratio", y = "Phenotype") +
         theme_minimal() +

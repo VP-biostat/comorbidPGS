@@ -17,10 +17,10 @@ download.
 
 ## Prerequisite
 
-- R version 3.5 or higher with the following packages:
-  - stats
-  - utils
-  - ggplot2
+-   R version 3.5 or higher with the following packages:
+    -   stats
+    -   utils
+    -   ggplot2
 
 ## Installation
 
@@ -145,5 +145,5 @@ manuscript:
 <p>
 Pascat V (????). <em>comorbidPRS: Assessing the shared predisposition
 between Phenotypes using Polygenic Scores (PRS)</em>. R package version
-0.0.0.9000.
+0.1.9000.
 </p>

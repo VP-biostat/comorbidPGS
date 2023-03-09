@@ -83,13 +83,13 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   # create the regression formula based on phenotype, prs and covariate(s)
   if (length(covar_col) > 1 & !is.na(covar_col[1])) {
     # create the regression formula
-    regress_formula <- paste(phenotype_col, "~", prs_col)
+    regress_formula <- paste0("`",phenotype_col,"` ~ `",prs_col,"`")
     for (covar in covar_col) {
-      regress_formula <- paste(regress_formula, "+", covar)
+      regress_formula <- paste0(regress_formula, " + `",covar,"`")
     }
   } else {
     # create the regression formula
-    regress_formula <- paste(phenotype_col, "~", prs_col)
+    regress_formula <- paste0("`",phenotype_col,"` ~ `",prs_col,"`")
   }
   cat("\n   ", regress_formula, file = log, append = T)
 
