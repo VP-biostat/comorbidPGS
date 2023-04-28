@@ -34,9 +34,24 @@ test_that("Wrong log", {
   expect_error(multiassoc(df = comorbidData, assoc_table = assoc, log = 1))
 })
 
+test_that("Null parallel", {
+  expect_error(multiassoc(df = comorbidData, assoc_table = assoc, parallel = NULL))
+})
+
+test_that("Wrong parallel", {
+  expect_error(multiassoc(df = comorbidData, assoc_table = assoc, parallel = 2))
+})
+
 test_that("Test of several PRS and Phenotype using an assoc_table matrix and covariates", {
   expect_s3_class(
-    object = multiassoc(df = comorbidData, assoc_table = assoc, covar_col = c("age", "sex", "gen_array")),
+    object = multiassoc(df = comorbidData, assoc_table = assoc, covar_col = c("age", "sex", "gen_array"), parallel = F),
+    class = "data.frame"
+  )
+})
+
+test_that("Test of several PRS and Phenotype using an assoc_table matrix and covariates, parallel version", {
+  expect_s3_class(
+    object = multiassoc(df = comorbidData, assoc_table = assoc, covar_col = c("age", "sex", "gen_array"), parallel = T),
     class = "data.frame"
   )
 })

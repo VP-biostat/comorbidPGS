@@ -9,7 +9,8 @@ multiassoc(
   assoc_table = NULL,
   scale = TRUE,
   covar_col = NA,
-  log = ""
+  log = "",
+  parallel = TRUE
 )
 }
 \arguments{
@@ -29,7 +30,11 @@ make from df, with 2 columns: PRS and Phenotype (in this order)}
 \item{covar_col}{a character vector specifying the covariate column names (facultative)}
 
 \item{log}{a connection, or a character string naming the file to print to.
-If "" (by default), it prints to the standard output connection, the console unless redirected by sink.}
+If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
+If parallel = TRUE, the log will be incomplete}
+
+\item{parallel}{a boolean, if TRUE (default), \code{multiassoc()} parallelise the association analysis to run it faster (no log available with this option, does not work with Windows machine)
+If FALSE, the association analysis will not be parallelised (useful for debugging process)}
 }
 \value{
 return a data frame showing the association of the PRS(s) on the Phenotype(s)

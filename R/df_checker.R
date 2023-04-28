@@ -73,7 +73,6 @@ normal_distribution_checker <- function(x) {
       st <- st+(t>0.05)
     }
     if (st == 0) {
-      print(st)
       normal <- F
     }
   } else {

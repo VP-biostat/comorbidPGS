@@ -18,7 +18,8 @@ Imports:
     stats,
     utils,
     MASS,
-    nnet
+    nnet, 
+    parallel
 LazyData: true
 Suggests: 
     testthat (>= 3.0.0)

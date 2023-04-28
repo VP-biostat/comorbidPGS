@@ -4,7 +4,7 @@
 \alias{assocplot}
 \title{Multiple PRS Associations Plot}
 \usage{
-assocplot(score_table = NULL, axis = "vertical", pval = 0.05)
+assocplot(score_table = NULL, axis = "vertical", pval = F)
 }
 \arguments{
 \item{score_table}{a dataframe with association results with at least the

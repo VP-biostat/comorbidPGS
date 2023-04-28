@@ -19,6 +19,9 @@
 #' @param covar_col a character vector specifying the covariate column names (facultative)
 #' @param log 	a connection, or a character string naming the file to print to.
 #' If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
+#' If parallel = TRUE, the log will be incomplete
+#' @param parallel a boolean, if TRUE (default), `multiassoc()` parallelise the association analysis to run it faster (no log available with this option, does not work with Windows machine)
+#' If FALSE, the association analysis will not be parallelised (useful for debugging process)
 #'
 #' @return return a data frame showing the association of the PRS(s) on the Phenotype(s)
 #' with the following columns:
@@ -49,9 +52,10 @@
 #' print(results)
 #'
 #' @importFrom stats na.omit
+#' @import parallel
 #' @export
 multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
-                       covar_col = NA, log = "") {
+                       covar_col = NA, log = "", parallel = TRUE) {
   ## Checking inputs (done in assoc that calls df_checker)
   if (is.null(assoc_table)) {
     stop("Please provide a data frame or a matrix for 'assoc_table' parameter")
@@ -61,17 +65,17 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
     stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
   } else if (!Reduce(`|`, class(log) %in% c("character","url","connection"))) {
     stop("Please provide a connection, or a character string naming the file to print to for 'log'")
+  } else if (is.null(parallel)) {
+    stop("Please provide a boolean for 'parallel' parameter")
+  } else if (!(parallel == T | parallel == F)) {
+    stop("Please provide a boolean for 'parallel' parameter")
   } else {
     n_assoc <- nrow(assoc_table)
     if (n_assoc <= 1) {
       warning("No multiple associations given, preferably use assoc() function")
     }
   }
-  cat("\n\n------\nMultiple associations (", n_assoc, ") testing:", file = log, append = F)
-
-  ## Creating progress bar
-  cat("\n", file = log, append = T)
-  progress <- txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
+  cat("\n\n------\nMultiple associations (", n_assoc, ") testing:\n", file = log, append = F)
 
   ## Creating the score table
   scores_table <- data.frame(matrix(nrow = 0, ncol = 11))
@@ -84,18 +88,42 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
   names(assoc_table) <- c("PRS", "Phenotype")
 
 
-  ## For loop of assoc function
-  for (i in 1:n_assoc) {
-    scores_table <- rbind(scores_table, assoc(
-      df = df, prs_col = as.character(assoc_table[i, 1]),
-      phenotype_col = as.character(assoc_table[i, 2]),
-      scale = scale, covar_col = covar_col,
-      log = log
-    ))
+  ## Parallele version of the for loop of assoc function
+  num_cores <- detectCores()
+  if (parallel & num_cores > 1 & Sys.info()["sysname"] != "Windows") {
 
-    cat("\n", file = log, append = T)
-    setTxtProgressBar(progress, i)
-    cat("\n", file = log, append = T)
+    num_cores <- num_cores-1
+    cat("Using parallelisation, no log available with this option. \nNo of cores:", num_cores, file = log, append = F)
+
+    scores_list <- mclapply(1:n_assoc, function(i) {
+      return(assoc(
+        df = df, prs_col = as.character(assoc_table[i, 1]),
+        phenotype_col = as.character(assoc_table[i, 2]),
+        scale = scale, covar_col = covar_col,
+        log = ""
+      ))
+    }, mc.cores = num_cores)
+    scores_table <- do.call(rbind, scores_list)
+
+  } else {
+
+    cat("No parallelisation, this operation may be slower\n", file = log, append = F)
+    ## Creating progress bar
+    progress <- txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
+
+    for (i in 1:n_assoc) {
+      scores_table <- rbind(scores_table, assoc(
+        df = df, prs_col = as.character(assoc_table[i, 1]),
+        phenotype_col = as.character(assoc_table[i, 2]),
+        scale = scale, covar_col = covar_col,
+        log = log
+      ))
+
+      cat("\n", file = log, append = T)
+      setTxtProgressBar(progress, i)
+      cat("\n", file = log, append = T)
+    }
+
   }
 
   # returning the result
