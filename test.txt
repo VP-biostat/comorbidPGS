@@ -1,2 +1,0 @@
-Using parallelisation, no log available with this option. 
-No of cores: 255
