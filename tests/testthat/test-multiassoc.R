@@ -55,3 +55,9 @@ test_that("Test of several PRS and Phenotype using an assoc_table matrix and cov
     class = "data.frame"
   )
 })
+
+test_that("Test of several PRS and Phenotype using an assoc_table matrix and covariates, parallel version and number of cores", {
+  expect_warning(
+    object = multiassoc(df = comorbidData, assoc_table = assoc, covar_col = c("age", "sex", "gen_array"), parallel = T, num_cores = detectCores()+1)
+  )
+})

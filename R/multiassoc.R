@@ -22,6 +22,8 @@
 #' If parallel = TRUE, the log will be incomplete
 #' @param parallel a boolean, if TRUE (default), `multiassoc()` parallelise the association analysis to run it faster (no log available with this option, does not work with Windows machine)
 #' If FALSE, the association analysis will not be parallelised (useful for debugging process)
+#' @param num_cores an integer, if parallel = TRUE (default), `multiassoc()` parallelise the association analysis to run it faster using num_cores as the number of cores.
+#' If nothing is provided, it detects the number of cores of the machine and use num_cores-1
 #'
 #' @return return a data frame showing the association of the PRS(s) on the Phenotype(s)
 #' with the following columns:
@@ -55,7 +57,7 @@
 #' @import parallel
 #' @export
 multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
-                       covar_col = NA, log = "", parallel = TRUE) {
+                       covar_col = NA, log = "", parallel = TRUE, num_cores = NA) {
   ## Checking inputs (done in assoc that calls df_checker)
   if (is.null(assoc_table)) {
     stop("Please provide a data frame or a matrix for 'assoc_table' parameter")
@@ -89,39 +91,46 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
 
 
   ## Parallele version of the for loop of assoc function
-  num_cores <- detectCores()
-  if (parallel & num_cores > 1 & Sys.info()["sysname"] != "Windows") {
+  if (parallel) {
+    if (is.na(num_cores) | (!Reduce(`|`, class(num_cores) %in% c("numeric")))) {
+      num_cores <- detectCores()-1
+    } else if (num_cores > detectCores()) {
+      warning("num_cores is more than the detected cores")
+    }
 
-    num_cores <- num_cores-1
-    cat("Using parallelisation, no log available with this option. \nNo of cores:", num_cores, file = log, append = F)
+    if (num_cores > 1 & Sys.info()["sysname"] != "Windows") {
 
-    scores_list <- mclapply(1:n_assoc, function(i) {
-      return(assoc(
-        df = df, prs_col = as.character(assoc_table[i, 1]),
-        phenotype_col = as.character(assoc_table[i, 2]),
-        scale = scale, covar_col = covar_col,
-        log = ""
-      ))
-    }, mc.cores = num_cores)
-    scores_table <- do.call(rbind, scores_list)
+      cat("Using parallelisation, no log available with this option. \nNo of cores:", num_cores, file = log, append = F)
 
-  } else {
+      scores_list <- mclapply(1:n_assoc, function(i) {
+        return(assoc(
+          df = df, prs_col = as.character(assoc_table[i, 1]),
+          phenotype_col = as.character(assoc_table[i, 2]),
+          scale = scale, covar_col = covar_col,
+          log = ""
+        ))
+      }, mc.cores = num_cores)
+      scores_table <- do.call(rbind, scores_list)
 
-    cat("No parallelisation, this operation may be slower\n", file = log, append = F)
-    ## Creating progress bar
-    progress <- txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
+    } else {
 
-    for (i in 1:n_assoc) {
-      scores_table <- rbind(scores_table, assoc(
-        df = df, prs_col = as.character(assoc_table[i, 1]),
-        phenotype_col = as.character(assoc_table[i, 2]),
-        scale = scale, covar_col = covar_col,
-        log = log
-      ))
+      cat("No parallelisation, this operation may be slower\n", file = log, append = F)
+      ## Creating progress bar
+      progress <- txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
 
-      cat("\n", file = log, append = T)
-      setTxtProgressBar(progress, i)
-      cat("\n", file = log, append = T)
+      for (i in 1:n_assoc) {
+        scores_table <- rbind(scores_table, assoc(
+          df = df, prs_col = as.character(assoc_table[i, 1]),
+          phenotype_col = as.character(assoc_table[i, 2]),
+          scale = scale, covar_col = covar_col,
+          log = log
+        ))
+
+        cat("\n", file = log, append = T)
+        setTxtProgressBar(progress, i)
+        cat("\n", file = log, append = T)
+      }
+
     }
 
   }

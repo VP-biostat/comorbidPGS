@@ -10,7 +10,8 @@ multiassoc(
   scale = TRUE,
   covar_col = NA,
   log = "",
-  parallel = TRUE
+  parallel = TRUE,
+  num_cores = NA
 )
 }
 \arguments{
@@ -35,6 +36,9 @@ If parallel = TRUE, the log will be incomplete}
 
 \item{parallel}{a boolean, if TRUE (default), \code{multiassoc()} parallelise the association analysis to run it faster (no log available with this option, does not work with Windows machine)
 If FALSE, the association analysis will not be parallelised (useful for debugging process)}
+
+\item{num_cores}{an integer, if parallel = TRUE (default), \code{multiassoc()} parallelise the association analysis to run it faster using num_cores as the number of cores.
+If nothing is provided, it detects the number of cores of the machine and use num_cores-1}
 }
 \value{
 return a data frame showing the association of the PRS(s) on the Phenotype(s)
