@@ -102,13 +102,15 @@ phenotype_type <- function(df = NULL, phenotype_col = "Phenotype") {
     }
     df[, phenotype_col] <- as.factor(df[, phenotype_col])
   } else if (Reduce(`|`, class(df[, phenotype_col]) %in% c("numeric", "integer", "double"))) {
+    phenotype_type <- "Continuous"
+    df[, phenotype_col] <- as.numeric(df[, phenotype_col])
+    #remove numbering values for missing data: "-99"
+    df[which(df[, phenotype_col] == -99), phenotype_col] <- NA
     #check first if the variable follow normal distribution
     #if we have n > 5000, we need to run shapiro multiple times
     if (!normal_distribution_checker(df[, phenotype_col])) {
       warning(paste("Phenotype column", phenotype_col, "is continuous and not normal, please normalise prior association"))
     }
-    phenotype_type <- "Continuous"
-    df[, phenotype_col] <- as.numeric(df[, phenotype_col])
   } else if (phenotype_type == "unknown") {
     stop(paste("Unable to identify phenotype type for", phenotype_col, "Please provide a Continuous, Categorical or Cases/Controls Phenotype"))
   }
