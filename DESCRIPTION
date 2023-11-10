@@ -1,6 +1,6 @@
 Package: comorbidPRS
 Title: Assessing the shared predisposition between Phenotypes using Polygenic Scores (PRS)
-Version: 0.1.9000
+Version: 0.2.9000
 Authors@R: 
     person("Vincent", "Pascat", , "vincent.pascat@univ-lille.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6227-8812"))

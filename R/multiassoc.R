@@ -91,7 +91,7 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
 
 
   ## Parallele version of the for loop of assoc function
-  if (parallel) {
+  if (parallel == T) {
     if (is.na(num_cores) | (!Reduce(`|`, class(num_cores) %in% c("numeric")))) {
       num_cores <- detectCores()-1
     } else if (num_cores > detectCores()) {
@@ -131,6 +131,25 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
         cat("\n", file = log, append = T)
       }
 
+    }
+
+  } else {
+
+    cat("No parallelisation, this operation may be slower\n", file = log, append = F)
+    ## Creating progress bar
+    progress <- txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
+
+    for (i in 1:n_assoc) {
+      scores_table <- rbind(scores_table, assoc(
+        df = df, prs_col = as.character(assoc_table[i, 1]),
+        phenotype_col = as.character(assoc_table[i, 2]),
+        scale = scale, covar_col = covar_col,
+        log = log
+      ))
+
+      cat("\n", file = log, append = T)
+      setTxtProgressBar(progress, i)
+      cat("\n", file = log, append = T)
     }
 
   }
