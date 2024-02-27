@@ -1,0 +1,107 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# comorbidPRS
+
+<!-- badges: start -->
+[![GitHub tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPRS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPRS)
+<!-- badges: end -->
+
+comorbidPRS is a tool for analysing an already computed PRS distribution to investigate shared aetiology in multiple conditions.
+
+comorbidPRS is under GPL-3 license, and is freely available for download. 
+
+## Prerequisite
+* R version 3.5 or higher with the following packages:
+    + stats 
+    + utils
+    + ggplot2 
+
+## Installation
+
+You can install the development version of comorbidPRS from [GitHub](https://github.com/VP-biostat/comorbidPRS) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("VP-biostat/comorbidPRS")
+```
+
+## Example
+
+### Building an Association Table
+
+This is a basic example which shows you how to do basic association with the example dataset:
+
+```{r example, results = 'hide', warning = FALSE}
+library(comorbidPRS)
+
+# use the demo dataset
+dataset <- comorbidData
+# NOTE: The dataset must have at least 3 different columns:
+# - an ID column (the first one)
+# - a PRS column (must be numeric, by default it is the column named "SCORESUM" or the second column if "SCORESUM" is not present)
+# - a Phenotype column, can be factors, numbers or characters
+
+# do an association of one PRS with one Phenotype
+result_1 <- assoc(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d")
+```
+```{r result_1, echo = FALSE}
+knitr::kable(result_1)
+```
+```{r example multiple assoc, results = 'hide'}
+# do multiple associations
+assoc <- expand.grid(c("t2d_PRS", "ldl_PRS"), c("ethnicity","brc","t2d","log_ldl","sbp_cat"))
+result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex", "gen_array"))
+```
+```{r result_2, echo = FALSE}
+knitr::kable(result_2)
+```
+
+
+### Examples of plot
+
+```{r densityplot}
+densityplot(dataset, prs_col = "ldl_PRS", phenotype_col = "sbp_cat")
+```
+
+```{r assocplot}
+# show multiple associations in a plot
+assoplot <- assocplot(score_table = result_2)
+assoplot$continuous_phenotype
+assoplot$discrete_phenotype
+```
+NOTE: The score_table should have the assoc() output format
+
+```{r centileplot}
+centileplot(dataset, prs_col = "brc_PRS", phenotype_col = "brc")
+```
+
+As those graphical functions use ggplot2, you can fully customize your plot:
+```{r centileplot-and-ggplot}
+library(ggplot2)
+centileplot(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d") + 
+  scale_color_gradient(low = "green", high = "red")
+```
+
+```{r decileplot, warning=FALSE}
+decileboxplot(dataset, prs_col = "ldl_PRS", phenotype_col = "ldl")
+```
+
+## Citation 
+If you use comorbidPRS in any published work, please cite the following manuscript:
+
+```{r citation, echo = FALSE, results = 'asis', warning = FALSE}
+print(citation("comorbidPRS"), "html")
+```
