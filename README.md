@@ -58,9 +58,9 @@ dataset <- comorbidData
 result_1 <- assoc(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d")
 ```
 
-| PRS     | Phenotype | Phenotype_type | Statistical_method         | Covar | N_cases | N_controls |     N |   Effect |        SE | lower_CI | upper_CI | P_value |
-|:--------|:----------|:---------------|:---------------------------|:------|--------:|-----------:|------:|---------:|----------:|---------:|---------:|--------:|
-| t2d_PRS | t2d       | Cases/Controls | Binary logistic regression | NA    |    2845 |      36535 | 39380 | 1.784127 | 0.0361516 | 1.713269 | 1.854984 |       0 |
+| PRS     | Phenotype | Phenotype_type | Statistical_method         | Covar | N_cases | N_controls |     N |   Effect | SE  | lower_CI | upper_CI | P_value |
+|:--------|:----------|:---------------|:---------------------------|:------|--------:|-----------:|------:|---------:|:----|---------:|---------:|--------:|
+| t2d_PRS | t2d       | Cases/Controls | Binary logistic regression | NA    |    2845 |      36535 | 39380 | 1.784127 | NA  | 1.714658 |  1.85641 |       0 |
 
 ``` r
 # do multiple associations
@@ -75,20 +75,20 @@ result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex"
 
 |     | PRS     | Phenotype        | Phenotype_type      | Statistical_method              | Covar             | N_cases | N_controls |     N |    Effect |        SE |  lower_CI |  upper_CI |   P_value |
 |:----|:--------|:-----------------|:--------------------|:--------------------------------|:------------------|--------:|-----------:|------:|----------:|----------:|----------:|----------:|----------:|
-| 2   | t2d_PRS | ethnicity 1 \~ 2 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    8526 |      24922 | 33448 | 0.9843528 | 0.0123519 | 0.9601431 | 1.0085625 | 0.2088171 |
-| 3   | t2d_PRS | ethnicity 1 \~ 3 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    4779 |      24922 | 29701 | 1.0161173 | 0.0160508 | 0.9846577 | 1.0475769 | 0.3114462 |
-| 4   | t2d_PRS | ethnicity 1 \~ 4 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    1153 |      24922 | 26075 | 1.0026245 | 0.0302145 | 0.9434041 | 1.0618450 | 0.9306895 |
-| 21  | ldl_PRS | ethnicity 1 \~ 2 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    8526 |      24922 | 33448 | 0.9925562 | 0.0124481 | 0.9681579 | 1.0169545 | 0.5513399 |
-| 31  | ldl_PRS | ethnicity 1 \~ 3 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    4779 |      24922 | 29701 | 1.0152907 | 0.0160504 | 0.9838319 | 1.0467496 | 0.3370977 |
-| 41  | ldl_PRS | ethnicity 1 \~ 4 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    1153 |      24922 | 26075 | 1.0128078 | 0.0305442 | 0.9529412 | 1.0726745 | 0.6730281 |
-| 1   | t2d_PRS | brc              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    1601 |      19867 | 21468 | 1.0348337 | 0.0269738 | 0.9819652 | 1.0877023 | 0.1889709 |
-| 11  | ldl_PRS | brc              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    1601 |      19867 | 21468 | 1.0119061 | 0.0263690 | 0.9602229 | 1.0635893 | 0.6496868 |
-| 12  | t2d_PRS | t2d              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    2845 |      36535 | 39380 | 1.8286147 | 0.0379141 | 1.7543029 | 1.9029264 | 0.0000000 |
-| 13  | ldl_PRS | t2d              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    2845 |      36535 | 39380 | 0.9968686 | 0.0196053 | 0.9584422 | 1.0352951 | 0.8732979 |
+| 2   | t2d_PRS | ethnicity 1 \~ 2 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    8526 |      24922 | 33448 | 0.9843528 |        NA | 0.9604383 | 1.0088627 | 0.2088171 |
+| 3   | t2d_PRS | ethnicity 1 \~ 3 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    4779 |      24922 | 29701 | 1.0161173 |        NA | 0.9604383 | 1.0088627 | 0.3114462 |
+| 4   | t2d_PRS | ethnicity 1 \~ 4 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    1153 |      24922 | 26075 | 1.0026245 |        NA | 0.9604383 | 1.0088627 | 0.9306895 |
+| 21  | ldl_PRS | ethnicity 1 \~ 2 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    8526 |      24922 | 33448 | 0.9925562 |        NA | 0.9684554 | 1.0172569 | 0.5513399 |
+| 31  | ldl_PRS | ethnicity 1 \~ 3 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    4779 |      24922 | 29701 | 1.0152907 |        NA | 0.9684554 | 1.0172569 | 0.3370977 |
+| 41  | ldl_PRS | ethnicity 1 \~ 4 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    1153 |      24922 | 26075 | 1.0128078 |        NA | 0.9684554 | 1.0172569 | 0.6730281 |
+| 1   | t2d_PRS | brc              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    1601 |      19867 | 21468 | 1.0348337 |        NA | 0.9832930 | 1.0890761 | 0.1889709 |
+| 11  | ldl_PRS | brc              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    1601 |      19867 | 21468 | 1.0119061 |        NA | 0.9615206 | 1.0649319 | 0.6496868 |
+| 12  | t2d_PRS | t2d              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    2845 |      36535 | 39380 | 1.8286147 |        NA | 1.7557926 | 1.9044570 | 0.0000000 |
+| 13  | ldl_PRS | t2d              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    2845 |      36535 | 39380 | 0.9968686 |        NA | 0.9591734 | 1.0360453 | 0.8732979 |
 | 14  | t2d_PRS | log_ldl          | Continuous          | Linear regression               | age+sex+gen_array |      NA |         NA | 39380 | 0.0036203 | 0.0011515 | 0.0013633 | 0.0058773 | 0.0016686 |
 | 15  | ldl_PRS | log_ldl          | Continuous          | Linear regression               | age+sex+gen_array |      NA |         NA | 39380 | 0.0843551 | 0.0010703 | 0.0822574 | 0.0864529 | 0.0000000 |
-| 16  | t2d_PRS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 39380 | 1.0757027 | 0.0013520 | 1.0730528 | 1.0783526 | 0.0000000 |
-| 17  | ldl_PRS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 39380 | 1.0754824 | 0.0013510 | 1.0728345 | 1.0781303 | 0.0000000 |
+| 16  | t2d_PRS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 39380 | 1.0757027 |        NA | 1.0730560 | 1.0783558 | 0.0000000 |
+| 17  | ldl_PRS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 39380 | 1.0754824 |        NA | 1.0728378 | 1.0781336 | 0.0000000 |
 
 ### Examples of plot
 
