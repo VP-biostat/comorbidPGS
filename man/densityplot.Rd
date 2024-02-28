@@ -2,7 +2,7 @@
 % Please edit documentation in R/densityplot.R
 \name{densityplot}
 \alias{densityplot}
-\title{Density Plot from a PRS Association}
+\title{Density Plot from a PGS Association}
 \usage{
 densityplot(
   df = NULL,
@@ -17,15 +17,15 @@ densityplot(
 columns:
 \itemize{
 \item one ID column,
-\item one PRS column, with numerical continuous values following a normal distribution,
+\item one PGS column, with numerical continuous values following a normal distribution,
 \item one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 }}
 
-\item{prs_col}{a character specifying the PRS column name}
+\item{prs_col}{a character specifying the PGS column name}
 
 \item{phenotype_col}{a character specifying the Phenotype column name}
 
-\item{scale}{a boolean specifying if scaling of PRS should be done before plotting}
+\item{scale}{a boolean specifying if scaling of PGS should be done before plotting}
 
 \item{threshold}{a facultative numeric specifying for Continuous Phenotype
 the Threshold to consider individuals as Cases/Controls as following:
@@ -38,6 +38,6 @@ the Threshold to consider individuals as Cases/Controls as following:
 return a ggplot object (ggplot2)
 }
 \description{
-\code{densityplot()} take a distribution of PRS, a Phenotype and eventual Confounders
-return a plot with density of PRS in x by Categories of the Phenotype
+\code{densityplot()} take a distribution of PGS, a Phenotype and eventual Confounders
+return a plot with density of PGS in x by Categories of the Phenotype
 }

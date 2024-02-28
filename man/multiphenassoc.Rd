@@ -2,7 +2,7 @@
 % Please edit documentation in R/multiphenassoc.R
 \name{multiphenassoc}
 \alias{multiphenassoc}
-\title{Multiple PRS Associations from different Phenotypes}
+\title{Multiple PGS Associations from different Phenotypes}
 \usage{
 multiphenassoc(
   df = NULL,
@@ -18,15 +18,15 @@ multiphenassoc(
 columns:
 \itemize{
 \item one ID column,
-\item one PRS column, with numerical continuous values following a normal distribution,
+\item one PGS column, with numerical continuous values following a normal distribution,
 \item one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 }}
 
-\item{prs_col}{a character specifying the PRS column name}
+\item{prs_col}{a character specifying the PGS column name}
 
 \item{phenotype_col}{a character vector specifying the Phenotype column names}
 
-\item{scale}{a boolean specifying if scaling of PRS should be done before testing}
+\item{scale}{a boolean specifying if scaling of PGS should be done before testing}
 
 \item{covar_col}{a character vector specifying the covariate column names (facultative)}
 
@@ -34,10 +34,10 @@ columns:
 If "" (by default), it prints to the standard output connection, the console unless redirected by sink.}
 }
 \value{
-return a data frame showing the association of the PRS on the Phenotypes
+return a data frame showing the association of the PGS on the Phenotypes
 with the following columns:
 \itemize{
-\item PRS: the name of the PRS
+\item PGS: the name of the PGS
 \item Phenotype: the name of Phenotype
 \item Phenotype_type: either \code{'Continuous'}, \code{'Ordered Categorical'}, \code{'Categorical'} or \code{'Cases/Controls'}
 \item Stat_method: association function detects what is the phenotype type and what is the best way to analyse it, either \code{'Linear regression'}, \code{'Binary logistic regression'}, \code{'Ordinal logistic regression'} or \code{'Multinomial logistic regression'}
@@ -53,6 +53,6 @@ with the following columns:
 }
 }
 \description{
-\code{multiphenassoc()} take a distribution of PRS and multiple Phenotypes and eventual confounders
+\code{multiphenassoc()} take a distribution of PGS and multiple Phenotypes and eventual confounders
 return a data frame showing the association results
 }

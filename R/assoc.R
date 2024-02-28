@@ -1,27 +1,27 @@
 #' @title
-#' Association of a PRS distribution with a Phenotype
+#' Association of a PGS distribution with a Phenotype
 #'
 #' @description
-#' `assoc()` take a distribution of PRS, a Phenotype and eventual Confounders
-#' return a data frame showing the association of PRS on the Phenotype
+#' `assoc()` take a distribution of PGS, a Phenotype and eventual Confounders
+#' return a data frame showing the association of PGS on the Phenotype
 #'
 #' @param df a dataframe with individuals on each row, and at least the following
 #' columns:
 #'
 #'  * one ID column,
-#'  * one PRS column, with numerical continuous values following a normal distribution,
+#'  * one PGS column, with numerical continuous values following a normal distribution,
 #'  * one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
-#' @param prs_col a character specifying the PRS column name
+#' @param prs_col a character specifying the PGS column name
 #' @param phenotype_col a character specifying the Phenotype column name
-#' @param scale a boolean specifying if scaling of PRS should be done before testing
+#' @param scale a boolean specifying if scaling of PGS should be done before testing
 #' @param covar_col a character vector specifying the covariate column names (facultative)
 #' @param log a connection, or a character string naming the file to print to.
 #' If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
 #'
-#' @return return a data frame showing the association of the PRS on the Phenotype
+#' @return return a data frame showing the association of the PGS on the Phenotype
 #' with the following columns:
 #'
-#' * PRS: the name of the PRS
+#' * PGS: the name of the PGS
 #' * Phenotype: the name of Phenotype
 #' * Phenotype_type: either `'Continuous'`, `'Ordered Categorical'`, `'Categorical'` or `'Cases/Controls'`
 #' * Stat_method: association function detects what is the phenotype type and what is the best way to analyse it, either `'Linear regression'`, `'Binary logistic regression'`, `'Ordinal logistic regression'` or `'Multinomial logistic regression'`
@@ -34,6 +34,16 @@
 #' * lower_CI: lower confidence interval of the related Effect (Beta or OR)
 #' * upper_CI: upper confidence interval of the related Effect (Beta or OR)
 #' * P_value: associated P-value
+#'
+#' @examples
+#' results <- assoc(
+#'   df = comorbidData,
+#'   prs_col = "ldl_PGS",
+#'   phenotype_col = "log_ldl",
+#'   scale = TRUE,
+#'   covar_col = c("age", "sex", "gen_array")
+#' )
+#' print(results)
 #'
 #' @importFrom stats na.omit glm binomial lm coef confint median pnorm
 #' @importFrom MASS polr
@@ -55,7 +65,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   cat("\n\n---\nAssociation testing:", file = log, append = T)
 
   # communicate the columns selected
-  cat("\n  PRS: ", prs_col, file = log, append = T)
+  cat("\n  PGS: ", prs_col, file = log, append = T)
   cat("\n  Phenotype: ", phenotype_col, file = log, append = T)
   cat("\n  Covariate: ", covar_col, file = log, append = T)
 
@@ -80,7 +90,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   phenotype_type <- phenotype_type(df = df, phenotype_col = phenotype_col)
   cat("\n  Phenotype type: ", phenotype_type, file = log, append = T)
 
-  # create the regression formula based on phenotype, prs and covariate(s)
+  # create the regression formula based on phenotype, PGS and covariate(s)
   if (length(covar_col) > 1 & !is.na(covar_col[1])) {
     # create the regression formula
     regress_formula <- paste0("`",phenotype_col,"` ~ `",prs_col,"`")
@@ -147,13 +157,14 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   if (phenotype_type == "Categorical") {
     beta <- coef(regress)[,2]
     beta_se <- summary(regress)$standard.error[,2]
-    beta_lo_ci <- beta-1.96*beta_se
-    beta_up_ci <- beta+1.96*beta_se
     z <- beta/beta_se
-    p_val <- (1-stats::pnorm(abs(z), 0, 1))*2
-    #EDIT: no need to compute it, systematically propose in the table output the Beta + SE and possibly OR
+
     beta_or <- exp(beta)
     se <- NA
+    p_val <- (1-stats::pnorm(abs(z), 0, 1))*2
+
+    lower_ci <- exp(beta-1.96*beta_se)
+    upper_ci <- exp(beta+1.96*beta_se)
   } else {
     ctable <- coef(summary(regress))
 
@@ -165,13 +176,14 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
 
     beta <- ctable[2, 1]
     beta_se <- ctable[2, 2]
+
     beta_or <- ifelse((phenotype_type == "Continuous"), beta, exp(beta))
     se <- ifelse((phenotype_type == "Continuous"), beta_se, NA)
     p_val <- ctable[2, 4]
-  }
 
-  lower_ci <- ifelse((phenotype_type == "Continuous"),  beta-1.96*beta_se, exp(beta-1.96*beta_se))
-  upper_ci <- ifelse((phenotype_type == "Continuous"),  beta+1.96*beta_se, exp(beta+1.96*beta_se))
+    lower_ci <- ifelse((phenotype_type == "Continuous"),  beta-1.96*beta_se, exp(beta-1.96*beta_se))
+    upper_ci <- ifelse((phenotype_type == "Continuous"),  beta+1.96*beta_se, exp(beta+1.96*beta_se))
+  }
 
   if (phenotype_type == "Continuous") {
     cat("\n   Beta ( SE ): ", beta_or, " (", se, ")", file = log, append = T)
@@ -182,7 +194,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
 
   # creating the score_table
   score_table <- data.frame(
-    "PRS" = prs_col, "Phenotype" = phenotype_name,
+    "PGS" = prs_col, "Phenotype" = phenotype_name,
     "Phenotype_type" = phenotype_type,
     "Statistical_method" = stat_method,
     "Covar" = paste(covar_col, collapse = "+"),

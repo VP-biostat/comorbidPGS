@@ -2,7 +2,7 @@
 % Please edit documentation in R/assocplot.R
 \name{assocplot}
 \alias{assocplot}
-\title{Multiple PRS Associations Plot}
+\title{Multiple PGS Associations Plot}
 \usage{
 assocplot(score_table = NULL, axis = "vertical", pval = F)
 }
@@ -10,7 +10,7 @@ assocplot(score_table = NULL, axis = "vertical", pval = F)
 \item{score_table}{a dataframe with association results with at least the
 following columns:
 \itemize{
-\item PRS: the name of the PRS
+\item PGS: the name of the PGS
 \item Phenotype: the name of Phenotype
 \item Phenotype_type: either \code{'Continuous'}, \code{'Ordered Categorical'}, \code{'Categorical'} or \code{'Cases/Controls'}
 \item Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise

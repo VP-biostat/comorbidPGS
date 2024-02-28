@@ -6,7 +6,7 @@ test_that("Wrong class score_table", {
   expect_error(assocplot(score_table = "WRONG_DF"))
 })
 
-prs <- grep("PRS", names(comorbidData), value = T)
+prs <- grep("PGS", names(comorbidData), value = T)
 phenotype <- c("ethnicity","t2d","log_ldl","sbp_cat")
 assoc <- cbind(prs, phenotype)
 assoc <- na.omit(assoc)
@@ -32,8 +32,8 @@ test_that("No column upper_CI in score_table", {
   expect_error(assocplot(score_table[, -"upper_CI"]))
 })
 
-test_that("No column PRS in score_table", {
-  expect_error(assocplot(score_table[, -"PRS"]))
+test_that("No column PGS in score_table", {
+  expect_error(assocplot(score_table[, -"PGS"]))
 })
 
 test_that("No column P-value in score_table", {

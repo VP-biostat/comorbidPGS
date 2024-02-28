@@ -1,17 +1,17 @@
 #' @title
-#' Deciles BoxPlot from a PRS Association with a Continuous Phenotype
+#' Deciles BoxPlot from a PGS Association with a Continuous Phenotype
 #'
 #' @description
-#' `decileboxplot()` take a distribution of PRS, a Continuous Phenotype
-#' return a plot with deciles of PRS in x and Boxplot of the Phenotype in y
+#' `decileboxplot()` take a distribution of PGS, a Continuous Phenotype
+#' return a plot with deciles of PGS in x and Boxplot of the Phenotype in y
 #'
 #' @param df a dataframe with individuals on each row, and at least the following
 #' columns:
 #'
 #'  * one ID column,
-#'  * one PRS column, with numerical continuous values following a normal distribution,
+#'  * one PGS column, with numerical continuous values following a normal distribution,
 #'  * one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
-#' @param prs_col a character specifying the PRS column name
+#' @param prs_col a character specifying the PGS column name
 #' @param phenotype_col a character specifying the Continuous Phenotype column name
 #'
 #' @return return a ggplot object (ggplot2)
@@ -27,7 +27,7 @@ decileboxplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
 
   ## Taking only subset of df
   df <- df[, c(prs_col, phenotype_col)]
-  names(df) <- c("PRS", "Phenotype")
+  names(df) <- c("PGS", "Phenotype")
   df <- na.omit(df)
   if (nrow(df) < 1000) {
     warning("The dataset has less than 1,000 individuals, deciles boxplot might not look good!")
@@ -36,7 +36,7 @@ decileboxplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
   ## Making centiles then deciles, ifelse using phenotype_type
   phenotype_type <- phenotype_type(df = df, phenotype_col = "Phenotype")
 
-  df$centile <- with(df, cut(PRS, breaks = quantile(PRS, probs = seq(0, 1, by = 0.01), na.rm = TRUE), include.lowest = TRUE, dig.lab = 10))
+  df$centile <- with(df, cut(PGS, breaks = quantile(PGS, probs = seq(0, 1, by = 0.01), na.rm = TRUE), include.lowest = TRUE, dig.lab = 10))
   df$centile <- as.factor(df$centile)
   levels(df$centile) <- seq(1, 100, by = 1)
   df$decile <- cut(as.numeric(df$centile), breaks = seq(0, 100, by = 10))

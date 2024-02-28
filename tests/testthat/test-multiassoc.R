@@ -16,12 +16,12 @@ test_that("Not enough column for assoc_table", {
 
 test_that("Only one association", {
   expect_warning(multiassoc(df = comorbidData, assoc_table = data.frame(
-    PRS = "ldl_PRS",
+    PGS = "ldl_PGS",
     Phenotype = "t2d"
   )))
 })
 
-prs <- grep("PRS", names(comorbidData), value = T)
+prs <- grep("PGS", names(comorbidData), value = T)
 phenotype <- c("ethnicity","t2d","log_ldl","sbp_cat")
 assoc <- cbind(prs, phenotype)
 assoc <- na.omit(assoc)
@@ -42,21 +42,21 @@ test_that("Wrong parallel", {
   expect_error(multiassoc(df = comorbidData, assoc_table = assoc, parallel = 2))
 })
 
-test_that("Test of several PRS and Phenotype using an assoc_table matrix and covariates", {
+test_that("Test of several PGS and Phenotype using an assoc_table matrix and covariates", {
   expect_s3_class(
     object = multiassoc(df = comorbidData, assoc_table = assoc, covar_col = c("age", "sex", "gen_array"), parallel = F),
     class = "data.frame"
   )
 })
 
-test_that("Test of several PRS and Phenotype using an assoc_table matrix and covariates, parallel version", {
+test_that("Test of several PGS and Phenotype using an assoc_table matrix and covariates, parallel version", {
   expect_s3_class(
     object = multiassoc(df = comorbidData, assoc_table = assoc, covar_col = c("age", "sex", "gen_array"), parallel = T),
     class = "data.frame"
   )
 })
 
-test_that("Test of several PRS and Phenotype using an assoc_table matrix and covariates, parallel version and number of cores", {
+test_that("Test of several PGS and Phenotype using an assoc_table matrix and covariates, parallel version and number of cores", {
   expect_warning(
     object = multiassoc(df = comorbidData, assoc_table = assoc, covar_col = c("age", "sex", "gen_array"), parallel = T, num_cores = detectCores()+1)
   )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/multiassoc.R
 \name{multiassoc}
 \alias{multiassoc}
-\title{Multiple PRS Associations from a Data Frame}
+\title{Multiple PGS Associations from a Data Frame}
 \usage{
 multiassoc(
   df = NULL,
@@ -19,14 +19,14 @@ multiassoc(
 columns:
 \itemize{
 \item one ID column,
-\item one PRS column, with numerical continuous values following a normal distribution,
+\item one PGS column, with numerical continuous values following a normal distribution,
 \item one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 }}
 
 \item{assoc_table}{a dataframe or matrix specifying the associations to
-make from df, with 2 columns: PRS and Phenotype (in this order)}
+make from df, with 2 columns: PGS and Phenotype (in this order)}
 
-\item{scale}{a boolean specifying if scaling of PRS should be done before testing}
+\item{scale}{a boolean specifying if scaling of PGS should be done before testing}
 
 \item{covar_col}{a character vector specifying the covariate column names (facultative)}
 
@@ -41,10 +41,10 @@ If FALSE (default), the association analysis will not be parallelised (useful fo
 If nothing is provided, it detects the number of cores of the machine and use num_cores-1}
 }
 \value{
-return a data frame showing the association of the PRS(s) on the Phenotype(s)
+return a data frame showing the association of the PGS(s) on the Phenotype(s)
 with the following columns:
 \itemize{
-\item PRS: the name of the PRS
+\item PGS: the name of the PGS
 \item Phenotype: the name of Phenotype
 \item Phenotype_type: either \code{'Continuous'}, \code{'Ordered Categorical'}, \code{'Categorical'} or \code{'Cases/Controls'}
 \item Stat_method: association function detects what is the phenotype type and what is the best way to analyse it, either \code{'Linear regression'}, \code{'Binary logistic regression'}, \code{'Ordinal logistic regression'} or \code{'Multinomial logistic regression'}
@@ -52,22 +52,22 @@ with the following columns:
 \item N_cases: if Phenotype_type is Cases/Controls, gives the number of cases
 \item N_controls: if Phenotype_type is Cases/Controls, gives the number of controls
 \item N: the number of individuals/samples
-\item Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression; Otherwise, it is the OR of logistic regression
-\item SE: standard error of the Beta coefficient (if Phenotype_type is Continuous)
+\item Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+\item SE: standard error of the related Effect (Beta or OR)
 \item lower_CI: lower confidence interval of the related Effect (Beta or OR)
 \item upper_CI: upper confidence interval of the related Effect (Beta or OR)
 \item P_value: associated P-value
 }
 }
 \description{
-\code{multiassoc()} take a data frame with distribution(s) of PRS and Phenotype(s),
+\code{multiassoc()} take a data frame with distribution(s) of PGS and Phenotype(s),
 and a table of associations to make from this data frame
 
 return a data frame showing the association results
 }
 \examples{
 assoc_table <- expand.grid(
-  c("t2d_PRS", "ldl_PRS"),
+  c("t2d_PGS", "ldl_PGS"),
   c("ethnicity","brc","t2d","log_ldl","sbp_cat")
 )
 results <- multiassoc(
