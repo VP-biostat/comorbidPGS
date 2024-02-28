@@ -13,13 +13,13 @@ df_checker <- function(df = NULL, prs_col = NA, phenotype_col = NA, scale = NA,
   ## Checking df object
   if (is.null(df)) {
     stop("Please provide for 'df' a data frame (with at least 3 columns:
-    ID, PRS and a continuous or discrete Phenotype)")
+    ID, PGS and a continuous or discrete Phenotype)")
   } else if (!Reduce(`|`, class(df) %in% c("data.frame"))) {
     stop("Please provide for 'df' a data frame (with at least 3 columns:
-    ID, PRS and a continuous or discrete Phenotype)")
+    ID, PGS and a continuous or discrete Phenotype)")
   } else if (ncol(df) < 3) {
     stop("Please provide for 'df' a data frame with at least 3 columns:
-    ID, PRS and a continuous or discrete Phenotype")
+    ID, PGS and a continuous or discrete Phenotype")
   } else if (!is.logical(scale)) {
     stop("Please provide a logical for 'scale' (TRUE by default)")
   } else if (nrow(unique(df)) != nrow(df)) {
@@ -30,7 +30,7 @@ df_checker <- function(df = NULL, prs_col = NA, phenotype_col = NA, scale = NA,
 
 
   ## Checking what is in the data frame df
-  # if no SCORESUM column found, assume 2nd column is PRS
+  # if no SCORESUM column found, assume 2nd column is PGS
   if (is.null(prs_col)) {
     stop("Missing prs_col")
   } else if (is.na(prs_col)) {
@@ -38,9 +38,9 @@ df_checker <- function(df = NULL, prs_col = NA, phenotype_col = NA, scale = NA,
   } else if (!prs_col %in% names(df)) {
     stop("prs_col not found in df")
   } else if (!Reduce(`|`, class(df[, prs_col]) %in% c("numeric", "integer", "double"))) {
-    stop("Please provide numeric values in the PRS column")
+    stop("Please provide numeric values in the PGS column")
   }
-  # if no Phenotype column found, assume 3rd column is PRS
+  # if no Phenotype column found, assume 3rd column is PGS
   if (is.null(phenotype_col)) {
     stop("Missing phenotype_col")
   } else if (is.na(phenotype_col)) {

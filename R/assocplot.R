@@ -1,5 +1,5 @@
 #' @title
-#' Multiple PRS Associations Plot
+#' Multiple PGS Associations Plot
 #'
 #' @description
 #' `assocplot()` take a data frame of associations, return plot of the associations
@@ -8,7 +8,7 @@
 #' @param score_table a dataframe with association results with at least the
 #' following columns:
 #'
-#' * PRS: the name of the PRS
+#' * PGS: the name of the PGS
 #' * Phenotype: the name of Phenotype
 #' * Phenotype_type: either `'Continuous'`, `'Ordered Categorical'`, `'Categorical'` or `'Cases/Controls'`
 #' * Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
@@ -36,11 +36,11 @@
 assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
   ## Checking inputs
   if (is.null(score_table)) {
-    stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype' 'Phenotype_type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
+    stop("Please provide a data frame (that includes at least 'PGS'	'Phenotype' 'Phenotype_type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
   } else if (!Reduce(`|`, class(score_table) %in% c("data.frame"))) {
-    stop("Please provide a data frame (that includes at least 'PRS'	'Phenotype' 'Phenotype_type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
-  } else if (!"PRS" %in% names(score_table)) {
-    stop("Please provide a column named 'PRS' in the data frame of results")
+    stop("Please provide a data frame (that includes at least 'PGS'	'Phenotype' 'Phenotype_type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
+  } else if (!"PGS" %in% names(score_table)) {
+    stop("Please provide a column named 'PGS' in the data frame of results")
   } else if (!"Phenotype" %in% names(score_table)) {
     stop("Please provide a column named 'Phenotype' in the data frame of results")
   } else if (!"Phenotype_type" %in% names(score_table)) {
@@ -81,47 +81,47 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
                                    y = .data$Effect,
                                    ymin = .data$lower_CI,
                                    ymax = .data$upper_CI,
-                                   color = .data$PRS)) +
+                                   color = .data$PGS)) +
         geom_point(position = position_dodge(0.5), cex = 2) +
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_hline(yintercept = 0, linetype = "dashed", colour = "grey") +
         geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != F)), "*", ""),
-                      group = .data$PRS),
+                      group = .data$PGS),
                   angle = 90, colour = "black", size = 5, position = position_dodge(0.5), vjust = 2
         ) +
-        labs(color = "PRS", y = "Beta", x = "Phenotype") +
+        labs(color = "PGS", y = "Beta", x = "Phenotype") +
         theme_minimal() +
         theme(
           axis.title.y = element_text(size = 11),
           axis.title.x = element_text(size = 11),
-          legend.position = ifelse((length(unique(score_table$PRS)) == 1), "none", "right")
+          legend.position = ifelse((length(unique(score_table$PGS)) == 1), "none", "right")
         )
 
     }
 
     if (Reduce(`|`, (c("Cases/Controls","Categorical","Ordered Categorical") %in% score_table$Phenotype_type))) {
 
-      temp_score <- score_table[which(score_table$Phenotype_type %in% c("Cases/Controls", "Categorical")),]
+      temp_score <- score_table[which(score_table$Phenotype_type %in% c("Cases/Controls", "Categorical", "Ordered Categorical")),]
       p2_flag <- T
 
       p2 <- ggplot(temp_score, aes(x = .data$Phenotype,
                                    y = .data$Effect,
                                    ymin = .data$lower_CI,
                                    ymax = .data$upper_CI,
-                                   color = .data$PRS)) +
+                                   color = .data$PGS)) +
         geom_point(position = position_dodge(0.5), cex = 2) +
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_hline(yintercept = 1, linetype = "dashed", colour = "grey") +
         geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != F)), "*", ""),
-                      group = .data$PRS),
+                      group = .data$PGS),
                   angle = 90, colour = "black", size = 5, position = position_dodge(0.5), vjust = 2
         ) +
-        labs(color = "PRS", y = "Odds Ratio", x = "Phenotype") +
+        labs(color = "PGS", y = "Odds Ratio", x = "Phenotype") +
         theme_minimal() +
         theme(
           axis.title.y = element_text(size = 11),
           axis.title.x = element_text(size = 11),
-          legend.position = ifelse((length(unique(score_table$PRS)) == 1), "none", "right")
+          legend.position = ifelse((length(unique(score_table$PGS)) == 1), "none", "right")
         )
 
     }
@@ -137,20 +137,20 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
                                    x = .data$Effect,
                                    xmin = .data$lower_CI,
                                    xmax = .data$upper_CI,
-                                   color = .data$PRS)) +
+                                   color = .data$PGS)) +
         geom_point(position = position_dodge(0.5), cex = 2) +
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_vline(xintercept = 0, linetype = "dashed", colour = "grey") +
         geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != F)), "*", ""),
-                      group = .data$PRS),
+                      group = .data$PGS),
                   angle = 0, colour = "black", size = 5, position = position_dodge(0.5), vjust = 1
         ) +
-        labs(color = "PRS", x = "Beta", y = "Phenotype") +
+        labs(color = "PGS", x = "Beta", y = "Phenotype") +
         theme_minimal() +
         theme(
           axis.title.x = element_text(size = 11),
           axis.title.y = element_text(size = 11),
-          legend.position = ifelse((length(unique(score_table$PRS)) == 1), "none", "bottom")
+          legend.position = ifelse((length(unique(score_table$PGS)) == 1), "none", "bottom")
         )
 
     }
@@ -158,26 +158,26 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
     if (Reduce(`|`, (c("Cases/Controls","Categorical","Ordered Categorical") %in% score_table$Phenotype_type))) {
 
       p2_flag <- T
-      temp_score <- score_table[which(score_table$Phenotype_type %in% c("Cases/Controls", "Categorical")),]
+      temp_score <- score_table[which(score_table$Phenotype_type %in% c("Cases/Controls", "Categorical", "Ordered Categorical")),]
 
       p2 <- ggplot(temp_score, aes(y = .data$Phenotype,
                                    x = .data$Effect,
                                    xmin = .data$lower_CI,
                                    xmax = .data$upper_CI,
-                                   color = .data$PRS)) +
+                                   color = .data$PGS)) +
         geom_point(position = position_dodge(0.5), cex = 2) +
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_vline(xintercept = 1, linetype = "dashed", colour = "grey") +
         geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != F)), "*", ""),
-                      group = .data$PRS),
+                      group = .data$PGS),
                   angle = 0, colour = "black", size = 5, position = position_dodge(0.5), vjust = 1
         ) +
-        labs(color = "PRS", x = "Odds Ratio", y = "Phenotype") +
+        labs(color = "PGS", x = "Odds Ratio", y = "Phenotype") +
         theme_minimal() +
         theme(
           axis.title.x = element_text(size = 11),
           axis.title.y = element_text(size = 11),
-          legend.position = ifelse((length(unique(score_table$PRS)) == 1), "none", "bottom")
+          legend.position = ifelse((length(unique(score_table$PGS)) == 1), "none", "bottom")
         )
 
     }

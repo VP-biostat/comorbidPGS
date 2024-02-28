@@ -2,7 +2,7 @@
 % Please edit documentation in R/decileboxplot.R
 \name{decileboxplot}
 \alias{decileboxplot}
-\title{Deciles BoxPlot from a PRS Association with a Continuous Phenotype}
+\title{Deciles BoxPlot from a PGS Association with a Continuous Phenotype}
 \usage{
 decileboxplot(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype")
 }
@@ -11,11 +11,11 @@ decileboxplot(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype")
 columns:
 \itemize{
 \item one ID column,
-\item one PRS column, with numerical continuous values following a normal distribution,
+\item one PGS column, with numerical continuous values following a normal distribution,
 \item one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 }}
 
-\item{prs_col}{a character specifying the PRS column name}
+\item{prs_col}{a character specifying the PGS column name}
 
 \item{phenotype_col}{a character specifying the Continuous Phenotype column name}
 }
@@ -23,6 +23,6 @@ columns:
 return a ggplot object (ggplot2)
 }
 \description{
-\code{decileboxplot()} take a distribution of PRS, a Continuous Phenotype
-return a plot with deciles of PRS in x and Boxplot of the Phenotype in y
+\code{decileboxplot()} take a distribution of PGS, a Continuous Phenotype
+return a plot with deciles of PGS in x and Boxplot of the Phenotype in y
 }

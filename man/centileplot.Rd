@@ -2,7 +2,7 @@
 % Please edit documentation in R/centileplot.R
 \name{centileplot}
 \alias{centileplot}
-\title{Centiles Plot from a PRS Association}
+\title{Centiles Plot from a PGS Association}
 \usage{
 centileplot(
   df = NULL,
@@ -17,11 +17,11 @@ centileplot(
 columns:
 \itemize{
 \item one ID column,
-\item one PRS column, with numerical continuous values following a normal distribution,
+\item one PGS column, with numerical continuous values following a normal distribution,
 \item one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 }}
 
-\item{prs_col}{a character specifying the PRS column name}
+\item{prs_col}{a character specifying the PGS column name}
 
 \item{phenotype_col}{a character specifying the Phenotype column name}
 
@@ -34,7 +34,7 @@ use for continuous Phenotype, only three options: \code{NA}, \code{"median"} or 
 return a figure of results in the format ggplot2 object
 }
 \description{
-\code{centileplot()} take a distribution of PRS, a Phenotype and eventual Confounders
+\code{centileplot()} take a distribution of PGS, a Phenotype and eventual Confounders
 return a plot (ggplot2 object) with centiles (or deciles if not enough individuals)
-of PRS in x and Prevalence/Median/Mean of the Phenotype in y
+of PGS in x and Prevalence/Median/Mean of the Phenotype in y
 }

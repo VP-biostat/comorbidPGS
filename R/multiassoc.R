@@ -1,8 +1,8 @@
 #' @title
-#' Multiple PRS Associations from a Data Frame
+#' Multiple PGS Associations from a Data Frame
 #'
 #' @description
-#' `multiassoc()` take a data frame with distribution(s) of PRS and Phenotype(s),
+#' `multiassoc()` take a data frame with distribution(s) of PGS and Phenotype(s),
 #' and a table of associations to make from this data frame
 #'
 #' return a data frame showing the association results
@@ -11,11 +11,11 @@
 #' columns:
 #'
 #'  * one ID column,
-#'  * one PRS column, with numerical continuous values following a normal distribution,
+#'  * one PGS column, with numerical continuous values following a normal distribution,
 #'  * one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
 #' @param assoc_table a dataframe or matrix specifying the associations to
-#' make from df, with 2 columns: PRS and Phenotype (in this order)
-#' @param scale a boolean specifying if scaling of PRS should be done before testing
+#' make from df, with 2 columns: PGS and Phenotype (in this order)
+#' @param scale a boolean specifying if scaling of PGS should be done before testing
 #' @param covar_col a character vector specifying the covariate column names (facultative)
 #' @param log 	a connection, or a character string naming the file to print to.
 #' If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
@@ -25,10 +25,10 @@
 #' @param num_cores an integer, if parallel = TRUE (default), `multiassoc()` parallelise the association analysis to run it faster using num_cores as the number of cores.
 #' If nothing is provided, it detects the number of cores of the machine and use num_cores-1
 #'
-#' @return return a data frame showing the association of the PRS(s) on the Phenotype(s)
+#' @return return a data frame showing the association of the PGS(s) on the Phenotype(s)
 #' with the following columns:
 #'
-#' * PRS: the name of the PRS
+#' * PGS: the name of the PGS
 #' * Phenotype: the name of Phenotype
 #' * Phenotype_type: either `'Continuous'`, `'Ordered Categorical'`, `'Categorical'` or `'Cases/Controls'`
 #' * Stat_method: association function detects what is the phenotype type and what is the best way to analyse it, either `'Linear regression'`, `'Binary logistic regression'`, `'Ordinal logistic regression'` or `'Multinomial logistic regression'`
@@ -36,15 +36,15 @@
 #' * N_cases: if Phenotype_type is Cases/Controls, gives the number of cases
 #' * N_controls: if Phenotype_type is Cases/Controls, gives the number of controls
 #' * N: the number of individuals/samples
-#' * Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression; Otherwise, it is the OR of logistic regression
-#' * SE: standard error of the Beta coefficient (if Phenotype_type is Continuous)
+#' * Effect: if Phenotype_type is Continuous, it represents the Beta coefficient of linear regression, OR of logistic regression otherwise
+#' * SE: standard error of the related Effect (Beta or OR)
 #' * lower_CI: lower confidence interval of the related Effect (Beta or OR)
 #' * upper_CI: upper confidence interval of the related Effect (Beta or OR)
 #' * P_value: associated P-value
 #'
 #' @examples
 #' assoc_table <- expand.grid(
-#'   c("t2d_PRS", "ldl_PRS"),
+#'   c("t2d_PGS", "ldl_PGS"),
 #'   c("ethnicity","brc","t2d","log_ldl","sbp_cat")
 #' )
 #' results <- multiassoc(
@@ -62,9 +62,9 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
   if (is.null(assoc_table)) {
     stop("Please provide a data frame or a matrix for 'assoc_table' parameter")
   } else if (!Reduce(`|`, class(assoc_table) %in% c("data.frame", "matrix", "array"))) {
-    stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
+    stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PGS and Phenotype (in this order)")
   } else if (ncol(assoc_table) != 2) {
-    stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PRS and Phenotype (in this order)")
+    stop("Please provide for 'assoc_table' a data frame or a matrix with 2 columns representing PGS and Phenotype (in this order)")
   } else if (!Reduce(`|`, class(log) %in% c("character","url","connection"))) {
     stop("Please provide a connection, or a character string naming the file to print to for 'log'")
   } else if (is.null(parallel)) {
@@ -82,12 +82,12 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
   ## Creating the score table
   scores_table <- data.frame(matrix(nrow = 0, ncol = 11))
   names(scores_table) <- c(
-    "PRS", "Phenotype", "Covar", "N_cases", "N_controls",
+    "PGS", "Phenotype", "Covar", "N_cases", "N_controls",
     "N", "OR", "SE", "lower_CI", "upper_CI", "P_value"
   )
 
   ## QC assoc table
-  names(assoc_table) <- c("PRS", "Phenotype")
+  names(assoc_table) <- c("PGS", "Phenotype")
 
 
   ## Parallele version of the for loop of assoc function

@@ -1,18 +1,18 @@
 #' @title
-#' Centiles Plot from a PRS Association
+#' Centiles Plot from a PGS Association
 #'
 #' @description
-#' `centileplot()` take a distribution of PRS, a Phenotype and eventual Confounders
+#' `centileplot()` take a distribution of PGS, a Phenotype and eventual Confounders
 #' return a plot (ggplot2 object) with centiles (or deciles if not enough individuals)
-#' of PRS in x and Prevalence/Median/Mean of the Phenotype in y
+#' of PGS in x and Prevalence/Median/Mean of the Phenotype in y
 #'
 #' @param df a dataframe with individuals on each row, and at least the following
 #' columns:
 #'
 #'  * one ID column,
-#'  * one PRS column, with numerical continuous values following a normal distribution,
+#'  * one PGS column, with numerical continuous values following a normal distribution,
 #'  * one Phenotype column, can be numeric (Continuous Phenotype), character, boolean or factors (Discrete Phenotype)
-#' @param prs_col a character specifying the PRS column name
+#' @param prs_col a character specifying the PGS column name
 #' @param phenotype_col a character specifying the Phenotype column name
 #' @param decile a boolean specifying if centiles or deciles should be used
 #' @param continuous_metric a facultative character specifying what metric to
@@ -35,7 +35,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
 
   ## Taking only subset of df
   df <- df[, c(prs_col, phenotype_col)]
-  names(df) <- c("PRS", "Phenotype")
+  names(df) <- c("PGS", "Phenotype")
   df <- na.omit(df)
   if (nrow(df) < 10000) {
     warning("The dataset has less than 10,000 individuals, centiles plot may not look good! Use the argument decile = T to adapt to small datasets")
@@ -44,7 +44,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
   ## Making centiles plot based on the category of Phenotype
   phenotype_type <- phenotype_type(df = df, phenotype_col = "Phenotype")
 
-  df$centile <- with(df, cut(PRS, breaks = quantile(PRS, probs = seq(0, 1, by = 0.01), na.rm = TRUE), include.lowest = TRUE, dig.lab = 10))
+  df$centile <- with(df, cut(PGS, breaks = quantile(PGS, probs = seq(0, 1, by = 0.01), na.rm = TRUE), include.lowest = TRUE, dig.lab = 10))
   df$centile <- as.factor(df$centile)
   levels(df$centile) <- seq(1, 100, by = 1)
   if (decile) {
