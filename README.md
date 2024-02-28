@@ -9,8 +9,9 @@
 tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPRS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPRS)
 <!-- badges: end -->
 
-comorbidPRS is a tool for analysing an already computed PRS distribution
-to investigate shared aetiology in multiple conditions.
+comorbidPRS is a tool for analysing an already computed Polygenic Score
+(PGS, also named PRS/GRS for binary outcomes) distribution to
+investigate shared genetic aetiology in multiple conditions.
 
 comorbidPRS is under GPL-3 license, and is freely available for
 download.
@@ -51,20 +52,20 @@ library(comorbidPRS)
 dataset <- comorbidData
 # NOTE: The dataset must have at least 3 different columns:
 # - an ID column (the first one)
-# - a PRS column (must be numeric, by default it is the column named "SCORESUM" or the second column if "SCORESUM" is not present)
+# - a PGS column (must be numeric, by default it is the column named "SCORESUM" or the second column if "SCORESUM" is not present)
 # - a Phenotype column, can be factors, numbers or characters
 
-# do an association of one PRS with one Phenotype
-result_1 <- assoc(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d")
+# do an association of one PGS with one Phenotype
+result_1 <- assoc(dataset, prs_col = "t2d_PGS", phenotype_col = "t2d")
 ```
 
-| PRS     | Phenotype | Phenotype_type | Statistical_method         | Covar | N_cases | N_controls |     N |   Effect | SE  | lower_CI | upper_CI | P_value |
+| PGS     | Phenotype | Phenotype_type | Statistical_method         | Covar | N_cases | N_controls |     N |   Effect | SE  | lower_CI | upper_CI | P_value |
 |:--------|:----------|:---------------|:---------------------------|:------|--------:|-----------:|------:|---------:|:----|---------:|---------:|--------:|
-| t2d_PRS | t2d       | Cases/Controls | Binary logistic regression | NA    |    2845 |      36535 | 39380 | 1.784127 | NA  | 1.714658 |  1.85641 |       0 |
+| t2d_PGS | t2d       | Cases/Controls | Binary logistic regression | NA    |     730 |       9270 | 10000 | 1.688258 | NA  | 1.561821 | 1.824931 |       0 |
 
 ``` r
 # do multiple associations
-assoc <- expand.grid(c("t2d_PRS", "ldl_PRS"), c("ethnicity","brc","t2d","log_ldl","sbp_cat"))
+assoc <- expand.grid(c("t2d_PGS", "ldl_PGS"), c("ethnicity","brc","t2d","log_ldl","sbp_cat"))
 result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex", "gen_array"))
 #> Warning in phenotype_type(df = df, phenotype_col = phenotype_col): Phenotype
 #> column log_ldl is continuous and not normal, please normalise prior association
@@ -73,27 +74,27 @@ result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex"
 #> column log_ldl is continuous and not normal, please normalise prior association
 ```
 
-|     | PRS     | Phenotype        | Phenotype_type      | Statistical_method              | Covar             | N_cases | N_controls |     N |    Effect |        SE |  lower_CI |  upper_CI |   P_value |
+|     | PGS     | Phenotype        | Phenotype_type      | Statistical_method              | Covar             | N_cases | N_controls |     N |    Effect |        SE |  lower_CI |  upper_CI |   P_value |
 |:----|:--------|:-----------------|:--------------------|:--------------------------------|:------------------|--------:|-----------:|------:|----------:|----------:|----------:|----------:|----------:|
-| 2   | t2d_PRS | ethnicity 1 \~ 2 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    8526 |      24922 | 33448 | 0.9843528 |        NA | 0.9604383 | 1.0088627 | 0.2088171 |
-| 3   | t2d_PRS | ethnicity 1 \~ 3 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    4779 |      24922 | 29701 | 1.0161173 |        NA | 0.9604383 | 1.0088627 | 0.3114462 |
-| 4   | t2d_PRS | ethnicity 1 \~ 4 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    1153 |      24922 | 26075 | 1.0026245 |        NA | 0.9604383 | 1.0088627 | 0.9306895 |
-| 21  | ldl_PRS | ethnicity 1 \~ 2 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    8526 |      24922 | 33448 | 0.9925562 |        NA | 0.9684554 | 1.0172569 | 0.5513399 |
-| 31  | ldl_PRS | ethnicity 1 \~ 3 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    4779 |      24922 | 29701 | 1.0152907 |        NA | 0.9684554 | 1.0172569 | 0.3370977 |
-| 41  | ldl_PRS | ethnicity 1 \~ 4 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    1153 |      24922 | 26075 | 1.0128078 |        NA | 0.9684554 | 1.0172569 | 0.6730281 |
-| 1   | t2d_PRS | brc              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    1601 |      19867 | 21468 | 1.0348337 |        NA | 0.9832930 | 1.0890761 | 0.1889709 |
-| 11  | ldl_PRS | brc              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    1601 |      19867 | 21468 | 1.0119061 |        NA | 0.9615206 | 1.0649319 | 0.6496868 |
-| 12  | t2d_PRS | t2d              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    2845 |      36535 | 39380 | 1.8286147 |        NA | 1.7557926 | 1.9044570 | 0.0000000 |
-| 13  | ldl_PRS | t2d              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |    2845 |      36535 | 39380 | 0.9968686 |        NA | 0.9591734 | 1.0360453 | 0.8732979 |
-| 14  | t2d_PRS | log_ldl          | Continuous          | Linear regression               | age+sex+gen_array |      NA |         NA | 39380 | 0.0036203 | 0.0011515 | 0.0013633 | 0.0058773 | 0.0016686 |
-| 15  | ldl_PRS | log_ldl          | Continuous          | Linear regression               | age+sex+gen_array |      NA |         NA | 39380 | 0.0843551 | 0.0010703 | 0.0822574 | 0.0864529 | 0.0000000 |
-| 16  | t2d_PRS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 39380 | 1.0757027 |        NA | 1.0730560 | 1.0783558 | 0.0000000 |
-| 17  | ldl_PRS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 39380 | 1.0754824 |        NA | 1.0728378 | 1.0781336 | 0.0000000 |
+| 2   | t2d_PGS | ethnicity 1 \~ 2 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    2142 |       6381 |  8523 | 0.9814174 |        NA | 0.9345150 | 1.0306739 | 0.4528020 |
+| 3   | t2d_PGS | ethnicity 1 \~ 3 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    1205 |       6381 |  7586 | 1.0178971 |        NA | 0.9570931 | 1.0825640 | 0.5724292 |
+| 4   | t2d_PGS | ethnicity 1 \~ 4 | Categorical         | Multinomial logistic regression | age+sex+gen_array |     272 |       6381 |  6653 | 0.9434640 |        NA | 0.8355980 | 1.0652542 | 0.3474694 |
+| 21  | ldl_PGS | ethnicity 1 \~ 2 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    2142 |       6381 |  8523 | 0.9925623 |        NA | 0.9451678 | 1.0423334 | 0.7648927 |
+| 31  | ldl_PGS | ethnicity 1 \~ 3 | Categorical         | Multinomial logistic regression | age+sex+gen_array |    1205 |       6381 |  7586 | 1.0083869 |        NA | 0.9481215 | 1.0724830 | 0.7905175 |
+| 41  | ldl_PGS | ethnicity 1 \~ 4 | Categorical         | Multinomial logistic regression | age+sex+gen_array |     272 |       6381 |  6653 | 0.9760204 |        NA | 0.8647226 | 1.1016433 | 0.6943783 |
+| 1   | t2d_PGS | brc              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |     402 |       5041 |  5443 | 1.0061678 |        NA | 0.9087543 | 1.1140235 | 0.9057882 |
+| 11  | ldl_PGS | brc              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |     402 |       5041 |  5443 | 1.1037106 |        NA | 0.9956370 | 1.2235153 | 0.0605407 |
+| 12  | t2d_PGS | t2d              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |     730 |       9270 | 10000 | 1.7359738 |        NA | 1.6029867 | 1.8799938 | 0.0000000 |
+| 13  | ldl_PGS | t2d              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |     730 |       9270 | 10000 | 0.9823272 |        NA | 0.9102411 | 1.0601223 | 0.6465580 |
+| 14  | t2d_PGS | log_ldl          | Continuous          | Linear regression               | age+sex+gen_array |      NA |         NA | 10000 | 0.0059961 | 0.0022747 | 0.0015378 | 0.0104544 | 0.0084010 |
+| 15  | ldl_PGS | log_ldl          | Continuous          | Linear regression               | age+sex+gen_array |      NA |         NA | 10000 | 0.0828545 | 0.0021183 | 0.0787027 | 0.0870064 | 0.0000000 |
+| 16  | t2d_PGS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 10000 | 1.0757093 |        NA | 1.0705815 | 1.0808617 | 0.0000000 |
+| 17  | ldl_PGS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 10000 | 1.0754564 |        NA | 1.0703336 | 1.0806038 | 0.0000000 |
 
 ### Examples of plot
 
 ``` r
-densityplot(dataset, prs_col = "ldl_PRS", phenotype_col = "sbp_cat")
+densityplot(dataset, prs_col = "ldl_PGS", phenotype_col = "sbp_cat")
 ```
 
 <img src="man/figures/README-densityplot-1.png" width="100%" />
@@ -114,7 +115,10 @@ assoplot$discrete_phenotype
 score_table should have the assoc() output format
 
 ``` r
-centileplot(dataset, prs_col = "brc_PRS", phenotype_col = "brc")
+centileplot(dataset, prs_col = "brc_PGS", phenotype_col = "brc")
+#> Warning in centileplot(dataset, prs_col = "brc_PGS", phenotype_col = "brc"):
+#> The dataset has less than 10,000 individuals, centiles plot may not look good!
+#> Use the argument decile = T to adapt to small datasets
 ```
 
 <img src="man/figures/README-centileplot-1.png" width="100%" />
@@ -124,14 +128,14 @@ plot:
 
 ``` r
 library(ggplot2)
-centileplot(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d") + 
+centileplot(dataset, prs_col = "t2d_PGS", phenotype_col = "t2d") + 
   scale_color_gradient(low = "green", high = "red")
 ```
 
 <img src="man/figures/README-centileplot-and-ggplot-1.png" width="100%" />
 
 ``` r
-decileboxplot(dataset, prs_col = "ldl_PRS", phenotype_col = "ldl")
+decileboxplot(dataset, prs_col = "ldl_PGS", phenotype_col = "ldl")
 ```
 
 <img src="man/figures/README-decileplot-1.png" width="100%" />
@@ -143,6 +147,6 @@ manuscript:
 
 <p>
 Pascat V (????). <em>comorbidPRS: Assessing the shared predisposition
-between Phenotypes using Polygenic Scores (PRS)</em>. R package version
-0.2.9000.
+between Phenotypes using Polygenic Scores (PGS, or PRS/GRS for binary
+outcomes)</em>. R package version 0.3.9000.
 </p>
