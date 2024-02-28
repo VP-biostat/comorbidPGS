@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![GitHub tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPRS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPRS)
 <!-- badges: end -->
 
-comorbidPRS is a tool for analysing an already computed PRS distribution to investigate shared aetiology in multiple conditions.
+comorbidPRS is a tool for analysing an already computed Polygenic Score (PGS, also named PRS/GRS for binary outcomes) distribution to investigate shared genetic aetiology in multiple conditions.
 
 comorbidPRS is under GPL-3 license, and is freely available for download. 
 
@@ -51,18 +51,18 @@ library(comorbidPRS)
 dataset <- comorbidData
 # NOTE: The dataset must have at least 3 different columns:
 # - an ID column (the first one)
-# - a PRS column (must be numeric, by default it is the column named "SCORESUM" or the second column if "SCORESUM" is not present)
+# - a PGS column (must be numeric, by default it is the column named "SCORESUM" or the second column if "SCORESUM" is not present)
 # - a Phenotype column, can be factors, numbers or characters
 
-# do an association of one PRS with one Phenotype
-result_1 <- assoc(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d")
+# do an association of one PGS with one Phenotype
+result_1 <- assoc(dataset, prs_col = "t2d_PGS", phenotype_col = "t2d")
 ```
 ```{r result_1, echo = FALSE}
 knitr::kable(result_1)
 ```
 ```{r example multiple assoc, results = 'hide'}
 # do multiple associations
-assoc <- expand.grid(c("t2d_PRS", "ldl_PRS"), c("ethnicity","brc","t2d","log_ldl","sbp_cat"))
+assoc <- expand.grid(c("t2d_PGS", "ldl_PGS"), c("ethnicity","brc","t2d","log_ldl","sbp_cat"))
 result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex", "gen_array"))
 ```
 ```{r result_2, echo = FALSE}
@@ -73,7 +73,7 @@ knitr::kable(result_2)
 ### Examples of plot
 
 ```{r densityplot}
-densityplot(dataset, prs_col = "ldl_PRS", phenotype_col = "sbp_cat")
+densityplot(dataset, prs_col = "ldl_PGS", phenotype_col = "sbp_cat")
 ```
 
 ```{r assocplot}
@@ -85,18 +85,18 @@ assoplot$discrete_phenotype
 NOTE: The score_table should have the assoc() output format
 
 ```{r centileplot}
-centileplot(dataset, prs_col = "brc_PRS", phenotype_col = "brc")
+centileplot(dataset, prs_col = "brc_PGS", phenotype_col = "brc")
 ```
 
 As those graphical functions use ggplot2, you can fully customize your plot:
 ```{r centileplot-and-ggplot}
 library(ggplot2)
-centileplot(dataset, prs_col = "t2d_PRS", phenotype_col = "t2d") + 
+centileplot(dataset, prs_col = "t2d_PGS", phenotype_col = "t2d") + 
   scale_color_gradient(low = "green", high = "red")
 ```
 
 ```{r decileplot, warning=FALSE}
-decileboxplot(dataset, prs_col = "ldl_PRS", phenotype_col = "ldl")
+decileboxplot(dataset, prs_col = "ldl_PGS", phenotype_col = "ldl")
 ```
 
 ## Citation 
