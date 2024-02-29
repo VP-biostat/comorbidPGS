@@ -165,14 +165,25 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
 
     lower_ci <- exp(beta-1.96*beta_se)
     upper_ci <- exp(beta+1.96*beta_se)
-  } else {
+  } else if (phenotype_type == "Ordered Categorical") {
     ctable <- coef(summary(regress))
 
-    if (phenotype_type == "Ordered Categorical") {
-      # adding pval in case
-      ptemp <- (1-stats::pnorm(abs(ctable[, "t value"]), 0, 1))*2
-      ctable <- cbind(ctable, "p value" = ptemp)
-    }
+    # adding pval
+    ptemp <- (1-stats::pnorm(abs(ctable[, "t value"]), 0, 1))*2
+    ctable <- cbind(ctable, "p value" = ptemp)
+
+    beta <- ctable[1, "Value"]
+    beta_se <- ctable[1, "Std. Error"]
+
+    beta_or <- exp(beta)
+    se <- NA
+    p_val <- ctable[1, "p value"]
+
+    lower_ci <- exp(beta-1.96*beta_se)
+    upper_ci <- exp(beta+1.96*beta_se)
+
+  } else { # for binary logistic and linear regression, same format
+    ctable <- coef(summary(regress))
 
     beta <- ctable[2, 1]
     beta_se <- ctable[2, 2]
