@@ -1,7 +1,7 @@
-#' Mock dataset for comorbidPRS package
+#' Mock dataset for comorbidPGS package
 #'
 #' A dataset with sets of PGSs, Phenotypes and Covariates to demo the
-#' comorbidPRS package
+#' comorbidPGS package
 #'
 #' @format ## `who`
 #' A data frame with 10,000 rows (individuals) and 16 columns:
@@ -17,5 +17,5 @@
 #'   \item{log_ldl}{A continuous Phenotype, based on log(ldl) to have a normal distribution; numeric values}
 #'   \item{sbp_cat}{An Ordered Categorical Phenotype, with 3 possible outcomes: low, normal or high systolic blood pressure; factor values}
 #' }
-#' @source <https://github.com/VP-biostat/comorbidPRS>
+#' @source <https://github.com/VP-biostat/comorbidPGS>
 "comorbidData"

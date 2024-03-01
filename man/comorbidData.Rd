@@ -3,7 +3,7 @@
 \docType{data}
 \name{comorbidData}
 \alias{comorbidData}
-\title{Mock dataset for comorbidPRS package}
+\title{Mock dataset for comorbidPGS package}
 \format{
 \subsection{\code{who}}{
 
@@ -23,13 +23,13 @@ A data frame with 10,000 rows (individuals) and 16 columns:
 }
 }
 \source{
-\url{https://github.com/VP-biostat/comorbidPRS}
+\url{https://github.com/VP-biostat/comorbidPGS}
 }
 \usage{
 comorbidData
 }
 \description{
 A dataset with sets of PGSs, Phenotypes and Covariates to demo the
-comorbidPRS package
+comorbidPGS package
 }
 \keyword{datasets}
