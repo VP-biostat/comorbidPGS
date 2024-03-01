@@ -13,15 +13,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-# comorbidPRS
+# comorbidPGS
 
 <!-- badges: start -->
-[![GitHub tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPRS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPRS)
+[![GitHub tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPGS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPGS)
 <!-- badges: end -->
 
-comorbidPRS is a tool for analysing an already computed Polygenic Score (PGS, also named PRS/GRS for binary outcomes) distribution to investigate shared genetic aetiology in multiple conditions.
+comorbidPGS is a tool for analysing an already computed Polygenic Score (PGS, also named PRS/GRS for binary outcomes) distribution to investigate shared genetic aetiology in multiple conditions.
 
-comorbidPRS is under GPL-3 license, and is freely available for download. 
+comorbidPGS is under GPL-3 license, and is freely available for download. 
 
 ## Prerequisite
 * R version 3.5 or higher with the following packages:
@@ -31,11 +31,11 @@ comorbidPRS is under GPL-3 license, and is freely available for download.
 
 ## Installation
 
-You can install the development version of comorbidPRS from [GitHub](https://github.com/VP-biostat/comorbidPRS) with:
+You can install the development version of comorbidPGS from [GitHub](https://github.com/VP-biostat/comorbidPGS) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("VP-biostat/comorbidPRS")
+devtools::install_github("VP-biostat/comorbidPGS")
 ```
 
 ## Example
@@ -45,7 +45,7 @@ devtools::install_github("VP-biostat/comorbidPRS")
 This is a basic example which shows you how to do basic association with the example dataset:
 
 ```{r example, results = 'hide', warning = FALSE}
-library(comorbidPRS)
+library(comorbidPGS)
 
 # use the demo dataset
 dataset <- comorbidData
@@ -100,8 +100,8 @@ decileboxplot(dataset, prs_col = "ldl_PGS", phenotype_col = "ldl")
 ```
 
 ## Citation 
-If you use comorbidPRS in any published work, please cite the following manuscript:
+If you use comorbidPGS in any published work, please cite the following manuscript:
 
 ```{r citation, echo = FALSE, results = 'asis', warning = FALSE}
-print(citation("comorbidPRS"), "html")
+print(citation("comorbidPGS"), "html")
 ```

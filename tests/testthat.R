@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(comorbidPRS)
+library(comorbidPGS)
 
-test_check("comorbidPRS")
+test_check("comorbidPGS")

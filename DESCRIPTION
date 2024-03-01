@@ -1,4 +1,4 @@
-Package: comorbidPRS
+Package: comorbidPGS
 Title: Assessing the shared predisposition between Phenotypes using Polygenic Scores (PGS, or PRS/GRS for binary outcomes)
 Version: 0.3.9000
 Authors@R: 

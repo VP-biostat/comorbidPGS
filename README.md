@@ -1,19 +1,19 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# comorbidPRS
+# comorbidPGS
 
 <!-- badges: start -->
 
 [![GitHub
-tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPRS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPRS)
+tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPGS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPGS)
 <!-- badges: end -->
 
-comorbidPRS is a tool for analysing an already computed Polygenic Score
+comorbidPGS is a tool for analysing an already computed Polygenic Score
 (PGS, also named PRS/GRS for binary outcomes) distribution to
 investigate shared genetic aetiology in multiple conditions.
 
-comorbidPRS is under GPL-3 license, and is freely available for
+comorbidPGS is under GPL-3 license, and is freely available for
 download.
 
 ## Prerequisite
@@ -25,12 +25,12 @@ download.
 
 ## Installation
 
-You can install the development version of comorbidPRS from
-[GitHub](https://github.com/VP-biostat/comorbidPRS) with:
+You can install the development version of comorbidPGS from
+[GitHub](https://github.com/VP-biostat/comorbidPGS) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("VP-biostat/comorbidPRS")
+devtools::install_github("VP-biostat/comorbidPGS")
 ```
 
 ## Example
@@ -41,9 +41,9 @@ This is a basic example which shows you how to do basic association with
 the example dataset:
 
 ``` r
-library(comorbidPRS)
+library(comorbidPGS)
 #> 
-#> Attachement du package : 'comorbidPRS'
+#> Attachement du package : 'comorbidPGS'
 #> L'objet suivant est masqué depuis 'package:graphics':
 #> 
 #>     assocplot
@@ -88,8 +88,8 @@ result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex"
 | 13  | ldl_PGS | t2d              | Cases/Controls      | Binary logistic regression      | age+sex+gen_array |     730 |       9270 | 10000 | 0.9823272 |        NA | 0.9102411 | 1.0601223 | 0.6465580 |
 | 14  | t2d_PGS | log_ldl          | Continuous          | Linear regression               | age+sex+gen_array |      NA |         NA | 10000 | 0.0059961 | 0.0022747 | 0.0015378 | 0.0104544 | 0.0084010 |
 | 15  | ldl_PGS | log_ldl          | Continuous          | Linear regression               | age+sex+gen_array |      NA |         NA | 10000 | 0.0828545 | 0.0021183 | 0.0787027 | 0.0870064 | 0.0000000 |
-| 16  | t2d_PGS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 10000 | 1.0757093 |        NA | 1.0705815 | 1.0808617 | 0.0000000 |
-| 17  | ldl_PGS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 10000 | 1.0754564 |        NA | 1.0703336 | 1.0806038 | 0.0000000 |
+| 16  | t2d_PGS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 10000 | 1.0628744 |        NA | 1.0236044 | 1.1036509 | 0.0015002 |
+| 17  | ldl_PGS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 10000 | 1.0078855 |        NA | 0.9707330 | 1.0464598 | 0.6818849 |
 
 ### Examples of plot
 
@@ -142,11 +142,11 @@ decileboxplot(dataset, prs_col = "ldl_PGS", phenotype_col = "ldl")
 
 ## Citation
 
-If you use comorbidPRS in any published work, please cite the following
+If you use comorbidPGS in any published work, please cite the following
 manuscript:
 
 <p>
-Pascat V (????). <em>comorbidPRS: Assessing the shared predisposition
+Pascat V (????). <em>comorbidPGS: Assessing the shared predisposition
 between Phenotypes using Polygenic Scores (PGS, or PRS/GRS for binary
 outcomes)</em>. R package version 0.3.9000.
 </p>
