@@ -33,7 +33,7 @@
 #'
 #' @import ggplot2
 #' @export
-assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
+assocplot <- function(score_table = NULL, axis = "vertical", pval = FALSE) {
   ## Checking inputs
   if (is.null(score_table)) {
     stop("Please provide a data frame (that includes at least 'PGS'	'Phenotype' 'Phenotype_type'  'Effect'	'lower_CI'	'upper_CI'	'P_value')")
@@ -68,14 +68,14 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
 
   ## Making plot
   p <- NULL
-  p1_flag <- F
-  p2_flag <- F
+  p1_flag <- FALSE
+  p2_flag <- FALSE
   if (axis == "horizontal") {
 
     if ("Continuous" %in% score_table$Phenotype_type) {
 
       temp_score <- score_table[which(score_table$Phenotype_type == "Continuous"),]
-      p1_flag <- T
+      p1_flag <- TRUE
 
       p1 <- ggplot(temp_score, aes(x = .data$Phenotype,
                                    y = .data$Effect,
@@ -85,7 +85,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
         geom_point(position = position_dodge(0.5), cex = 2) +
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_hline(yintercept = 0, linetype = "dashed", colour = "grey") +
-        geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != F)), "*", ""),
+        geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != FALSE)), "*", ""),
                       group = .data$PGS),
                   angle = 90, colour = "black", size = 5, position = position_dodge(0.5), vjust = 2
         ) +
@@ -102,7 +102,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
     if (Reduce(`|`, (c("Cases/Controls","Categorical","Ordered Categorical") %in% score_table$Phenotype_type))) {
 
       temp_score <- score_table[which(score_table$Phenotype_type %in% c("Cases/Controls", "Categorical", "Ordered Categorical")),]
-      p2_flag <- T
+      p2_flag <- TRUE
 
       p2 <- ggplot(temp_score, aes(x = .data$Phenotype,
                                    y = .data$Effect,
@@ -112,7 +112,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
         geom_point(position = position_dodge(0.5), cex = 2) +
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_hline(yintercept = 1, linetype = "dashed", colour = "grey") +
-        geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != F)), "*", ""),
+        geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != FALSE)), "*", ""),
                       group = .data$PGS),
                   angle = 90, colour = "black", size = 5, position = position_dodge(0.5), vjust = 2
         ) +
@@ -130,7 +130,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
 
     if ("Continuous" %in% score_table$Phenotype_type) {
 
-      p1_flag <- T
+      p1_flag <- TRUE
       temp_score <- score_table[which(score_table$Phenotype_type == "Continuous"),]
 
       p1 <- ggplot(temp_score, aes(y = .data$Phenotype,
@@ -141,7 +141,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
         geom_point(position = position_dodge(0.5), cex = 2) +
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_vline(xintercept = 0, linetype = "dashed", colour = "grey") +
-        geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != F)), "*", ""),
+        geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != FALSE)), "*", ""),
                       group = .data$PGS),
                   angle = 0, colour = "black", size = 5, position = position_dodge(0.5), vjust = 1
         ) +
@@ -157,7 +157,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
 
     if (Reduce(`|`, (c("Cases/Controls","Categorical","Ordered Categorical") %in% score_table$Phenotype_type))) {
 
-      p2_flag <- T
+      p2_flag <- TRUE
       temp_score <- score_table[which(score_table$Phenotype_type %in% c("Cases/Controls", "Categorical", "Ordered Categorical")),]
 
       p2 <- ggplot(temp_score, aes(y = .data$Phenotype,
@@ -168,7 +168,7 @@ assocplot <- function(score_table = NULL, axis = "vertical", pval = F) {
         geom_point(position = position_dodge(0.5), cex = 2) +
         geom_errorbar(lwd = 1.25, width = 0.2, position = position_dodge(0.5)) +
         geom_vline(xintercept = 1, linetype = "dashed", colour = "grey") +
-        geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != F)), "*", ""),
+        geom_text(aes(label = ifelse(((.data$P_value <= pval) & (pval != FALSE)), "*", ""),
                       group = .data$PGS),
                   angle = 0, colour = "black", size = 5, position = position_dodge(0.5), vjust = 1
         ) +

@@ -4,7 +4,7 @@
 \alias{assocplot}
 \title{Multiple PGS Associations Plot}
 \usage{
-assocplot(score_table = NULL, axis = "vertical", pval = F)
+assocplot(score_table = NULL, axis = "vertical", pval = FALSE)
 }
 \arguments{
 \item{score_table}{a dataframe with association results with at least the

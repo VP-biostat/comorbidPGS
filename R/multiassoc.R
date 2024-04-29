@@ -17,6 +17,7 @@
 #' make from df, with 2 columns: PGS and Phenotype (in this order)
 #' @param scale a boolean specifying if scaling of PGS should be done before testing
 #' @param covar_col a character vector specifying the covariate column names (facultative)
+#' @param verbose a boolean (TRUE by default) to write in the console/log messages.
 #' @param log 	a connection, or a character string naming the file to print to.
 #' If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
 #' If parallel = TRUE, the log will be incomplete
@@ -48,8 +49,11 @@
 #'   c("ethnicity","brc","t2d","log_ldl","sbp_cat")
 #' )
 #' results <- multiassoc(
-#'   df = comorbidData, assoc_table = assoc_table,
-#'   covar_col = c("age", "sex", "gen_array")
+#'   df = comorbidData,
+#'   assoc_table = assoc_table,
+#'   covar_col = c("age", "sex", "gen_array"),
+#'   parallel = FALSE,
+#'   verbose = FALSE
 #' )
 #' print(results)
 #'
@@ -57,7 +61,8 @@
 #' @import parallel
 #' @export
 multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
-                       covar_col = NA, log = "", parallel = FALSE, num_cores = NA) {
+                       covar_col = NA, verbose = TRUE,
+                       log = "", parallel = FALSE, num_cores = NA) {
   ## Checking inputs (done in assoc that calls df_checker)
   if (is.null(assoc_table)) {
     stop("Please provide a data frame or a matrix for 'assoc_table' parameter")
@@ -69,7 +74,7 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
     stop("Please provide a connection, or a character string naming the file to print to for 'log'")
   } else if (is.null(parallel)) {
     stop("Please provide a boolean for 'parallel' parameter")
-  } else if (!(parallel == T | parallel == F)) {
+  } else if (!(parallel == TRUE | parallel == FALSE)) {
     stop("Please provide a boolean for 'parallel' parameter")
   } else {
     n_assoc <- nrow(assoc_table)
@@ -77,7 +82,7 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
       warning("No multiple associations given, preferably use assoc() function")
     }
   }
-  cat("\n\n------\nMultiple associations (", n_assoc, ") testing:\n", file = log, append = F)
+  if (verbose) cat("\n\n------\nMultiple associations (", n_assoc, ") testing:\n", file = log, append = FALSE)
 
   ## Creating the score table
   scores_table <- data.frame(matrix(nrow = 0, ncol = 11))
@@ -91,7 +96,7 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
 
 
   ## Parallele version of the for loop of assoc function
-  if (parallel == T) {
+  if (parallel == TRUE) {
     if (is.na(num_cores) | (!Reduce(`|`, class(num_cores) %in% c("numeric")))) {
       num_cores <- detectCores()-1
     } else if (num_cores > detectCores()) {
@@ -100,21 +105,21 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
 
     if (num_cores > 1 & Sys.info()["sysname"] != "Windows") {
 
-      cat("Using parallelisation, no log available with this option. \nNo of cores:", num_cores, file = log, append = F)
+      if (verbose) cat("Using parallelisation, no log available with this option. \nNo of cores:", num_cores, file = log, append = FALSE)
 
       scores_list <- mclapply(1:n_assoc, function(i) {
         return(assoc(
           df = df, prs_col = as.character(assoc_table[i, 1]),
           phenotype_col = as.character(assoc_table[i, 2]),
           scale = scale, covar_col = covar_col,
-          log = ""
+          log = "", verbose = FALSE
         ))
       }, mc.cores = num_cores)
       scores_table <- do.call(rbind, scores_list)
 
     } else {
 
-      cat("No parallelisation, this operation may be slower\n", file = log, append = F)
+      if (verbose) if (verbose) cat("No parallelisation, this operation may be slower\n", file = log, append = FALSE)
       ## Creating progress bar
       progress <- txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
 
@@ -123,19 +128,19 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
           df = df, prs_col = as.character(assoc_table[i, 1]),
           phenotype_col = as.character(assoc_table[i, 2]),
           scale = scale, covar_col = covar_col,
-          log = log
+          log = log, verbose = verbose
         ))
 
-        cat("\n", file = log, append = T)
+        if (verbose) cat("\n", file = log, append = TRUE)
         setTxtProgressBar(progress, i)
-        cat("\n", file = log, append = T)
+        if (verbose) cat("\n", file = log, append = TRUE)
       }
 
     }
 
   } else {
 
-    cat("No parallelisation, this operation may be slower\n", file = log, append = F)
+    if (verbose) cat("No parallelisation, this operation may be slower\n", file = log, append = FALSE)
     ## Creating progress bar
     progress <- txtProgressBar(min = 0, max = n_assoc, initial = 0, style = 3)
 
@@ -144,12 +149,12 @@ multiassoc <- function(df = NULL, assoc_table = NULL, scale = TRUE,
         df = df, prs_col = as.character(assoc_table[i, 1]),
         phenotype_col = as.character(assoc_table[i, 2]),
         scale = scale, covar_col = covar_col,
-        log = log
+        log = log, verbose = verbose
       ))
 
-      cat("\n", file = log, append = T)
+      if (verbose) cat("\n", file = log, append = TRUE)
       setTxtProgressBar(progress, i)
-      cat("\n", file = log, append = T)
+      if (verbose) cat("\n", file = log, append = TRUE)
     }
 
   }

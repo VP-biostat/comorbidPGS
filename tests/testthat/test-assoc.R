@@ -44,6 +44,10 @@ test_that("Wrong scale", {
   expect_error(assoc(df = comorbidData, prs_col = "ldl_PGS", phenotype_col = "log_ldl", scale = "WRONG_SCALE"))
 })
 
+test_that("Wrong verbose", {
+  expect_error(assoc(df = comorbidData, prs_col = "ldl_PGS", phenotype_col = "log_ldl", verbose = "WRONG_SCALE"))
+})
+
 test_that("Wrong Phenotype: only one value", {
   expect_error(assoc(df = cbind(comorbidData, data.frame("WRONG_PHENO" = rep(0, nrow(comorbidData)))), prs_col = "ldl_PGS", phenotype_col = "WRONG_PHENO"))
 })

@@ -8,7 +8,7 @@ densityplot(
   df = NULL,
   prs_col = "SCORESUM",
   phenotype_col = "Phenotype",
-  scale = T,
+  scale = TRUE,
   threshold = NA
 )
 }

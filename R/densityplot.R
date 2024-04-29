@@ -25,7 +25,7 @@
 #' @import ggplot2
 #' @export
 densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
-                          "Phenotype", scale = T, threshold = NA) {
+                          "Phenotype", scale = TRUE, threshold = NA) {
   ## Checking inputs
   col_names <- df_checker(df, prs_col, phenotype_col, scale)
   prs_col <- col_names$prs_col
@@ -36,7 +36,7 @@ densityplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
   names(df) <- c("PGS", "Phenotype")
   df <- na.omit(df)
   if (scale) {
-    df[, "PGS"] <- scale(df[, "PGS"]) # scaling if scale = T
+    df[, "PGS"] <- scale(df[, "PGS"]) # scaling if scale = TRUE
   }
 
   ## Making plot based on the category of Phenotype

@@ -15,6 +15,7 @@
 #' @param phenotype_col a character specifying the Phenotype column name
 #' @param scale a boolean specifying if scaling of PGS should be done before testing
 #' @param covar_col a character vector specifying the covariate column names (facultative)
+#' @param verbose a boolean (TRUE by default) to write in the console/log messages.
 #' @param log a connection, or a character string naming the file to print to.
 #' If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
 #'
@@ -51,23 +52,25 @@
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
-                  scale = TRUE, covar_col = NA, log = "") {
+                  scale = TRUE, covar_col = NA, verbose = TRUE, log = "") {
   ## Checking inputs
   col_names <- df_checker(df, prs_col, phenotype_col, scale, covar_col)
   prs_col <- col_names$prs_col
   phenotype_col <- col_names$phenotype_col
-  if (!is.logical(scale)) {
+  if (!is.logical(verbose)) {
+    stop("Please provide a logical for 'verbose' (TRUE by default)")
+  } else if (!is.logical(scale)) {
     stop("Please provide a logical for 'scale' (TRUE by default)")
   } else if (!Reduce(`|`, class(log) %in% c("character","url","connection"))) {
     stop("Please provide a connection, or a character string naming the file to print to for 'log'")
   }
 
-  cat("\n\n---\nAssociation testing:", file = log, append = T)
+  if (verbose) cat("\n\n---\nAssociation testing:", file = log, append = TRUE)
 
   # communicate the columns selected
-  cat("\n  PGS: ", prs_col, file = log, append = T)
-  cat("\n  Phenotype: ", phenotype_col, file = log, append = T)
-  cat("\n  Covariate: ", covar_col, file = log, append = T)
+  if (verbose) cat("\n  PGS: ", prs_col, file = log, append = TRUE)
+  if (verbose) cat("\n  Phenotype: ", phenotype_col, file = log, append = TRUE)
+  if (verbose) cat("\n  Covariate: ", covar_col, file = log, append = TRUE)
 
 
   ## QCing df
@@ -78,7 +81,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   }
   df <- na.omit(df) # excluding rows with NAs
   if (scale) {
-    df[, prs_col] <- scale(df[, prs_col]) # scaling if scale = T
+    df[, prs_col] <- scale(df[, prs_col]) # scaling if scale = TRUE
   }
   if (nrow(df) < 2) {
     stop("After NA removal, not enough samples/individuals to test")
@@ -88,7 +91,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   ## Doing regression
   # check Phenotype continuous or discrete aspect
   phenotype_type <- phenotype_type(df = df, phenotype_col = phenotype_col)
-  cat("\n  Phenotype type: ", phenotype_type, file = log, append = T)
+  if (verbose) cat("\n  Phenotype type: ", phenotype_type, file = log, append = TRUE)
 
   # create the regression formula based on phenotype, PGS and covariate(s)
   if (length(covar_col) > 1 & !is.na(covar_col[1])) {
@@ -101,7 +104,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
     # create the regression formula
     regress_formula <- paste0("`",phenotype_col,"` ~ `",prs_col,"`")
   }
-  cat("\n   ", regress_formula, file = log, append = T)
+  if (verbose) cat("\n   ", regress_formula, file = log, append = TRUE)
 
   # doing regression according to phenotype type
   if (phenotype_type == "Cases/Controls") {
@@ -109,24 +112,24 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
     regress <- glm(regress_formula, family = "binomial"(link = "logit"), data = df)
   } else if (phenotype_type == "Ordered Categorical") {
     stat_method <- 'Ordinal logistic regression'
-    regress <- polr(regress_formula, method = c("logistic"), data = df, Hess = T)
+    regress <- polr(regress_formula, method = c("logistic"), data = df, Hess = TRUE)
   } else if (phenotype_type == "Categorical") {
     stat_method <- 'Multinomial logistic regression'
-    regress <- multinom(regress_formula, data = df, Hess = T)
+    regress <- multinom(regress_formula, data = df, Hess = TRUE)
   } else if (phenotype_type == "Continuous") {
     stat_method <- 'Linear regression'
     regress <- lm(regress_formula, data = df)
   }
-  cat("\n   Using a ",stat_method, file = log, append = T)
+  if (verbose) cat("\n   Using a ",stat_method, file = log, append = TRUE)
 
 
   ## Wrapping up the results in a table
   #collecting common sample size
   if (phenotype_type == "Cases/Controls") {
-    cases <- sum(as.logical(df[, phenotype_col]) == T)
-    controls <- sum(as.logical(df[, phenotype_col]) == F)
-    cat("\n  Cases: ", cases, file = log, append = T)
-    cat("\n  Controls: ", controls, file = log, append = T)
+    cases <- sum(as.logical(df[, phenotype_col]) == TRUE)
+    controls <- sum(as.logical(df[, phenotype_col]) == FALSE)
+    if (verbose) cat("\n  Cases: ", cases, file = log, append = TRUE)
+    if (verbose) cat("\n  Controls: ", controls, file = log, append = TRUE)
   } else if (phenotype_type == "Categorical") {
     phen_ref <- levels(df[, phenotype_col])[1]
     cases <- c()
@@ -151,7 +154,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   if (!exists("sample_size")) {
     sample_size <- nrow(df)
   }
-  cat("\n  Sample Size: ", sample_size, file = log, append = T)
+  if (verbose) cat("\n  Sample Size: ", sample_size, file = log, append = TRUE)
 
   # linear regression or binary log regression or ordinal log regression
   if (phenotype_type == "Categorical") {
@@ -197,11 +200,11 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   }
 
   if (phenotype_type == "Continuous") {
-    cat("\n   Beta ( SE ): ", beta_or, " (", se, ")", file = log, append = T)
+    if (verbose) cat("\n   Beta ( SE ): ", beta_or, " (", se, ")", file = log, append = TRUE)
   } else {
-    cat("\n   OR [ 95% CI ]: ", beta_or, " [", lower_ci, "-", upper_ci, "]", file = log, append = T)
+    if (verbose) cat("\n   OR [ 95% CI ]: ", beta_or, " [", lower_ci, "-", upper_ci, "]", file = log, append = TRUE)
   }
-  cat("\n   P-value: ", p_val, "\n", file = log, append = T)
+  if (verbose) cat("\n   P-value: ", p_val, "\n", file = log, append = TRUE)
 
   # creating the score_table
   score_table <- data.frame(
