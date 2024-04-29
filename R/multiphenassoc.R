@@ -15,6 +15,7 @@
 #' @param phenotype_col a character vector specifying the Phenotype column names
 #' @param scale a boolean specifying if scaling of PGS should be done before testing
 #' @param covar_col a character vector specifying the covariate column names (facultative)
+#' @param verbose a boolean (TRUE by default) to write in the console/log messages.
 #' @param log 	a connection, or a character string naming the file to print to.
 #' If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
 #'
@@ -38,10 +39,10 @@
 #' @importFrom stats na.omit
 #' @export
 multiphenassoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
-                           scale = TRUE, covar_col = NA, log = "") {
+                           scale = TRUE, covar_col = NA, verbose= TRUE, log = "") {
   ## Checking inputs
   n_pheno <- length(phenotype_col)
-  cat("\n\n------\nMultiple  phenotypes associations (", n_pheno, ") testing:", file = log, append = F)
+  if (verbose) cat("\n\n------\nMultiple  phenotypes associations (", n_pheno, ") testing:", file = log, append = FALSE)
   # checking inputs (done in assoc that calls df_checker)
   if (n_pheno <= 1) {
     warning("No multiple Phenotypes given, preferably use assoc() function")
@@ -50,7 +51,7 @@ multiphenassoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phe
   }
 
   ## Creating progress bar
-  cat("\n", file = log, append = T)
+  if (verbose) cat("\n", file = log, append = TRUE)
   progress <- txtProgressBar(min = 0, max = n_pheno, initial = 0, style = 3)
 
   ## Creating the score table
@@ -67,12 +68,12 @@ multiphenassoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phe
       df = df, prs_col = prs_col,
       phenotype_col = phenotype_col[i],
       scale = scale, covar_col = covar_col,
-      log = log
+      log = log, verbose = verbose
     ))
 
-    cat("\n", file = log, append = T)
+    if (verbose) cat("\n", file = log, append = TRUE)
     setTxtProgressBar(progress, i)
-    cat("\n", file = log, append = T)
+    if (verbose) cat("\n", file = log, append = TRUE)
   }
 
   # returning the result

@@ -67,20 +67,20 @@ normal_distribution_checker <- function(x) {
   #check first if the variable follow normal distribution
   #if we have n > 5000, we need to run shapiro multiple times
   n_pheno <- sum(!is.na(x))
-  normal <- T
+  normal <- TRUE
   if (n_pheno>5000) {
     st <- 0
     for (i in 1:50) {
-      t <- stats::shapiro.test(x[sample(1:n_pheno, 5000, replace = T)])$p.value
+      t <- stats::shapiro.test(x[sample(1:n_pheno, 5000, replace = TRUE)])$p.value
       st <- st+(t>0.05)
     }
     if (st == 0) {
-      normal <- F
+      normal <- FALSE
     }
   } else {
-    t <- stats::shapiro.test(x[sample(1:n_pheno, 5000, replace = T)])$p.value
+    t <- stats::shapiro.test(x[sample(1:n_pheno, 5000, replace = TRUE)])$p.value
     if (t <= 0.05) {
-      normal <- F
+      normal <- FALSE
     }
   }
 

@@ -10,6 +10,7 @@ assoc(
   phenotype_col = "Phenotype",
   scale = TRUE,
   covar_col = NA,
+  verbose = TRUE,
   log = ""
 )
 }
@@ -29,6 +30,8 @@ columns:
 \item{scale}{a boolean specifying if scaling of PGS should be done before testing}
 
 \item{covar_col}{a character vector specifying the covariate column names (facultative)}
+
+\item{verbose}{a boolean (TRUE by default) to write in the console/log messages.}
 
 \item{log}{a connection, or a character string naming the file to print to.
 If "" (by default), it prints to the standard output connection, the console unless redirected by sink.}

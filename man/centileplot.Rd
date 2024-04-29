@@ -8,7 +8,7 @@ centileplot(
   df = NULL,
   prs_col = "SCORESUM",
   phenotype_col = "Phenotype",
-  decile = F,
+  decile = FALSE,
   continuous_metric = NA
 )
 }

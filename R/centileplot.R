@@ -24,9 +24,9 @@
 #' @export
 centileplot <- function(df = NULL, prs_col = "SCORESUM",
                         phenotype_col = "Phenotype",
-                        decile = F, continuous_metric = NA) {
+                        decile = FALSE, continuous_metric = NA) {
   ## Checking inputs
-  col_names <- df_checker(df, prs_col, phenotype_col, scale = F)
+  col_names <- df_checker(df, prs_col, phenotype_col, scale = FALSE)
   prs_col <- col_names$prs_col
   phenotype_col <- col_names$phenotype_col
   if (!continuous_metric %in% c(NA, "median", "mean")) {
@@ -38,7 +38,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
   names(df) <- c("PGS", "Phenotype")
   df <- na.omit(df)
   if (nrow(df) < 10000) {
-    warning("The dataset has less than 10,000 individuals, centiles plot may not look good! Use the argument decile = T to adapt to small datasets")
+    warning("The dataset has less than 10,000 individuals, centiles plot may not look good! Use the argument decile = TRUE to adapt to small datasets")
   }
 
   ## Making centiles plot based on the category of Phenotype
@@ -62,8 +62,8 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
 
     # create prevalence of cases group by centiles
     for (val in levels(df$centile)) {
-      n_cases <- sum(df$centile == val & as.logical(df$Phenotype) == T, na.rm = T)
-      n_controls <- sum(df$centile == val & as.logical(df$Phenotype) == F, na.rm = T)
+      n_cases <- sum(df$centile == val & as.logical(df$Phenotype) == TRUE, na.rm = TRUE)
+      n_controls <- sum(df$centile == val & as.logical(df$Phenotype) == FALSE, na.rm = TRUE)
       n <- n_cases + n_controls
       preval <- rbind(preval, data.frame(
         "centile" = val,
@@ -78,7 +78,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
       y = as.numeric(.data$prevalence) * 100,
       color = as.numeric(.data$prevalence)
     )) +
-      geom_point(show.legend = F) +
+      geom_point(show.legend = FALSE) +
       xlim(1, ifelse(decile, 10, 100)) +
       labs(
         x = paste(ifelse(decile, "Deciles of", "Centiles of"), prs_col),
@@ -100,8 +100,8 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
 
     # create median of continuous phenotype group by centiles
     for (val in levels(df$centile)) {
-      med <- median(df[which(df$centile == val), "Phenotype"], na.rm = T)
-      mean <- mean(df[which(df$centile == val), "Phenotype"], na.rm = T)
+      med <- median(df[which(df$centile == val), "Phenotype"], na.rm = TRUE)
+      mean <- mean(df[which(df$centile == val), "Phenotype"], na.rm = TRUE)
       n <- nrow(df[which(df$centile == val), ])
       preval <- rbind(preval, data.frame(
         "centile" = val,
@@ -116,7 +116,7 @@ centileplot <- function(df = NULL, prs_col = "SCORESUM",
       y = as.numeric(get(continuous_metric)),
       color = as.numeric(get(continuous_metric))
     )) +
-      geom_point(show.legend = F) +
+      geom_point(show.legend = FALSE) +
       xlim(1, ifelse(decile, 10, 100)) +
       labs(
         x = paste(ifelse(decile, "Deciles of", "Centiles of"), prs_col),

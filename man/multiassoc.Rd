@@ -9,6 +9,7 @@ multiassoc(
   assoc_table = NULL,
   scale = TRUE,
   covar_col = NA,
+  verbose = TRUE,
   log = "",
   parallel = FALSE,
   num_cores = NA
@@ -29,6 +30,8 @@ make from df, with 2 columns: PGS and Phenotype (in this order)}
 \item{scale}{a boolean specifying if scaling of PGS should be done before testing}
 
 \item{covar_col}{a character vector specifying the covariate column names (facultative)}
+
+\item{verbose}{a boolean (TRUE by default) to write in the console/log messages.}
 
 \item{log}{a connection, or a character string naming the file to print to.
 If "" (by default), it prints to the standard output connection, the console unless redirected by sink.
@@ -71,8 +74,11 @@ assoc_table <- expand.grid(
   c("ethnicity","brc","t2d","log_ldl","sbp_cat")
 )
 results <- multiassoc(
-  df = comorbidData, assoc_table = assoc_table,
-  covar_col = c("age", "sex", "gen_array")
+  df = comorbidData,
+  assoc_table = assoc_table,
+  covar_col = c("age", "sex", "gen_array"),
+  parallel = FALSE,
+  verbose = FALSE
 )
 print(results)
 

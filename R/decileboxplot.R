@@ -21,7 +21,7 @@
 decileboxplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
                             "Phenotype") {
   ## Checking inputs
-  col_names <- df_checker(df, prs_col, phenotype_col, scale = F)
+  col_names <- df_checker(df, prs_col, phenotype_col, scale = FALSE)
   prs_col <- col_names$prs_col
   phenotype_col <- col_names$phenotype_col
 
@@ -47,9 +47,9 @@ decileboxplot <- function(df = NULL, prs_col = "SCORESUM", phenotype_col =
     p <- ggplot(df, aes(
       x = as.factor(.data$decile),
       y = as.numeric(.data$Phenotype),
-      fill = mean(as.numeric(.data$Phenotype), na.rm = T)
+      fill = mean(as.numeric(.data$Phenotype), na.rm = TRUE)
     )) +
-      geom_boxplot(show.legend = F, alpha = 0.4) +
+      geom_boxplot(show.legend = FALSE, alpha = 0.4) +
       labs(
         x = paste("Deciles of", prs_col),
         y = phenotype_col
