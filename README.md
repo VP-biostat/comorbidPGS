@@ -7,6 +7,7 @@
 
 [![GitHub
 tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPGS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPGS)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/comorbidPGS)](https://cran.r-project.org/package=comorbidPGS)
 <!-- badges: end -->
 
 comorbidPGS is a tool for analysing an already computed Polygenic Score
@@ -25,17 +26,24 @@ download.
 
 ## Installation
 
-You can install the development version of comorbidPGS from
-[GitHub](https://github.com/VP-biostat/comorbidPGS) with:
+comorbidPGS is available on CRAN, you can download it using the
+following command:
 
 ``` r
-# install.packages("devtools")
+install.packages("comorbidPGS")
+```
+
+If you prefer the latest stable development version, you can download it
+from [GitHub](https://github.com/VP-biostat/comorbidPGS) with:
+
+``` r
+if (!require("devtools", quietly = TRUE)) install.packages("devtools")
 devtools::install_github("VP-biostat/comorbidPGS")
 ```
 
 ## Example
 
-### Building an Association Table
+### Building an Association Table of PGS
 
 This is a basic example which shows you how to do basic association with
 the example dataset:
@@ -91,7 +99,7 @@ result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex"
 | 16  | t2d_PGS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 10000 | 1.0628744 |        NA | 1.0236044 | 1.1036509 | 0.0015002 |
 | 17  | ldl_PGS | sbp_cat          | Ordered Categorical | Ordinal logistic regression     | age+sex+gen_array |      NA |         NA | 10000 | 1.0078855 |        NA | 0.9707330 | 1.0464598 | 0.6818849 |
 
-### Examples of plot
+### Examples of data visualisation using comorbidPGS
 
 ``` r
 densityplot(dataset, prs_col = "ldl_PGS", phenotype_col = "sbp_cat")
@@ -118,7 +126,7 @@ score_table should have the assoc() output format
 centileplot(dataset, prs_col = "brc_PGS", phenotype_col = "brc")
 #> Warning in centileplot(dataset, prs_col = "brc_PGS", phenotype_col = "brc"):
 #> The dataset has less than 10,000 individuals, centiles plot may not look good!
-#> Use the argument decile = T to adapt to small datasets
+#> Use the argument decile = TRUE to adapt to small datasets
 ```
 
 <img src="man/figures/README-centileplot-1.png" width="100%" />
@@ -146,7 +154,6 @@ If you use comorbidPGS in any published work, please cite the following
 manuscript:
 
 <p>
-Pascat V (????). <em>comorbidPGS: Assessing the shared predisposition
-between Phenotypes using Polygenic Scores (PGS, or PRS/GRS for binary
-outcomes)</em>. R package version 0.3.9000.
+Pascat V (????). <em>comorbidPGS: Assessing Predisposition Between
+Phenotypes using Polygenic Scores</em>. R package version 0.3.4.
 </p>
