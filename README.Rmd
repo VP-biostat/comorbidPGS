@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![GitHub tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPGS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPGS)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/comorbidPGS)](https://cran.r-project.org/package=comorbidPGS)
 <!-- badges: end -->
 
 comorbidPGS is a tool for analysing an already computed Polygenic Score (PGS, also named PRS/GRS for binary outcomes) distribution to investigate shared genetic aetiology in multiple conditions.
@@ -31,16 +32,22 @@ comorbidPGS is under GPL-3 license, and is freely available for download.
 
 ## Installation
 
-You can install the development version of comorbidPGS from [GitHub](https://github.com/VP-biostat/comorbidPGS) with:
+comorbidPGS is available on CRAN, you can download it using the following command: 
 
-``` r
-# install.packages("devtools")
+``` {r cran, eval = FALSE}
+install.packages("comorbidPGS")
+```
+
+If you prefer the latest stable development version, you can download it from [GitHub](https://github.com/VP-biostat/comorbidPGS) with:
+
+``` {r github, eval = FALSE}
+if (!require("devtools", quietly = TRUE)) install.packages("devtools")
 devtools::install_github("VP-biostat/comorbidPGS")
 ```
 
 ## Example
 
-### Building an Association Table
+### Building an Association Table of PGS 
 
 This is a basic example which shows you how to do basic association with the example dataset:
 
@@ -70,7 +77,7 @@ knitr::kable(result_2)
 ```
 
 
-### Examples of plot
+### Examples of data visualisation using comorbidPGS
 
 ```{r densityplot}
 densityplot(dataset, prs_col = "ldl_PGS", phenotype_col = "sbp_cat")
