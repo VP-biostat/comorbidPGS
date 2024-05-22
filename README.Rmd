@@ -107,8 +107,7 @@ decileboxplot(dataset, prs_col = "ldl_PGS", phenotype_col = "ldl")
 ```
 
 ## Citation 
-If you use comorbidPGS in any published work, please cite the following manuscript:
-
+To cite comorbidPGS in publications, please use:
 ```{r citation, echo = FALSE, results = 'asis', warning = FALSE}
 print(citation("comorbidPGS"), "html")
 ```
