@@ -2,10 +2,10 @@
 #' Multiple PGS Associations from a Data Frame
 #'
 #' @description
-#' `multiassoc()` take a data frame with distribution(s) of PGS and Phenotype(s),
-#' and a table of associations to make from this data frame
+#' `multiassoc()` takes a data frame with distribution(s) of PGS and Phenotype(s),
+#' and a table of associations to make from this data frame.
 #'
-#' return a data frame showing the association results
+#' Returns a data frame showing the association results
 #'
 #' @param df a dataframe with individuals on each row, and at least the following
 #' columns:

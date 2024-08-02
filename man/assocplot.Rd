@@ -40,6 +40,6 @@ Phenotypes (i.e. "Categorical" or "Cases/Controls")
 }
 }
 \description{
-\code{assocplot()} take a data frame of associations, return plot of the associations
+\code{assocplot()} takes a data frame of associations. Returns plot of the associations
 from \code{assoc()} (ggplot2 object or list of ggplot object)
 }

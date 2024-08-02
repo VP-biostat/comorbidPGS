@@ -2,8 +2,8 @@
 #' Centiles Plot from a PGS Association
 #'
 #' @description
-#' `centileplot()` take a distribution of PGS, a Phenotype and eventual Confounders
-#' return a plot (ggplot2 object) with centiles (or deciles if not enough individuals)
+#' `centileplot()` takes a distribution of PGS, a Phenotype and eventual Confounders.
+#' Returns a plot (ggplot2 object) with centiles (or deciles if not enough individuals)
 #' of PGS in x and Prevalence/Median/Mean of the Phenotype in y
 #'
 #' @param df a dataframe with individuals on each row, and at least the following
