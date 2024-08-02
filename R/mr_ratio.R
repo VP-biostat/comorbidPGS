@@ -105,7 +105,7 @@ mr_ratio <- function(df = NULL, prs_col = "SCORESUM", exposure_col = NA,
 
   # doing Exposure regression according to phenotype type
   if (exposure_type == "Cases/Controls") {
-    gx <- glm(exposure_formula, family = "binomial"(link = "logit"), data = df_control)
+    gx <- glm(exposure_formula, family = stats::binomial(link = "logit"), data = df_control)
     fstat <- NA
   } else if (exposure_type == "Continuous") {
     gx <- lm(exposure_formula, data = df_control)
@@ -115,7 +115,7 @@ mr_ratio <- function(df = NULL, prs_col = "SCORESUM", exposure_col = NA,
   # doing Outcome regression according to phenotype type
   sample_size <- nrow(df)
   if (outcome_type == "Cases/Controls") {
-    gy <- glm(outcome_formula, family = "binomial"(link = "logit"), data = df)
+    gy <- glm(outcome_formula, family = stats::binomial(link = "logit"), data = df)
     controls <- sum(df[, outcome_col] == outcome_control)
     cases <- sample_size - controls
   } else if (outcome_type == "Continuous") {
