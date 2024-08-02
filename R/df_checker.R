@@ -62,6 +62,58 @@ df_checker <- function(df = NULL, prs_col = NA, phenotype_col = NA, scale = NA,
   return(list("prs_col" = prs_col, "phenotype_col" = phenotype_col))
 }
 
+df_mr_checker <- function(df = NULL, prs_col = NA, exposure_col = NA,
+                          outcome_col = NA, scale = NA) {
+  ## Checking df object
+  if (is.null(df)) {
+    stop("Please provide for 'df' a data frame (with at least 4 columns:
+    ID, PGS and two continuous or discrete Phenotype)")
+  } else if (!Reduce(`|`, class(df) %in% c("data.frame"))) {
+    stop("Please provide for 'df' a data frame (with at least 4 columns:
+    ID, PGS and two continuous or discrete Phenotype)")
+  } else if (ncol(df) < 4) {
+    stop("Please provide for 'df' a data frame with at least 4 columns:
+    ID, PGS and two continuous or discrete Phenotype")
+  } else if (!is.logical(scale)) {
+    stop("Please provide a logical for 'scale' (TRUE by default)")
+  } else if (nrow(unique(df)) != nrow(df)) {
+    warning("Duplicate(s) found in df! Removing them")
+    df <- unique(df)
+  }
+
+  ## Checking what is in the data frame df
+  # checking PGS column
+  if (is.null(prs_col)) {
+    stop("Missing prs_col")
+  } else if (is.na(prs_col)) {
+    stop("Missing prs_col")
+  } else if (!prs_col %in% names(df)) {
+    stop("prs_col not found in df")
+  } else if (!Reduce(`|`, class(df[, prs_col]) %in% c("numeric", "integer", "double"))) {
+    stop("Please provide numeric values in the PGS column")
+  }
+  # checking Exposure column
+  if (is.null(exposure_col)) {
+    stop("Missing exposure_col")
+  } else if (is.na(exposure_col)) {
+    stop("Missing exposure_col")
+  } else if (!exposure_col %in% names(df)) {
+    stop("exposure_col not found in df")
+  }
+  # checking Outcome column
+  if (is.null(outcome_col)) {
+    stop("Missing outcome_col")
+  } else if (is.na(outcome_col)) {
+    stop("Missing outcome_col")
+  } else if (!outcome_col %in% names(df)) {
+    stop("outcome_col not found in df")
+  }
+
+  return(list("prs_col" = prs_col,
+              "exposure_col" = exposure_col,
+              "outcome_col" = outcome_col))
+}
+
 
 normal_distribution_checker <- function(x) {
   #check first if the variable follow normal distribution

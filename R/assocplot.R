@@ -2,7 +2,7 @@
 #' Multiple PGS Associations Plot
 #'
 #' @description
-#' `assocplot()` take a data frame of associations, return plot of the associations
+#' `assocplot()` takes a data frame of associations. Returns plot of the associations
 #' from `assoc()` (ggplot2 object or list of ggplot object)
 #'
 #' @param score_table a dataframe with association results with at least the
