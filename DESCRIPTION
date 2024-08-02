@@ -8,11 +8,11 @@ Description: Using polygenic scores (PGS, or PRS/GRS for binary outcomes),
     this package allows to investigate shared predisposition between different 
     conditions, and do fast association analysis, export plots and views
     of the PGS distribution using 'ggplot2' object. 
-Depends: R (>= 3.5.0)
 License: GPL (>= 3)
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+URL: https://github.com/VP-biostat/comorbidPGS,
+    https://VP-biostat.github.io/comorbidPGS/
+BugReports: https://github.com/VP-biostat/comorbidPGS/issues
+Depends: R (>= 3.5.0)
 Imports: 
     ggplot2,
     stats,
@@ -20,7 +20,11 @@ Imports:
     MASS,
     nnet, 
     parallel
-LazyData: true
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    pkgdown
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.2
 Config/testthat/edition: 3
