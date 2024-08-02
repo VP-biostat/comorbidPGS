@@ -3,3 +3,7 @@
 .RData
 README.md.bak
 comorbidPRS.Rproj
+docs/
+renv/
+renv.lock
+.Rprofile

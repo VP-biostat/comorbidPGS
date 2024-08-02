@@ -1,3 +1,5 @@
+^renv$
+^renv\.lock$
 ^comorbidPRS\.Rproj$
 ^\.Rproj\.user$
 ^\.git$
@@ -7,3 +9,10 @@
 ^README\.Rmd$
 ^LICENSE\.md$
 ^data-raw$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^.Rprofile$
+^renv$
+^renv.lock$
+^codecov\.yml$

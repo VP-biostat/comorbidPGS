@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![GitHub tag](https://img.shields.io/github/v/tag/VP-biostat/comorbidPGS.svg?label=latest%20version)](https://github.com/VP-biostat/comorbidPGS)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/comorbidPGS)](https://cran.r-project.org/package=comorbidPGS)
+[![R-CMD-check](https://github.com/VP-biostat/comorbidPGS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/VP-biostat/comorbidPGS/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 comorbidPGS is a tool for analysing an already computed Polygenic Score (PGS, also named PRS/GRS for binary outcomes) distribution to investigate shared genetic aetiology in multiple conditions.
