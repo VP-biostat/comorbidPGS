@@ -109,7 +109,7 @@ assoc <- function(df = NULL, prs_col = "SCORESUM", phenotype_col = "Phenotype",
   # doing regression according to phenotype type
   if (phenotype_type == "Cases/Controls") {
     stat_method <- 'Binary logistic regression'
-    regress <- glm(regress_formula, family = "binomial"(link = "logit"), data = df)
+    regress <- glm(regress_formula, family = stats::binomial(link = "logit"), data = df)
   } else if (phenotype_type == "Ordered Categorical") {
     stat_method <- 'Ordinal logistic regression'
     regress <- polr(regress_formula, method = c("logistic"), data = df, Hess = TRUE)
