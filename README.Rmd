@@ -76,6 +76,25 @@ result_2 <- multiassoc(df = dataset, assoc_table = assoc, covar = c("age", "sex"
 knitr::kable(result_2)
 ```
 
+### Extension of association analysis: one-sample MR using the Wald Ratio and 2SLS methods
+
+```{r one_sample_ratio_MR, results = 'hide'}
+# MR using Wald ratio method
+mr1 <- mr_ratio(df = dataset, prs_col = "ldl_PGS", exposure_col = "log_ldl", outcome_col = "sbp") 
+```
+
+```{r result_3, echo = FALSE}
+knitr::kable(mr1)
+```
+
+```{r one_sample_2sls_MR, results = 'hide'}
+# MR using 2-stage least square method (2SLS)
+mr2 <- mr_2sls(df = dataset, prs_col = "ldl_PGS", exposure_col = "log_ldl", outcome_col = "sbp") 
+```
+
+```{r result_4, echo = FALSE}
+knitr::kable(mr2)
+```
 
 ### Examples of data visualisation using comorbidPGS
 
