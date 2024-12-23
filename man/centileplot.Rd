@@ -34,7 +34,7 @@ use for continuous Phenotype, only three options: \code{NA}, \code{"median"} or 
 return a figure of results in the format ggplot2 object
 }
 \description{
-\code{centileplot()} take a distribution of PGS, a Phenotype and eventual Confounders
-return a plot (ggplot2 object) with centiles (or deciles if not enough individuals)
+\code{centileplot()} takes a distribution of PGS, a Phenotype and eventual Confounders.
+Returns a plot (ggplot2 object) with centiles (or deciles if not enough individuals)
 of PGS in x and Prevalence/Median/Mean of the Phenotype in y
 }

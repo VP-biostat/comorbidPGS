@@ -56,6 +56,6 @@ with the following columns:
 }
 }
 \description{
-\code{multiphenassoc()} take a distribution of PGS and multiple Phenotypes and eventual confounders
-return a data frame showing the association results
+\code{multiphenassoc()} takes a distribution of PGS and multiple Phenotypes and eventual confounders.
+Returns a data frame showing the association results
 }

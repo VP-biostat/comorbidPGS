@@ -2,8 +2,8 @@
 #' Multiple PGS Associations from different Phenotypes
 #'
 #' @description
-#' `multiphenassoc()` take a distribution of PGS and multiple Phenotypes and eventual confounders
-#' return a data frame showing the association results
+#' `multiphenassoc()` takes a distribution of PGS and multiple Phenotypes and eventual confounders.
+#' Returns a data frame showing the association results
 #'
 #' @param df a dataframe with individuals on each row, and at least the following
 #' columns:

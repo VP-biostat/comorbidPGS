@@ -2,8 +2,8 @@
 #' Deciles BoxPlot from a PGS Association with a Continuous Phenotype
 #'
 #' @description
-#' `decileboxplot()` take a distribution of PGS, a Continuous Phenotype
-#' return a plot with deciles of PGS in x and Boxplot of the Phenotype in y
+#' `decileboxplot()` takes a distribution of PGS, a Continuous Phenotype.
+#' Returns a plot with deciles of PGS in x and Boxplot of the Phenotype in y
 #'
 #' @param df a dataframe with individuals on each row, and at least the following
 #' columns:

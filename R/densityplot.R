@@ -2,8 +2,8 @@
 #' Density Plot from a PGS Association
 #'
 #' @description
-#' `densityplot()` take a distribution of PGS, a Phenotype and eventual Confounders
-#' return a plot with density of PGS in x by Categories of the Phenotype
+#' `densityplot()` takes a distribution of PGS, a Phenotype and eventual Confounders.
+#' Returns a plot with density of PGS in x by Categories of the Phenotype
 #'
 #' @param df a dataframe with individuals on each row, and at least the following
 #' columns:

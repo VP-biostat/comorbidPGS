@@ -23,6 +23,6 @@ columns:
 return a ggplot object (ggplot2)
 }
 \description{
-\code{decileboxplot()} take a distribution of PGS, a Continuous Phenotype
-return a plot with deciles of PGS in x and Boxplot of the Phenotype in y
+\code{decileboxplot()} takes a distribution of PGS, a Continuous Phenotype.
+Returns a plot with deciles of PGS in x and Boxplot of the Phenotype in y
 }
