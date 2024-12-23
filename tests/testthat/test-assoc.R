@@ -82,7 +82,7 @@ for (prs in grep("PGS", names(comorbidData), value = T)) {
   for (phenotype in c("ethnicity","brc","t2d","log_ldl","sbp_cat")) {
     test_that(paste("Test of", prs, "on", phenotype), {
       expect_s3_class(
-        object = assoc(df = comorbidData, prs_col = prs, phenotype_col = phenotype),
+        object = assoc(df = comorbidData, prs_col = prs, phenotype_col = phenotype, verbose = FALSE),
         class = "data.frame"
       )
     })

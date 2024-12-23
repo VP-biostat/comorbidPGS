@@ -56,8 +56,8 @@ with the following columns:
 }
 }
 \description{
-\code{assoc()} take a distribution of PGS, a Phenotype and eventual Confounders
-return a data frame showing the association of PGS on the Phenotype
+\code{assoc()} takes a distribution of PGS, a Phenotype and eventual Confounders.
+Returns a data frame showing the association of PGS on the Phenotype
 }
 \examples{
 results <- assoc(

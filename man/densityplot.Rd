@@ -38,6 +38,6 @@ the Threshold to consider individuals as Cases/Controls as following:
 return a ggplot object (ggplot2)
 }
 \description{
-\code{densityplot()} take a distribution of PGS, a Phenotype and eventual Confounders
-return a plot with density of PGS in x by Categories of the Phenotype
+\code{densityplot()} takes a distribution of PGS, a Phenotype and eventual Confounders.
+Returns a plot with density of PGS in x by Categories of the Phenotype
 }

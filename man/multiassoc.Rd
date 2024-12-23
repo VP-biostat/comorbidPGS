@@ -63,10 +63,10 @@ with the following columns:
 }
 }
 \description{
-\code{multiassoc()} take a data frame with distribution(s) of PGS and Phenotype(s),
-and a table of associations to make from this data frame
+\code{multiassoc()} takes a data frame with distribution(s) of PGS and Phenotype(s),
+and a table of associations to make from this data frame.
 
-return a data frame showing the association results
+Returns a data frame showing the association results
 }
 \examples{
 assoc_table <- expand.grid(

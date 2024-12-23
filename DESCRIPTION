@@ -1,6 +1,6 @@
 Package: comorbidPGS
 Title: Assessing Predisposition Between Phenotypes using Polygenic Scores 
-Version: 0.3.4
+Version: 0.4.0
 Authors@R: 
     person("Vincent", "Pascat", , "vincent.pascat@univ-lille.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6227-8812"))
@@ -12,14 +12,15 @@ Depends: R (>= 3.5.0)
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Imports: 
     ggplot2,
     stats,
     utils,
     MASS,
-    nnet, 
-    parallel
+    nnet,
+    parallel,
+    ivreg
 LazyData: true
 Suggests: 
     testthat (>= 3.0.0)

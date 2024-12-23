@@ -2,8 +2,8 @@
 #' Association of a PGS distribution with a Phenotype
 #'
 #' @description
-#' `assoc()` take a distribution of PGS, a Phenotype and eventual Confounders
-#' return a data frame showing the association of PGS on the Phenotype
+#' `assoc()` takes a distribution of PGS, a Phenotype and eventual Confounders.
+#' Returns a data frame showing the association of PGS on the Phenotype
 #'
 #' @param df a dataframe with individuals on each row, and at least the following
 #' columns:
