@@ -50,15 +50,7 @@ test_that("Test of several PGS and Phenotype using an assoc_table matrix and cov
   )
 })
 
-cores <- min(nrow(assoc), parallel::detectCores()-1)
-
-test_that("Test of several PGS and Phenotype using an assoc_table matrix and covariates, parallel version", {
-  skip_on_cran()
-  expect_s3_class(
-    object = multiassoc(df = comorbidData, assoc_table = assoc, covar_col = c("age", "sex", "gen_array"), parallel = TRUE, num_cores = cores),
-    class = "data.frame"
-  )
-})
+cores <- min(nrow(assoc), getOption("mc.cores", 2L))
 
 test_that("Test of several PGS and Phenotype using an assoc_table matrix and covariates, parallel version and number of cores", {
   skip_on_cran()
