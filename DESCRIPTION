@@ -1,6 +1,6 @@
 Package: comorbidPGS
 Title: Assessing Predisposition Between Phenotypes using Polygenic Scores 
-Version: 0.4.0
+Version: 1.0.0
 Authors@R: 
     person("Vincent", "Pascat", , "vincent.pascat@univ-lille.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6227-8812"))
