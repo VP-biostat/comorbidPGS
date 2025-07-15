@@ -1,9 +1,12 @@
 ^comorbidPRS\.Rproj$
+^comorbidPGS\.Rproj$
 ^\.Rproj\.user$
 ^\.git$
 ^\.github$
 ^\.gitignore$
 ^README\.md\.bak$
 ^README\.Rmd$
-^LICENSE\.md$
 ^data-raw$
+^LICENSE\.md$
+^CRAN-SUBMISSION$
+^cran-comments\.md$
